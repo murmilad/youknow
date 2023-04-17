@@ -23,19 +23,6 @@ type KnowType struct {
 	Style string `json:"style"` // `gorm:"-" default:"[]"`
 }
 
-type Responce struct {
-	Err string `json:"err"`
-}
-type ArrayResponce[T any] struct {
-	Responce
-	Data []T `json:"data"`
-}
-
-type ItemResponce[T any] struct {
-	Responce
-	Data T `json:"data"`
-}
-
 func main() {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
@@ -55,16 +42,16 @@ func main() {
 		db.Find(&knowtypes, "id = ?", c.Params("id"))
 
 		if len(knowtypes) > 0 {
-			return c.JSON(ItemResponce[KnowType]{Data: knowtypes[0]})
+			return c.JSON(knowtypes[0])
 		} else {
-			return c.JSON(Responce{Err: "Not found!"})
+			return fiber.NewError(fiber.StatusBadRequest, "Element not found")
 		}
 	})
 	app.Get("/api/knowtypes", func(c *fiber.Ctx) error {
 		var knowtypes []KnowType
 		db.Find(&knowtypes)
 
-		return c.JSON(ArrayResponce[KnowType]{Data: knowtypes})
+		return c.JSON(knowtypes)
 	})
 
 	app.Post("/api/knowtypes", func(c *fiber.Ctx) error {
@@ -74,9 +61,15 @@ func main() {
 			return err
 		}
 
-		db.Create(&knowtype)
+		db.Save(&knowtype)
 
-		return c.JSON(ItemResponce[KnowType]{Data: knowtype})
+		return c.JSON(knowtype)
+	})
+
+	app.Delete("/api/:id/knowtypes", func(c *fiber.Ctx) error {
+		db.Delete(&KnowType{}, 10, c.Params("id"))
+
+		return c.Send(nil)
 	})
 
 	app.Listen(":8000")

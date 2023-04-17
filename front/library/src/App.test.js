@@ -23,7 +23,7 @@ describe('App', () => {
         data: []
        },
        knowtypes: [
-        {"name":"Java","style":"Javist","_id":"2"}
+        {"name":"Java","style":"Javist","id":"2"}
        ],
     });
     const wrapper =  mount(

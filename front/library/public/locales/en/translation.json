@@ -1,0 +1,21 @@
+
+{
+    "header": {
+        "know-types":"Types of Know"
+    },
+    "field": {
+      "know-type-name": "Type Name",
+      "know-type-style": "Style"
+    },
+    "error": {
+        "required": "The field is required!"
+    },
+    "action": {
+        "create-know-type": "Create Type of Know",
+        "delete-know-type": "Delete"
+    },
+    "message":{
+        "loading": "Loading..."
+    }
+
+}

@@ -12,6 +12,8 @@ import {injectStoreToServer} from "./actions/server";
 import createSagaMiddleware from 'redux-saga'
 import rootSaga from './sagas'
 
+import './i18n';
+
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(reducer,
   

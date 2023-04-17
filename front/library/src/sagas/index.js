@@ -15,7 +15,7 @@ import {
 
 
 export function* callServerLastest() {
-    yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/knowtypes/' + action.knowtype._id, 'GET_KNOWTYPES')
+    yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/'+action.knowtype.id+'/knowtypes/', 'GET_KNOWTYPES')
     yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/knowtypes', request => request.knowtype, 'GET_KNOWTYPES')
     yield takeLatest("GET_KNOWTYPES", fetchResource, '/api/knowtypes', response =>  ({ knowtypes: response.data })  , "FETCH_KNOWTYPES")
 }
@@ -24,7 +24,7 @@ function* deleteResource(linkCallback, successAction, action) {
       const result = yield call(SERVER.delete, linkCallback(action))
       yield put({ type: 'GET_KNOWTYPES'})
     } catch (error) {
-//      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
+      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
     }
   }
   
@@ -33,13 +33,13 @@ function* deleteResource(linkCallback, successAction, action) {
       const result = yield call(SERVER.post, link, requestCallback(action))
       yield put({type: successAction})
     } catch (error) {
-//      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
+      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
     }
   }
 
-  function* fetchResource(resource, resultCallback, successAction) {
+  function* fetchResource(link, resultCallback, successAction) {
     try {
-      const result = yield call(SERVER.get, resource)
+      const result = yield call(SERVER.get, link)
       yield put({ type: successAction, payload: resultCallback(result)})
     } catch (error) {
       yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})

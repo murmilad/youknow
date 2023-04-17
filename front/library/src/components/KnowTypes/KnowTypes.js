@@ -1,6 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next';
 
 function KnowTypes() {
+  const { t, i18n } = useTranslation();
   const knowtypes = useSelector(state => state.knowtypes)
   const dispatch = useDispatch()
 
@@ -11,7 +13,7 @@ function KnowTypes() {
           <span><strong>{knowtype.name}</strong> {knowtype.style}</span>
           <span className="pull-right">
               <button type="button" data-testid="delete-button"  className="btn btn-outline-danger btn-sm"
-                      onClick={()=>dispatch({type: "DELETE_KNOWTYPE", knowtype})}>DELETE</button>
+                      onClick={()=>dispatch({type: "DELETE_KNOWTYPE", knowtype})}>{t('action.delete-know-type')}</button>
           </span>
         </li>
       )}

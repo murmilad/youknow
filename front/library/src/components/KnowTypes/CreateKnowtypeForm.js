@@ -4,8 +4,11 @@ import {useDispatch} from "react-redux";
 import {isStringEmpty, isObjectEmpty} from "../../utils/utils"
 import {Formik, Field, Form} from "formik"
 import * as yup from "yup"
+import { useTranslation } from 'react-i18next';
+
 
 function CreateKnowtypeForm() {
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch()
   const [name, setName] = useState("")
   const [style, setStyle] = useState("")
@@ -18,8 +21,8 @@ function CreateKnowtypeForm() {
       }}
       onSubmit ={ values => {
         dispatch({type: 'CREATE_KNOWTYPE', knowtype: {
-          title: values.name,
-          author: values.style
+          name: values.name,
+          style: values.style
         }})
         setName("")
         setStyle("")
@@ -40,9 +43,9 @@ function CreateKnowtypeForm() {
       meta,
       }) => (
           <div className="create_input col-md-6" >
-          <label htmlFor="name" className="form-label">Name</label>
+          <label htmlFor="name" className="form-label">{t('field.know-type-name')}</label>
           <input className="form-control" {...field} />
-          {meta.touched && meta.error && ( <span className="form_error">This field is required</span>)}
+          {meta.touched && meta.error && ( <span className="form_error">{t('error.required')}</span>)}
         </div>
       )}
       </Field>
@@ -53,14 +56,14 @@ function CreateKnowtypeForm() {
       meta,
       }) => (
           <div className="create_input col-md-6">
-          <label htmlFor="style" className="form-label">Style</label>
+          <label htmlFor="style" className="form-label">{t('field.know-type-style')}</label>
           <input className="form-control" {...field} />
-          {meta.touched && meta.error && ( <span className="form_error">This field is required</span>)}
+          {meta.touched && meta.error && ( <span className="form_error">{t('error.required')}</span>)}
         </div>
       )}
       </Field>
       <div className="create_form_add_btn_wrapper">
-            <button type="submit" className="btn btn-primary">Create Know Type</button>
+            <button type="submit" className="btn btn-primary">{t('action.create-know-type')}</button>
         </div>
         </div>
       </Form>
