@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -17,9 +18,22 @@ const (
 )
 
 type KnowType struct {
-	id    uint
-	name  string
-	style string //`json:"style" gorm:"-" default:"[]"`
+	Id    uint   `json:"id"`
+	Name  string `json:"name"`
+	Style string `json:"style"` // `gorm:"-" default:"[]"`
+}
+
+type Responce struct {
+	Err string `json:"err"`
+}
+type ArrayResponce[T any] struct {
+	Responce
+	Data []T `json:"data"`
+}
+
+type ItemResponce[T any] struct {
+	Responce
+	Data T `json:"data"`
 }
 
 func main() {
@@ -34,19 +48,23 @@ func main() {
 	app := fiber.New()
 
 	db.AutoMigrate(KnowType{})
+	app.Use(cors.New())
 
 	app.Get("/api/:id/knowtypes", func(c *fiber.Ctx) error {
 		var knowtypes []KnowType
 		db.Find(&knowtypes, "id = ?", c.Params("id"))
 
-		return c.JSON(knowtypes)
+		if len(knowtypes) > 0 {
+			return c.JSON(ItemResponce[KnowType]{Data: knowtypes[0]})
+		} else {
+			return c.JSON(Responce{Err: "Not found!"})
+		}
 	})
-
 	app.Get("/api/knowtypes", func(c *fiber.Ctx) error {
 		var knowtypes []KnowType
 		db.Find(&knowtypes)
 
-		return c.JSON(knowtypes)
+		return c.JSON(ArrayResponce[KnowType]{Data: knowtypes})
 	})
 
 	app.Post("/api/knowtypes", func(c *fiber.Ctx) error {
@@ -58,8 +76,8 @@ func main() {
 
 		db.Create(&knowtype)
 
-		return c.JSON(knowtype)
+		return c.JSON(ItemResponce[KnowType]{Data: knowtype})
 	})
 
-	app.Listen(":3000")
+	app.Listen(":8000")
 }
