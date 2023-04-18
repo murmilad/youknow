@@ -11,7 +11,7 @@
         "required": "The field is required!"
     },
     "action": {
-        "create-know-type": "Create Type of Know",
+        "create-know-type": "Create",
         "delete-know-type": "Delete"
     },
     "message":{

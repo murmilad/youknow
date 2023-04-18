@@ -50,7 +50,9 @@
 
 .selection_control_item,
 .create_selection_input, .create_input {
-  padding: 0 20px 10px 0;
+  padding: 10px 20px 20px 0;
+  float: left;
+  display: inline;
 }
 
 .selection_control_item, .control_item {
@@ -87,11 +89,16 @@
   padding-right: 20px;
 }
 
+.create_form_wrapper {
+  display: inherit;
+}
 
 .create_form_add_btn_wrapper,
 .create_selection_form_add_btn_wrapper {
   width: 100%;
   margin-top: 15px!important;
+  float: left;
+  display: inline;
 }
 
 .create_form_add_btn_wrapper .create_form_add_btn,
@@ -130,4 +137,37 @@
     padding-right: 0;
     margin-bottom: 5px;
   }
+}
+
+/*PickerField*/
+.picker_label {
+  float: left;
+  padding: 7px;
+}
+.picker_color {
+  width: 36px;
+  float: left;
+}
+
+.picker_swatch {
+  padding: 5px;
+  margin: 2px;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 16%);
+  display: inline !important;
+  cursor: pointer;
+  float: left;
+  height: 34px;
+}
+.picker_popover {
+  position: absolute;
+  z-index: 2;
+  margin-top: 40px;
+}
+.picker_cover {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
 }

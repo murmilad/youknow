@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware } from 'redux';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { reducer } from './reducers/reducer';
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -15,10 +16,10 @@ import rootSaga from './sagas'
 import './i18n';
 
 const sagaMiddleware = createSagaMiddleware()
-const store = createStore(reducer,
-  
-      applyMiddleware(sagaMiddleware)
-    );
+const store = configureStore({
+    reducer ,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
+});
     
 sagaMiddleware.run(rootSaga)
 
@@ -29,6 +30,5 @@ injectStoreToServer(store)
 ReactDOM.render(
   <Provider store={store}>
     <App />
-  </Provider>,
-  document.getElementById('root')
-);
+  </Provider>
+, document.getElementById('root'));
