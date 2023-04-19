@@ -140,13 +140,9 @@
 }
 
 /*PickerField*/
-.picker_label {
-  float: left;
-  padding: 7px;
-}
+
 .picker_color {
   width: 36px;
-  float: left;
 }
 
 .picker_swatch {
@@ -157,7 +153,7 @@
   display: inline !important;
   cursor: pointer;
   float: left;
-  height: 34px;
+  height: 35px;
 }
 .picker_popover {
   position: absolute;
@@ -170,4 +166,13 @@
   right: 0px;
   bottom: 0px;
   left: 0px;
+}
+.picker_placeholder{
+  color:#6c757d;
+  padding: 7px 10px 3px 10px;
+}
+
+/*Buttons*/
+.button_delete {
+  background-color: #fff !important;
 }
