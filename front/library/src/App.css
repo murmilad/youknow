@@ -174,5 +174,15 @@
 
 /*Buttons*/
 .button_delete {
-  background-color: #fff !important;
+  
 }
+
+/*Edit form*/
+
+.edit_form {
+  display: contents !important;
+}
+.edit_form_wrapper {
+  display: contents !important;
+}
+

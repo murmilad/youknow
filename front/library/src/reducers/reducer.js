@@ -9,13 +9,18 @@ export const reducer = (state = { knowtypes: [], selections: { data: [] } }, act
       }
     case "CREATE_KNOWTYPE":
       return {
-        ...state,
-        selections: {
-          ...state.selections,
-          isPending: false,
-          newSelection: null
-        }
+        ...state
       }
+    case "OPEN_KNOWTYPE":
+        var knowtypes = state.knowtypes.map(knowtype =>{ 
+          return {...knowtype, open: knowtype.id === action.payload.id}
+        })
+        return {
+          ...state,
+          knowtypes: [
+            ...knowtypes
+          ]
+        }
     case "HIDE_ERROR_MODAL":
       return {
         ...state,

@@ -1,7 +1,4 @@
-import {useState} from "react";
-import {createKnowtype} from "../../actions/knowtype-actions";
 import {useDispatch} from "react-redux";
-import {isStringEmpty, isObjectEmpty} from "../../utils/utils"
 import {Formik, Field, Form} from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
@@ -11,8 +8,6 @@ import PickerField from '../../components/PickerField'
 function CreateKnowtypeForm() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch()
-  const [name, setName] = useState("")
-  const [style, setStyle] = useState("")
 
   return (
     <Formik
@@ -20,13 +15,13 @@ function CreateKnowtypeForm() {
         name: '',
         style: "#fff",
       }}
-      onSubmit ={ values => {
+      onSubmit ={ (values, { setSubmitting, resetForm }) => {
         dispatch({type: 'CREATE_KNOWTYPE', knowtype: {
           name: values.name,
           style: values.style
         }})
-        setName("")
-        setStyle("")
+        resetForm()
+        setSubmitting(false)
       }}
       validationSchema = {
         yup.object().shape({
