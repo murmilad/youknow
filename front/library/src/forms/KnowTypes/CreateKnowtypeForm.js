@@ -35,7 +35,6 @@ function CreateKnowtypeForm() {
           <Field name="name" > 
             {({
               field,
-              form: { touched, errors },
               meta,
             }) => (
               <div className="create_input " >
@@ -47,7 +46,6 @@ function CreateKnowtypeForm() {
           <Field name="style">
             {({
               field,
-              form: { touched, errors },
               meta,
             }) => (
               <div className="create_input ">

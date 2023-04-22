@@ -11,6 +11,10 @@ function PickerField(props) {
 
   var handleChangeColor = (color) => {
     formikProps.setFieldValue("style", color.hex)
+    if (props.onChange) {
+      props.onChange()
+    }
+   // props.form.submitForm()
   };
 
   var handleClick = () => {

@@ -18,20 +18,21 @@ function EditKnowtypeForm(props) {
   }
 
   return (
+    <div onClick={handleClick} key={props.idx} style={{background:props.knowtype.style}} className="list-group-item d-flex justify-content-between align-items-center">
+
     <Formik
       initialValues = {{
         id: props.knowtype.id,
         name: props.knowtype.name,
         style: props.knowtype.style,
       }}
-      onSubmit ={ (values, { setSubmitting, resetForm }) => {
+      enableReinitialize
+      onSubmit ={ values => {
         dispatch({type: 'EDIT_KNOWTYPE', knowtype: {
           id: values.id,
           name: values.name,
           style: values.style
         }})
-        resetForm()
-        setSubmitting(false)
       }}
       validationSchema = {
         yup.object().shape({
@@ -40,25 +41,24 @@ function EditKnowtypeForm(props) {
         })
       }
     >
-      <Form className="edit_form row" onClick={handleClick}>
+      <Form className="edit_form row" >
         <div className="edit_form_wrapper" >
-          { !props.knowtype.open 
+          { !props.open 
             && <>
-              <span><strong>{props.knowtype.name}</strong></span>
-              <span className="pull-right">
-                  <button type="button" data-testid="delete-button"   className="btn btn-outline-danger btn-sm button_delete"
-                          onClick={()=>dispatch({type: "DELETE_KNOWTYPE", knowtype: props.knowtype})}>{t('action.delete-know-type')}</button>
-              </span>
+              <div className="line_element"><strong>{props.knowtype.name}</strong></div>
               </>
             || <> 
               <Field name="name" > 
                 {({
                   field,
-                  form: { touched, errors },
+                  form,
                   meta,
                 }) => (
-                  <div className="create_input " >
-                    <input placeholder={t('field.know-type-name')} className="form-control" {...field} />
+                  <div className="create_input line_element" >
+                    <input  placeholder={t('field.know-type-name')} className="form-control" {...field} onChange={(e) => {
+                      field.onChange(e)
+                      form.submitForm()
+                    }}/>
                     {meta.touched && meta.error && ( <span className="form_error">{t('error.required')}</span>)}
                   </div>
                 )}
@@ -66,20 +66,27 @@ function EditKnowtypeForm(props) {
               <Field name="style">
                 {({
                   field,
-                  form: { touched, errors },
+                  form,
                   meta,
                 }) => (
-                  <div className="create_input ">
-                    <PickerField header={t('field.know-type-style')} value={field.value}/>
+                  <div className="create_input line_element">
+                    <PickerField header={t('field.know-type-style')} value={field.value} onChange={(e)=>
+                      form.submitForm()
+                    }/>
                     {meta.touched && meta.error && ( <span className="form_error">{t('error.required')}</span>)}
                   </div>
                 )}
               </Field>
             </>
           }
+          <div className="line_element">
+              <button type="button" data-testid="delete-button"   className="btn btn-outline-danger btn-sm button_delete"
+                      onClick={()=>dispatch({type: "DELETE_KNOWTYPE", knowtype: props.knowtype})}>{t('action.delete-know-type')}</button>
+          </div>
         </div>
       </Form>
     </Formik>
+    </div>
   )}
 
 export default EditKnowtypeForm

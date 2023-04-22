@@ -17,6 +17,7 @@ import {
 export function* callServerLastest() {
     yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/'+action.knowtype.id+'/knowtypes/', 'GET_KNOWTYPES')
     yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/knowtypes', request => request.knowtype, 'GET_KNOWTYPES')
+    yield takeLatest("EDIT_KNOWTYPE", postResource, '/api/knowtypes', request => request.knowtype, 'GET_KNOWTYPES')
     yield takeLatest("GET_KNOWTYPES", fetchResource, '/api/knowtypes', response =>  ({ knowtypes: response.data })  , "FETCH_KNOWTYPES")
 }
 function* deleteResource(linkCallback, successAction, action) {

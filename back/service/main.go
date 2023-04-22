@@ -49,7 +49,7 @@ func main() {
 	})
 	app.Get("/api/knowtypes", func(c *fiber.Ctx) error {
 		var knowtypes []KnowType
-		db.Find(&knowtypes)
+		db.Order("id").Find(&knowtypes)
 
 		return c.JSON(knowtypes)
 	})

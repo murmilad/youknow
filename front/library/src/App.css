@@ -186,3 +186,9 @@
   display: contents !important;
 }
 
+/*Line*/
+
+.line_element {
+  float: left;
+  display: contents;
+}

@@ -1,4 +1,4 @@
-export const reducer = (state = { knowtypes: [], selections: { data: [] } }, action) => {
+export const reducer = (state = { knowtypes: [], open: null }, action) => {
   switch (action.type) {
     case "FETCH_KNOWTYPES":
       return {
@@ -12,14 +12,10 @@ export const reducer = (state = { knowtypes: [], selections: { data: [] } }, act
         ...state
       }
     case "OPEN_KNOWTYPE":
-        var knowtypes = state.knowtypes.map(knowtype =>{ 
-          return {...knowtype, open: knowtype.id === action.payload.id}
-        })
+
         return {
           ...state,
-          knowtypes: [
-            ...knowtypes
-          ]
+          open:action.payload.id
         }
     case "HIDE_ERROR_MODAL":
       return {
