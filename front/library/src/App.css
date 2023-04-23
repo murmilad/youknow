@@ -48,14 +48,7 @@
   align-items: center;
 }
 
-.selection_control_item,
-.create_selection_input, .create_input {
-  padding: 10px 20px 20px 0;
-  float: left;
-  display: inline;
-}
-
-.selection_control_item, .control_item {
+.control_item {
   width: 50%;
 }
 
@@ -82,11 +75,6 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-}
-
-.create_selection_input {
-  width: 33.3%;
-  padding-right: 20px;
 }
 
 .create_form_wrapper {
@@ -189,6 +177,14 @@
 /*Line*/
 
 .line_element {
+  padding: 0px 10px 0px 10px;
   float: left;
-  display: contents;
+  display: block;
+}
+
+/*Form*/
+.form_element {
+  padding: 10px 20px 20px 0;
+  float: left;
+  display: inline;
 }

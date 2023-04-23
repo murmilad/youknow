@@ -23,7 +23,14 @@ function PickerField(props) {
   return (
       <>
 
-        <div className="picker_swatch" style={{background : formikProps.values.style}}  onClick={ handleClick }>
+        <div 
+          className={props.className} 
+          onClick={(e)=>{
+            e.stopPropagation()
+            handleClick()
+          }}
+          style={{background : formikProps.values.style}}  
+        >
           <span className="picker_placeholder" >{props.header}</span>
           { showPicker ? <div className="picker_popover">
             <div className="picker_cover" onClick={ handleClick }/>

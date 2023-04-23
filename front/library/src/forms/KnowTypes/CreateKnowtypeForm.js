@@ -21,7 +21,6 @@ function CreateKnowtypeForm() {
           style: values.style
         }})
         resetForm()
-        setSubmitting(false)
       }}
       validationSchema = {
         yup.object().shape({
@@ -31,15 +30,15 @@ function CreateKnowtypeForm() {
       }
     >
       <Form className="create_form row" >
-        <div className="create_form_wrapper">
+        <div className="form-wrapper">
           <Field name="name" > 
             {({
               field,
               meta,
             }) => (
-              <div className="create_input " >
-                <input placeholder={t('field.know-type-name')} className="form-control" {...field} />
-                {meta.touched && meta.error && ( <span className="form_error">{t('error.required')}</span>)}
+              <div className="form_element form-group" >
+                <input placeholder={t('field.know-type-name')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
+                {meta.touched && meta.error && ( <span className="invalid-feedback">{t('error.required')}</span>)}
               </div>
             )}
           </Field>
@@ -48,19 +47,18 @@ function CreateKnowtypeForm() {
               field,
               meta,
             }) => (
-              <div className="create_input ">
-                <PickerField header={t('field.know-type-style')} value={field.value}/>
-                {meta.touched && meta.error && ( <span className="form_error">{t('error.required')}</span>)}
+              <div className="form_element form-group">
+                <PickerField className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'}  header={t('field.know-type-style')} value={field.value}/>
+                {meta.touched && meta.error && ( <span className="invalid-feedback">{t('error.required')}</span>)}
               </div>
             )}
           </Field>
-          <div className="create_input ">
-            <button type="submit" className="btn btn-primary">{t('action.create-know-type')}</button>
+          <div className="form_element form-group">
+            <button type="submit" className="btn btn-primary" >{t('action.create-know-type')}</button>
           </div>
         </div>
       </Form>
     </Formik>
   )
 }
-
 export default CreateKnowtypeForm

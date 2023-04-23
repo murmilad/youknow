@@ -5,22 +5,25 @@ import EditKnowtypeForm from './EditKnowtypeForm'
 
   
 function KnowTypes() {
-  const knowtypes = useSelector(state => state.knowtypes)
-  const open = useSelector(state => state.open)
+  const knowtypes = useSelector(state => state.knowtype.list)
+  const open = useSelector(state => state.knowtype.open)
+  const error = useSelector(state => state.knowtype.error)
+  
   const selectableList = useRef(null);
   const dispatch = useDispatch()
-
+  
   useEffect(() => {
     function handleClickOutside(event) {
       if (selectableList.current && !selectableList.current.contains(event.target)) {
-        dispatch({type: 'OPEN_KNOWTYPE', payload:{id:null}})
+        if (!error)
+          dispatch({type: 'CLOSE_KNOWTYPES', payload:{close:true}})
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [selectableList])
+  }, [selectableList, error])
 
 
   return (

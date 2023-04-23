@@ -15,7 +15,8 @@
         "delete-know-type": "Delete"
     },
     "message":{
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "wait": "Wait..."
     }
 
 }
