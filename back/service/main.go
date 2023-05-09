@@ -3,18 +3,12 @@ package main
 import (
 	"fmt"
 
+	"akosarev.info/youknow/config"
+	"akosarev.info/youknow/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-)
-
-const (
-	host     = "localhost"
-	port     = 5560
-	user     = "postgres"
-	password = "postgres"
-	dbname   = "youknow"
 )
 
 type KnowType struct {
@@ -23,10 +17,23 @@ type KnowType struct {
 	Style string `json:"style"` // `gorm:"-" default:"[]"`
 }
 
+type Login struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type Token struct {
+	Token string `json:"token"`
+}
+
 func main() {
-	dsn := fmt.Sprintf("host=%s port=%d user=%s "+
+	dsn := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+		config.Config("DB_HOST"),
+		config.Config("DB_PORT"),
+		config.Config("DB_USER"),
+		config.Config("DB_PASSWORD"),
+		config.Config("DB_NAME"))
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -58,12 +65,27 @@ func main() {
 		var knowtype KnowType
 
 		if err := c.BodyParser(&knowtype); err != nil {
-			return err
+			return fiber.NewError(fiber.StatusInternalServerError, "JWT generator error")
 		}
 
 		db.Save(&knowtype)
 
 		return c.JSON(knowtype)
+	})
+
+	app.Post("/api/login", func(c *fiber.Ctx) error {
+		var login Login
+
+		if err := c.BodyParser(&login); err != nil {
+			return err
+		}
+
+		token, err := jwt.GenerateJWT()
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(Token{token})
 	})
 
 	app.Delete("/api/:id/knowtypes", func(c *fiber.Ctx) error {

@@ -185,6 +185,9 @@
 /*Form*/
 .form_element {
   padding: 10px 20px 20px 0;
-  float: left;
+}
+
+.horizontal {
   display: inline;
+  float: left;
 }

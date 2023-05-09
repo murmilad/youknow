@@ -36,7 +36,7 @@ function CreateKnowtypeForm() {
               field,
               meta,
             }) => (
-              <div className="form_element form-group" >
+              <div className="form_element horizontal form-group" >
                 <input placeholder={t('field.know-type-name')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
                 {meta.touched && meta.error && ( <span className="invalid-feedback">{t('error.required')}</span>)}
               </div>
@@ -47,7 +47,7 @@ function CreateKnowtypeForm() {
               field,
               meta,
             }) => (
-              <div className="form_element form-group">
+              <div className="form_element horizontal form-group">
                 <PickerField className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'}  header={t('field.know-type-style')} value={field.value}/>
                 {meta.touched && meta.error && ( <span className="invalid-feedback">{t('error.required')}</span>)}
               </div>

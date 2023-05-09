@@ -1,7 +1,8 @@
 
 {
     "header": {
-        "know-types":"Types of Know"
+        "know-types":"Types of Know",
+        "login":"Log In"
     },
     "field": {
       "know-type-name": "Type Name",

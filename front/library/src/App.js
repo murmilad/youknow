@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 //forms
 import ErrorModal from "./forms/Errors/ErrorModal"
+import RoutesPage from "./router/RoutesPage"
 
 //styles
 import './App.css';
@@ -25,13 +26,9 @@ function App() {
 
   return (
     <>
-    <div className="wrapper _wrapper">
-      <h2 className="page_title">{t('header.know-types')}</h2>
       <Suspense fallback={<div>{t('message.loading')}</div>}>
-        <KnowTypes/>
+        <RoutesPage/>
       </Suspense>
-      <CreateKnowtypeForm />
-    </div>
     <ErrorModal />
     </>
   );

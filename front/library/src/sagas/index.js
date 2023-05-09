@@ -15,6 +15,7 @@ import {
 
 
 export function* callServerLastest() {
+    yield takeLatest("LOGIN", submitForm, '/api/login', request => request.login, response =>  ({ logged_in: response.data.token }), 'SET_LOGIN')
     yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/'+action.knowtype.id+'/knowtypes/', 'GET_KNOWTYPES')
     yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/knowtypes', request => request.knowtype, 'GET_KNOWTYPES')
     yield takeLatest("EDIT_KNOWTYPE", postResource, '/api/knowtypes', request => request.knowtype, 'GET_KNOWTYPES')
@@ -29,6 +30,15 @@ function* deleteResource(linkCallback, successAction, action) {
     }
   }
   
+  function* submitForm(link, requestCallback, resultCallback, successAction, action) {
+    try {
+      const result = yield call(SERVER.post, link, requestCallback(action))
+      yield put({type: successAction, payload: resultCallback(result)})
+    } catch (error) {
+      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
+    }
+  }
+
   function* postResource(link, requestCallback, successAction, action) {
     try {
       const result = yield call(SERVER.post, link, requestCallback(action))
