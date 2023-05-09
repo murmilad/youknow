@@ -1,4 +1,4 @@
-export const reducer = (state = { knowtype: {list:[], open: null, error: false, close:false},  logged_in: false}, action) => {
+export const reducer = (state = { knowtype: {list:[], open: null, error: false, close:false},  logged_in: false, login_incorrect: false}, action) => {
   switch (action.type) {
     case "FETCH_KNOWTYPES":
       return {
@@ -61,7 +61,8 @@ export const reducer = (state = { knowtype: {list:[], open: null, error: false, 
     case "SET_LOGIN": 
       return {
         ...state,
-        logged_in:action.payload.logged_in
+        logged_in:action.payload.logged_in,
+        login_incorrect:action.payload.login_incorrect
       }
     default:
       return state

@@ -23,7 +23,8 @@ type Login struct {
 }
 
 type Token struct {
-	Token string `json:"token"`
+	Token       string `json:"token"`
+	IsIncorrect bool   `json:"is_incorrect"`
 }
 
 func main() {
@@ -80,12 +81,15 @@ func main() {
 			return err
 		}
 
-		token, err := jwt.GenerateJWT()
-		if err != nil {
-			return err
+		if login.Password == "123" {
+			token, err := jwt.GenerateJWT()
+			if err != nil {
+				return err
+			}
+			return c.JSON(Token{token, false})
+		} else {
+			return c.JSON(Token{"", true})
 		}
-
-		return c.JSON(Token{token})
 	})
 
 	app.Delete("/api/:id/knowtypes", func(c *fiber.Ctx) error {

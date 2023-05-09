@@ -17,7 +17,8 @@
     },
     "message":{
         "loading": "Loading...",
-        "wait": "Wait..."
+        "wait": "Wait...",
+        "login_incorrect": "User or Password incorrect"
     }
 
 }
