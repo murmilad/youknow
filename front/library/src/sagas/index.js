@@ -29,7 +29,7 @@ function* deleteResource(linkCallback, successAction, action) {
       const result = yield call(SERVER.delete, linkCallback(action))
       yield put({ type: 'GET_KNOWTYPES'})
     } catch (error) {
-      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
+      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.response.data.message}})
     }
   }
   
@@ -38,7 +38,7 @@ function* deleteResource(linkCallback, successAction, action) {
       const result = yield call(SERVER.post, link, requestCallback(action))
       yield put({type: successAction, payload: resultCallback(result)})
     } catch (error) {
-      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
+      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.response.data.message}})
     }
   }
 
@@ -47,7 +47,7 @@ function* deleteResource(linkCallback, successAction, action) {
       const result = yield call(SERVER.post, link, requestCallback(action))
       yield put({type: successAction})
     } catch (error) {
-      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
+      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.response.data.message}})
     }
   }
 
@@ -56,7 +56,7 @@ function* deleteResource(linkCallback, successAction, action) {
       const result = yield call(SERVER.get, link)
       yield put({ type: successAction, payload: resultCallback(result)})
     } catch (error) {
-      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.message}})
+      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.response.data.message}})
     }
   }
    
