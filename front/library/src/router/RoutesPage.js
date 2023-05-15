@@ -5,10 +5,12 @@ import { useSelector, useDispatch } from 'react-redux'
 //pages
 import KnowTypesPage from "../forms/KnowTypes/KnowTypes"
 import LoginPage from "../forms/Login/Login"
+import SignedUp from "../forms/Login/SignedUp"
 
 
 function RoutesPage() {
     const logged_in = useSelector(state => state.logged_in)
+    const signed_up = useSelector(state => state.signed_up)
 
 
     return (
@@ -20,8 +22,9 @@ function RoutesPage() {
                 element={
                     logged_in ?
                         <KnowTypesPage />
-                        :
-                        <Navigate to={{ pathname: '/login' }} />
+                        : signed_up ?
+                            <SignedUp />
+                            : <Navigate to={{ pathname: '/login' }} />
                 }
             >
 

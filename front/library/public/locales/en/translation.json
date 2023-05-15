@@ -2,14 +2,27 @@
 {
     "header": {
         "know-types":"Types of Know",
-        "login":"Log In"
+        "login":"Log In",
+        "sign-up":"Sign up",
+        "signed-up" : "Please check your mail box and confirm your E-Mai"
     },
     "field": {
       "know-type-name": "Type Name",
-      "know-type-style": "Style"
+      "know-type-style": "Style",
+      "user-name":"Name",
+      "user-email":"E-Mail",
+      "user-password":"Password",
+      "user-retype-password":"Retype password",
+      "user-sign-up":"Sign Up"
     },
     "error": {
-        "required": "The field is required!"
+        "required": "The field is required!",
+        "email" : "Please enter correct email",
+        "name" : "Please enter name",
+        "password" : "Please enter password",
+        "password-match": "Passwords must match",
+        "password-letters": "Password can only contain Latin letters",
+        "password-short": "Password is too short - should be 8 chars minimum"
     },
     "action": {
         "create-know-type": "Create",

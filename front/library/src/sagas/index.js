@@ -15,9 +15,12 @@ import {
 
 
 export function* callServerLastest() {
+  
+    yield takeLatest("SIGN_UP", submitForm, '/api/auth/register', request => request.signup, response =>  ({ 
+      signed_up: true,
+    }), 'SET_SIGN_UP')
     yield takeLatest("LOGIN", submitForm, '/api/auth/login', request => request.login, response =>  ({ 
       logged_in: response.token,
-      login_incorrect: response.is_incorrect 
     }), 'SET_LOGIN')
     yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/youknow/knowtype'+action.knowtype.id, 'GET_KNOWTYPES')
     yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/youknow/knowtypes', request => request.knowtype, 'GET_KNOWTYPES')
