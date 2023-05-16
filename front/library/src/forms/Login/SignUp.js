@@ -15,37 +15,37 @@ function SignUpPage() {
   
     <Formik
       initialValues = {{
-        name: '',
-        email: '',
-        password: '',
-        passwordConfirm: '',
+        signupName: '',
+        signupEmail: '',
+        signupPassword: '',
+        signupPasswordConfirm: '',
       }}
       onSubmit ={ (values, { setSubmitting, resetForm }) => {
         dispatch({type: 'SIGN_UP', signup: {
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          passwordConfirm: values.passwordConfirm,
+          name: values.signupName,
+          email: values.signupEmail,
+          password: values.signupPassword,
+          passwordConfirm: values.signupPasswordConfirm,
           }})
       }}
       validationSchema = {
         yup.object().shape({
-          name: yup.string().required(),
-          email: yup.string().email().required(),
-          password: yup.string().required().min(8, t('password-short'))
+          signupName: yup.string().required(),
+          signupEmail: yup.string().email().required(),
+          signupPassword: yup.string().required().min(8, t('error.password-short'))
           .matches(/[a-zA-Z]/, t('error.password-letters')),
-          passwordConfirm: yup.string().required().min(8, t('password-short'))
+          signupPasswordConfirm: yup.string().required().min(8, t('error.password-short'))
           .matches(/[a-zA-Z]/, t('error.password-letters')).test(
             'passwords-match', 
             t('error.password-match'), 
-            (value) => this.parent.password === value)
-          
+            function (value) { return this.parent.signupPassword === value}
+          )
         })
       }
     >
       <Form className="row" >
         <div className="form-wrapper">
-        <Field name="name" > 
+        <Field name="signupName" > 
             {({
               field,
               meta,
@@ -56,7 +56,7 @@ function SignUpPage() {
               </div>
             )}
           </Field>
-          <Field name="email" > 
+          <Field name="signupEmail" > 
             {({
               field,
               meta,
@@ -67,7 +67,7 @@ function SignUpPage() {
               </div>
             )}
           </Field>
-          <Field name="password">
+          <Field name="signupPassword">
             {({
               field,
               meta,
@@ -78,7 +78,7 @@ function SignUpPage() {
               </div>
             )}
           </Field>
-          <Field name="passwordConfirm">
+          <Field name="signupPasswordConfirm">
             {({
               field,
               meta,
