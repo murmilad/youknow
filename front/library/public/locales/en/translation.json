@@ -13,7 +13,11 @@
       "user-email":"E-Mail",
       "user-password":"Password",
       "user-retype-password":"Retype password",
-      "user-sign-up":"Sign Up"
+      "user-sign-up":"Sign Up",
+      "login-email":"E-Mail",
+      "login-password":"Password",
+      "login-login" : "Login",
+      "login-sign-up" : "Sign up"
     },
     "error": {
         "required": "The field is required!",

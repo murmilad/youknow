@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import KnowTypesPage from "../forms/KnowTypes/KnowTypes"
 import LoginPage from "../forms/Login/Login"
 import SignedUp from "../forms/Login/SignedUp"
+import SignUp from "../forms/Login/SignUp"
 
 
 function RoutesPage() {
@@ -37,6 +38,10 @@ function RoutesPage() {
                         :
                             <LoginPage />
                     }
+                    />
+                <Route
+                    path="/signup"
+                    element={<SignUp/>}
                     />
             </Routes>
         </BrowserRouter>
