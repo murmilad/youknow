@@ -22,7 +22,7 @@ function LoginPage() {
         email: '',
         password: '',
       }}
-      onSubmit ={ (values, { setSubmitting, resetForm }) => {
+      onSubmit ={ (values) => {
         dispatch({type: 'LOGIN', login: {
           email: values.email,
           password: values.pass

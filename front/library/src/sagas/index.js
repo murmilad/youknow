@@ -16,11 +16,15 @@ import {
 
 export function* callServerLastest() {
   
+  
+    yield takeLatest("VERIFY", submitFormGet, action => '/api/auth/verifyemail/'+action.verifyHash, response =>  ({ 
+      verified: true,
+    }), 'SET_VERIFIED')
     yield takeLatest("SIGN_UP", submitForm, '/api/auth/register', request => request.signup, response =>  ({ 
       signed_up: true,
     }), 'SET_SIGN_UP')
     yield takeLatest("LOGIN", submitForm, '/api/auth/login', request => request.login, response =>  ({ 
-      logged_in: response.token,
+      logged_in: response.data.token,
     }), 'SET_LOGIN')
     yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/youknow/knowtype'+action.knowtype.id, 'GET_KNOWTYPES')
     yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/youknow/knowtypes', request => request.knowtype, 'GET_KNOWTYPES')
@@ -35,7 +39,17 @@ function* deleteResource(linkCallback, successAction, action) {
       yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.response.data.message}})
     }
   }
-  
+
+  function* submitFormGet(linkCallback, resultCallback, successAction, action) {
+    try {
+      const result = yield call(SERVER.get, linkCallback(action))
+      yield put({type: successAction, payload: resultCallback(result)})
+    } catch (error) {
+      yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.response.data.message}})
+    }
+  }
+ 
+
   function* submitForm(link, requestCallback, resultCallback, successAction, action) {
     try {
       const result = yield call(SERVER.post, link, requestCallback(action))

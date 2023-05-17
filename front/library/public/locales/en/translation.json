@@ -4,7 +4,8 @@
         "know-types":"Types of Know",
         "login":"Log In",
         "sign-up":"Sign up",
-        "signed-up" : "Please check your mail box and confirm your E-Mai"
+        "signed-up" : "Please check and confirm your E-Mail",
+        "verify" : "Verify E-Mail address"
     },
     "field": {
       "know-type-name": "Type Name",
@@ -17,7 +18,8 @@
       "login-email":"E-Mail",
       "login-password":"Password",
       "login-login" : "Login",
-      "login-sign-up" : "Sign up"
+      "login-sign-up" : "Sign up",
+      "verify-verify" : "Verify"
     },
     "error": {
         "required": "The field is required!",

@@ -7,12 +7,13 @@ import KnowTypesPage from "../forms/KnowTypes/KnowTypes"
 import LoginPage from "../forms/Login/Login"
 import SignedUp from "../forms/Login/SignedUp"
 import SignUp from "../forms/Login/SignUp"
+import Verify from "../forms/Login/Verify"
 
 
 function RoutesPage() {
     const logged_in = useSelector(state => state.logged_in)
     const signed_up = useSelector(state => state.signed_up)
-
+    const verified = useSelector(state => state.verified)
 
     return (
        <BrowserRouter>
@@ -23,9 +24,7 @@ function RoutesPage() {
                 element={
                     logged_in ?
                         <KnowTypesPage />
-                        : signed_up ?
-                            <SignedUp />
-                            : <Navigate to={{ pathname: '/login' }} />
+                        : <Navigate to={{ pathname: '/login' }} />
                 }
             >
 
@@ -35,13 +34,24 @@ function RoutesPage() {
                     element={
                         logged_in ?
                             <Navigate to={{ pathname: '/' }} />
-                        :
-                            <LoginPage />
+                            : <LoginPage />
                     }
                     />
                 <Route
                     path="/signup"
-                    element={<SignUp/>}
+                    element={
+                        signed_up ?
+                            <SignedUp />
+                            : <SignUp/>
+                    }
+                    />
+                <Route
+                    path="/verifyemail/:verifyHash"
+                    element={
+                        verified ?
+                            <Navigate to={{ pathname: '/' }} />
+                            : <Verify/>
+                    }
                     />
             </Routes>
         </BrowserRouter>
