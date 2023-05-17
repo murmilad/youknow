@@ -51,7 +51,7 @@ function SignUpPage() {
               meta,
             }) => (
               <div className="form_element form-group field" >
-                <input placeholder={t('field.user-name')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
+                <input autocomplete='name' placeholder={t('field.user-name')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
                 {meta.touched && meta.error && ( <span className="invalid-feedback" >{t('error.name')}</span>)}
               </div>
             )}
@@ -62,7 +62,7 @@ function SignUpPage() {
               meta,
             }) => (
               <div className="form_element form-group field" >
-                <input placeholder={t('field.user-email')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
+                <input autocomplete='email' placeholder={t('field.user-email')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
                 {meta.touched && meta.error && ( <span className="invalid-feedback" >{t('error.email')}</span>)}
               </div>
             )}
@@ -73,7 +73,7 @@ function SignUpPage() {
               meta,
             }) => (
               <div className="form_element form-group field" >
-                <input type="password" placeholder={t('field.user-password')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
+                <input autocomplete='new-password' type="password" placeholder={t('field.user-password')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
                 {meta.touched && meta.error && ( <span className="invalid-feedback">{ meta.error }</span>)}
               </div>
             )}
@@ -84,7 +84,7 @@ function SignUpPage() {
               meta,
             }) => (
               <div className="form_element form-group field" >
-                <input type="password" placeholder={t('field.user-retype-password')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
+                <input autocomplete='new-password' type="password" placeholder={t('field.user-retype-password')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
                 {meta.touched && meta.error && ( <span className="invalid-feedback">{ meta.error }</span>)}
               </div>
             )}

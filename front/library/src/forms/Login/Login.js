@@ -43,7 +43,7 @@ function LoginPage() {
               meta,
             }) => (
               <div className="form_element form-group field" >
-                <input placeholder={t('field.login-email')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
+                <input autocomplete='email' placeholder={t('field.login-email')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
                 {meta.touched && meta.error && ( <span className="invalid-feedback" >{t('error.email')}</span>)}
               </div>
             )}
