@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect }  from "react";
 import { Navigate, Routes, Route, BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -11,9 +11,11 @@ import Verify from "../forms/Login/Verify"
 
 
 function RoutesPage() {
-    const logged_in = useSelector(state => state.logged_in)
+    let dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     const signed_up = useSelector(state => state.signed_up)
     const verified = useSelector(state => state.verified)
+
 
     return (
        <BrowserRouter>
@@ -22,7 +24,7 @@ function RoutesPage() {
                 exact
                 path="/"
                 element={
-                    logged_in ?
+                    user ?
                         <KnowTypesPage />
                         : <Navigate to={{ pathname: '/login' }} />
                 }
@@ -32,7 +34,7 @@ function RoutesPage() {
                 <Route
                     path="/login"
                     element={
-                        logged_in ?
+                        user ?
                             <Navigate to={{ pathname: '/' }} />
                             : <LoginPage />
                     }

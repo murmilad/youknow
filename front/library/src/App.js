@@ -16,13 +16,12 @@ const KnowTypes = lazy(() => import( "./forms/KnowTypes/KnowTypes"));
 
 function App() {
   const { t, i18n } = useTranslation();
+  let dispatch = useDispatch() 
 
-  const selections = useSelector(state => state.selections)
-  const dispatch = useDispatch()
   useEffect(() => {
-    dispatch({type: "GET_KNOWTYPES"})
-    dispatch({type: "GET_SELECTIONS"})
-  }, [])
+    dispatch({type: 'CHECK_LOG_IN'})
+  });
+
 
   return (
     <>

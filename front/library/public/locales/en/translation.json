@@ -5,7 +5,8 @@
         "login":"Log In",
         "sign-up":"Sign up",
         "signed-up" : "Please check and confirm your E-Mail",
-        "verify" : "Verify E-Mail address"
+        "verify" : "Verify E-Mail address",
+        "application" : "You know"
     },
     "field": {
       "know-type-name": "Type Name",

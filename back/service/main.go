@@ -52,6 +52,7 @@ func main() {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{"http://notebook:8000", config.ClientOrigin}
 	corsConfig.AllowCredentials = true
+	corsConfig.AllowHeaders = []string{"*"}
 
 	server.Use(cors.New(corsConfig))
 

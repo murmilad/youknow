@@ -1,4 +1,4 @@
-export const reducer = (state = { knowtype: {list:[], open: null, error: false, close:false},  signed_up: false, verified: false, logged_in: false}, action) => {
+export const reducer = (state = { knowtype: {list:[], open: null, error: false, close:false},  signed_up: false, verified: false}, action) => {
   switch (action.type) {
     case "FETCH_KNOWTYPES":
       return {
@@ -39,7 +39,7 @@ export const reducer = (state = { knowtype: {list:[], open: null, error: false, 
           error:action.payload.error
         }
       }
-      case "HIDE_ERROR_MODAL":
+    case "HIDE_ERROR_MODAL":
       return {
         ...state,
         modal: {
@@ -47,7 +47,6 @@ export const reducer = (state = { knowtype: {list:[], open: null, error: false, 
           isShow: false
         }
       }
-
     case "SHOW_ERROR_MODAL":
       return {
         ...state,
@@ -57,23 +56,21 @@ export const reducer = (state = { knowtype: {list:[], open: null, error: false, 
           isShow: true
         }
       }
-
-      
     case "SET_SIGN_UP": 
-    return {
-      ...state,
-      signed_up:action.payload.signed_up,
-    }
-    case "SET_LOGIN": 
       return {
         ...state,
-        logged_in:action.payload.logged_in
+        signed_up:action.payload.signed_up,
       }
     case "SET_VERIFIED": 
-    return {
-      ...state,
-      verified:action.payload.verified
-    }
+      return {
+        ...state,
+        verified:action.payload.verified
+      }
+    case "SET_USER": 
+      return {
+        ...state,
+        user:action.payload.user
+      }
     default:
       return state
   }
