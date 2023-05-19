@@ -5,13 +5,14 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useTranslation } from 'react-i18next'
 
+
 function NavigationBar(props) {
   const { t, i18n } = useTranslation();
 
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">{t('header.application')}</Navbar.Brand>
+        <Navbar.Brand href="#home"><img src="/images/logo.png" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
           <Nav className="justify-content-end">
