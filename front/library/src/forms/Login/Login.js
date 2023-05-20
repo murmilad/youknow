@@ -2,13 +2,20 @@ import {Formik, Field, Form} from "formik"
 import { useSelector, useDispatch } from 'react-redux'
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { getGitHubUrl } from "../../utils/getGithubUrl"
+import { getGoogleUrl } from "../../utils/getGoogleUrl"
+import { Google, Github } from 'react-bootstrap-icons';
 
 function LoginPage() {
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = ((location.state)?.from.pathname) || '/';
+
+
   function goSignUp(){
     navigate("/signup");
   }
@@ -66,11 +73,23 @@ function LoginPage() {
               </div>
             )}
           </Field>
-          <div className="line_element  form-group field">
-            <button type="submit" className="btn btn-primary" >{t('field.login-login')}</button>
-          </div>
-          <div className="line_element form-group field">
-            <button type="button" className="btn btn-primary" onClick={goSignUp}>{t('field.login-sign-up')}</button>
+          <div className="form_element form-group field" >
+            <div className="line_element ">
+              <button type="submit" className="btn btn-primary" >{t('field.login-login')}</button>
+            </div>
+            <div className="line_element ">
+              <button type="button" className="btn btn-primary" onClick={goSignUp}>{t('field.login-sign-up')}</button>
+            </div>
+            <div className="line_element ">
+              <Link to={getGitHubUrl(from)}>
+                <button type="button" className="btn btn-primary " ><Github /></button>
+              </Link>
+            </div>
+            <div className="line_element ">
+              <Link to={getGoogleUrl(from)}>
+                <button type="button" className="btn btn-primary " ><Google /></button>
+              </Link>
+            </div>
           </div>
         </div>
       </Form>
