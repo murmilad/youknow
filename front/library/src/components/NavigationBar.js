@@ -12,7 +12,7 @@ function NavigationBar(props) {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#home"><img src="/images/logo.png" /></Navbar.Brand>
+        <Navbar.Brand href="#home"><img src="/images/logo_small.png" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
           <Nav className="justify-content-end">

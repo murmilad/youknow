@@ -20,7 +20,8 @@
       "login-password":"Password",
       "login-login" : "Login",
       "login-sign-up" : "Sign up",
-      "verify-verify" : "Verify"
+      "verify-verify" : "Verify",
+      "user-back-to-login": "Back to login"
     },
     "error": {
         "required": "The field is required!",

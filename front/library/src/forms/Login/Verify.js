@@ -17,15 +17,23 @@ function Verify() {
   }
 
   return (
+    <>
+    <div className="text-center">
+      <img
+        src="/images/logo_big.png"
+        className="esc-logo slide-top center-block" alt="logo"
+      />
+    </div>
     <div className="wrapper _wrapper">
     <h2 className="page_title">{t('header.verify')}</h2>
   
         <div className="form-wrapper">
-          <div className="form_element form-group field">
+          <div className="text-center form-group field">
             <button type="button" onClick={onSubmit} className="btn btn-primary" >{t('field.verify-verify')}</button>
           </div>
         </div>
     </div>
+    </>
   )
 }
 export default Verify

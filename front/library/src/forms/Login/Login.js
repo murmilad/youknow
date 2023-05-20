@@ -14,6 +14,13 @@ function LoginPage() {
   }
 
   return (
+    <>
+    <div className="text-center">
+      <img
+        src="/images/logo_big.png"
+        className="esc-logo slide-top center-block" alt="logo"
+      />
+    </div>
     <div className="wrapper _wrapper">
     <h2 className="page_title">{t('header.login')}</h2>
   
@@ -68,7 +75,9 @@ function LoginPage() {
         </div>
       </Form>
     </Formik>
+    
     </div>
+    </>
   )
 }
 export default LoginPage

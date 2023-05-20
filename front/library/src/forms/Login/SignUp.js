@@ -2,14 +2,27 @@ import {Formik, Field, Form} from "formik"
 import { useSelector, useDispatch } from 'react-redux'
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next'
-
+import { useNavigate } from "react-router-dom";
 
 
 function SignUpPage() {
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation();
 
+  const navigate = useNavigate();
+  function goLogin(){
+    navigate("/login");
+  }
+
   return (
+    <>
+    <div className="text-center">
+      <img
+        src="/images/logo_big.png"
+        className="esc-logo slide-top center-block" alt="logo"
+      />
+    </div>
+
     <div className="wrapper _wrapper">
     <h2 className="page_title">{t('header.sign-up')}</h2>
   
@@ -89,13 +102,17 @@ function SignUpPage() {
               </div>
             )}
           </Field>
-          <div className="form_element form-group field">
+          <div className="line_element form-group field">
             <button type="submit" className="btn btn-primary" >{t('field.user-sign-up')}</button>
+          </div>
+          <div className="line_element form-group field">
+            <button type="button" className="btn btn-primary" onClick={goLogin}>{t('field.user-back-to-login')}</button>
           </div>
         </div>
       </Form>
     </Formik>
     </div>
+    </>
   )
 }
 export default SignUpPage
