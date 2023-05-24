@@ -25,7 +25,8 @@ type SignUpInput struct {
 	Email           string `json:"email" binding:"required"`
 	Password        string `json:"password" binding:"required,min=8"`
 	PasswordConfirm string `json:"passwordConfirm" binding:"required"`
-	Photo           string `json:"photo"`
+	Provider        string `json:"provider,omitempty"`
+	Photo           string `json:"photo,omitempty"`
 }
 
 type SignInInput struct {
@@ -42,4 +43,18 @@ type UserResponse struct {
 	Provider  string    `json:"provider"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type UpdateDBUser struct {
+	ID              uuid.UUID `json:"id,omitempty" bson:"_id,omitempty"`
+	Name            string    `json:"name,omitempty" bson:"name,omitempty"`
+	Email           string    `json:"email,omitempty" bson:"email,omitempty"`
+	Password        string    `json:"password,omitempty" bson:"password,omitempty"`
+	PasswordConfirm string    `json:"passwordConfirm,omitempty" bson:"passwordConfirm,omitempty"`
+	Role            string    `json:"role,omitempty" bson:"role,omitempty"`
+	Provider        string    `json:"provider" bson:"provider"`
+	Photo           string    `json:"photo,omitempty" bson:"photo,omitempty"`
+	Verified        bool      `json:"verified,omitempty" bson:"verified,omitempty"`
+	CreatedAt       time.Time `json:"created_at,omitempty" bson:"created_at,omitempty"`
+	UpdatedAt       time.Time `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }

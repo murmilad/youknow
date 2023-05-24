@@ -21,6 +21,8 @@ var (
 
 	YouKnowController      controllers.YouKnowController
 	YouKnowRouteController routes.YouKnowRouteController
+
+	SessionRouteController routes.SessionRouteController
 )
 
 func init() {
@@ -39,6 +41,8 @@ func init() {
 
 	YouKnowController = controllers.NewYouKnowController(initializers.DB)
 	YouKnowRouteController = routes.NewYouKnowRouteController(YouKnowController)
+
+	SessionRouteController = routes.NewSessionRouteController(AuthController)
 
 	server = gin.Default()
 }
@@ -65,5 +69,6 @@ func main() {
 	AuthRouteController.AuthRoute(router)
 	UserRouteController.UserRoute(router)
 	YouKnowRouteController.YouKnowRoute(router)
+	SessionRouteController.SessionRoute(router)
 	log.Fatal(server.Run(":" + config.ServerPort))
 }

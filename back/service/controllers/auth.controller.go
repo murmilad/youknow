@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -8,7 +9,9 @@ import (
 	"akosarev.info/youknow/initializers"
 	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/utils"
+
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/thanhpk/randstr"
 	"gorm.io/gorm"
 )
@@ -163,4 +166,77 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 	ctx.SetCookie("token", "", -1, "/", "localhost", false, true)
 	ctx.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
+	code := ctx.Query("code")
+	var pathUrl string = "/"
+
+	if ctx.Query("state") != "" {
+		pathUrl = ctx.Query("state")
+	}
+
+	if code == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": "Authorization code not provided!"})
+		return
+	}
+
+	// Use the code to get the id and access tokens
+	tokenRes, err := utils.GetGoogleOauthToken(code)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	fmt.Println("Access_token ", tokenRes.Access_token)
+
+	googleUser, err := utils.GetGoogleUser(tokenRes.Access_token, tokenRes.Id_token)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	var users []models.User
+	ac.DB.Order("email").Find(&users)
+	ac.DB.Find(&users, "email = ?", googleUser.Email)
+
+	var userID uuid.UUID
+	if len(users) > 0 {
+		userID = users[0].ID
+	}
+
+	createdAt := time.Now()
+	user := &models.User{
+		ID:        userID,
+		Email:     googleUser.Email,
+		Name:      googleUser.Name,
+		Photo:     googleUser.Picture,
+		Provider:  "google",
+		Role:      "user",
+		Verified:  true,
+		CreatedAt: createdAt,
+		UpdatedAt: createdAt,
+	}
+
+	ac.DB.Save(&user)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	config, _ := initializers.LoadConfig(".")
+
+	// Generate Tokens
+	access_token, err := utils.GenerateToken(config.TokenExpiresIn, user.ID, config.TokenSecret)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", "localhost", false, true)
+
+	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
 }
