@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { reducer } from './reducers/reducer';
 import "bootstrap/dist/css/bootstrap.min.css"
 import {injectStoreToServer} from "./actions/server";
+import { CookiesProvider } from 'react-cookie';
 
 
 import createSagaMiddleware from 'redux-saga'
@@ -28,7 +29,9 @@ sagaMiddleware.run(rootSaga)
 injectStoreToServer(store)
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
+    <Provider store={store}>
+      <CookiesProvider>
+        <App />
+      </CookiesProvider>
+    </Provider>
 , document.getElementById('root'));

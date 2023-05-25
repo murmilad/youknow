@@ -3,7 +3,7 @@ import axios from "axios"
 
 
 const SERVER = axios.create({
-    baseURL: 'http://notebook:8000'
+    baseURL: 'http://localhost:8000'
   })
 
 let store = null
@@ -13,14 +13,11 @@ export const injectStoreToServer = _store => {
 }
 
 export const setCredentails = (token) => {
-    localStorage.setItem("token", token);
-
     SERVER.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
 }
 
 export const dropCredentails = (token) => {
-    localStorage.removeItem("token");
     delete SERVER.defaults.headers.common["Authorization"];
 }
 

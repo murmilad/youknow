@@ -236,7 +236,7 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 		return
 	}
 
-	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", "localhost", false, true)
+	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", "localhost", false, false)
 
 	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
 }

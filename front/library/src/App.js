@@ -9,6 +9,7 @@ import RoutesPage from "./router/RoutesPage"
 import './App.css';
 import { useTranslation } from 'react-i18next';
 
+import { useCookies } from 'react-cookie';
 
 import CreateKnowtypeForm from "./forms/KnowTypes/CreateKnowtypeForm";
 const KnowTypes = lazy(() => import( "./forms/KnowTypes/KnowTypes"));
@@ -17,9 +18,11 @@ const KnowTypes = lazy(() => import( "./forms/KnowTypes/KnowTypes"));
 function App() {
   const { t, i18n } = useTranslation();
   let dispatch = useDispatch() 
+  const [cookies] = useCookies(["token"]);
+
 
   useEffect(() => {
-    dispatch({type: 'CHECK_LOG_IN'})
+    dispatch({type: 'CHECK_LOG_IN', payload:{token: cookies.token}})
   });
 
 
