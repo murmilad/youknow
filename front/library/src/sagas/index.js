@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects'
-
+import Cookies from 'universal-cookie';
 import SERVER, {setCredentails, dropCredentails} from "../actions/server";
 
 import {
@@ -13,6 +13,7 @@ import {
   cancel,
 } from 'redux-saga/effects'
 
+const cookies = new Cookies();
 
 export function* callServerLastest() {
   
@@ -39,9 +40,9 @@ export function* callServerLastest() {
 
 function* checkLogin(action) {
   if (action.payload) {
-    localStorage.setItem("token", action.payload.token)
+    cookies.set('token', action.payload.token, { path: '/' });
   }
-  let token = localStorage.getItem("token");
+  let token = cookies.get("token");
   if (token) {
     setCredentails(token)
     yield put({ type: 'GET_USER'})
@@ -49,7 +50,7 @@ function* checkLogin(action) {
 }
 
 function* logOut(action) {
-  localStorage.removeItem("token")
+  cookies.remove('token');
   dropCredentails()
   yield put({ type: 'SET_USER', payload: {user: null}})
 }
