@@ -240,3 +240,82 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 
 	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
 }
+
+func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
+	errorDescription := ctx.Query("error_description")
+	if errorDescription != "" {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": errorDescription})
+		return
+	}
+
+	code := ctx.Query("code")
+	var pathUrl string = "/"
+
+	if ctx.Query("state") != "" {
+		pathUrl = ctx.Query("state")
+	}
+
+	if code == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": "Authorization code not provided!"})
+		return
+	}
+
+	// Use the code to get the id and access tokens
+	tokenRes, err := utils.GetGithubOauthToken(code)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	fmt.Println("Access_token ", tokenRes.Access_token)
+
+	githubUser, err := utils.GetGithubUser(tokenRes.Access_token)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	var users []models.User
+	ac.DB.Order("email").Find(&users)
+	ac.DB.Find(&users, "email = ?", githubUser.Email)
+
+	var userID uuid.UUID
+	if len(users) > 0 {
+		userID = users[0].ID
+	}
+
+	createdAt := time.Now()
+	user := &models.User{
+		ID:        userID,
+		Email:     githubUser.Email,
+		Name:      githubUser.Name,
+		Photo:     githubUser.Avatar_url,
+		Provider:  "github",
+		Role:      "user",
+		Verified:  true,
+		CreatedAt: createdAt,
+		UpdatedAt: createdAt,
+	}
+
+	ac.DB.Save(&user)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	config, _ := initializers.LoadConfig(".")
+
+	// Generate Tokens
+	access_token, err := utils.GenerateToken(config.TokenExpiresIn, user.ID, config.TokenSecret)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", "localhost", false, false)
+
+	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
+}

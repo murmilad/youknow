@@ -3,7 +3,7 @@ export function getGitHubUrl(from) {
 
   const options = {
     client_id: process.env.REACT_APP_GITHUB_OAUTH_CLIENT_ID,
-    redirect_uri: process.env.REACT_APP_GITHUB_OAUTH_REDIRECT_URL,
+    redirect_uri: process.env.REACT_APP_GITHUB_OAUTH_REDIRECT,
     scope: 'user:email',
     state: from,
   };
