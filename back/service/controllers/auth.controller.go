@@ -88,13 +88,104 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	emailData := utils.EmailData{
 		URL:       config.ClientOrigin + "/verifyemail/" + code,
 		FirstName: firstName,
-		Subject:   "Your account verification code",
+		Subject:   "YouknoW account verification code",
+		Header:    "Please verify your account to be able to login",
+		Button:    "Verify your account",
 	}
 
 	utils.SendEmail(&newUser, &emailData)
 
 	message := "We sent an email with a verification code to " + newUser.Email
 	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "message": message})
+}
+
+// [...] ForgotPassword
+func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
+
+	var payload *models.ForgotInput
+
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	var user models.User
+	result := ac.DB.First(&user, "email = ?", strings.ToLower(payload.Email))
+	if result.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "User with this E-Mail didnt found"})
+		return
+	}
+
+	config, _ := initializers.LoadConfig(".")
+
+	// Generate Verification Code
+	code := randstr.String(20)
+
+	verification_code := utils.Encode(code)
+
+	// Update User in Database
+	user.VerificationCode = verification_code
+	ac.DB.Save(user)
+
+	var firstName = user.Name
+
+	if strings.Contains(firstName, " ") {
+		firstName = strings.Split(firstName, " ")[1]
+	}
+
+	// ? Send Email
+	emailData := utils.EmailData{
+		URL:       config.ClientOrigin + "/resetpassword/" + verification_code,
+		FirstName: firstName,
+		Subject:   "YouknoW changing password",
+		Header:    "Please press button to change password",
+		Button:    "Change password",
+	}
+
+	utils.SendEmail(&user, &emailData)
+
+	message := "We sent an email with a verification code to " + user.Email
+	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "message": message})
+}
+
+// [...] ResetPassword
+func (ac *AuthController) ResetPassword(ctx *gin.Context) {
+	var payload *models.ChangePasswordInput
+
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	var updatedUser models.User
+	result := ac.DB.First(&updatedUser, "verification_code = ?", payload.VerifyHash)
+	if result.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Change password failed. Please try to start change password procedure again"})
+		return
+	}
+
+	if payload.Password != payload.PasswordConfirm {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Passwords do not match"})
+		return
+	}
+
+	hashedPassword, err := utils.HashPassword(payload.Password)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	now := time.Now()
+
+	updatedUser.UpdatedAt = now
+	updatedUser.VerificationCode = ""
+	updatedUser.Verified = true
+	updatedUser.Password = hashedPassword
+
+	ac.DB.Save(&updatedUser)
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Password changed successfully"})
+
 }
 
 // [...] Verify Email

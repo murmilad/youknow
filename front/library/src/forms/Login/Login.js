@@ -20,6 +20,10 @@ function LoginPage() {
     navigate("/signup");
   }
 
+  function goReset(){
+    navigate("/forgot");
+  }
+
   return (
     <>
     <div className="text-center">
@@ -79,6 +83,9 @@ function LoginPage() {
             </div>
             <div className="line_element ">
               <button type="button" className="btn btn-primary" onClick={goSignUp}>{t('field.login-sign-up')}</button>
+            </div>
+            <div className="line_element ">
+              <button type="button" className="btn btn-primary" onClick={goReset}>{t('field.login-forgot')}</button>
             </div>
             <div className="line_element ">
               <Link to={getGitHubUrl(from)}>

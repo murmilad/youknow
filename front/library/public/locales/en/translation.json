@@ -6,7 +6,11 @@
         "sign-up":"Sign up",
         "signed-up" : "Please check and confirm your E-Mail",
         "verify" : "Verify E-Mail address",
-        "application" : "You know"
+        "application" : "You know",
+        "forgot-password" : "Enter your email address and we’ll send you a link to reset your password.",
+        "email-sent": "We have sent you a password recovery email.",
+        "reset-password": "Reset password",
+        "reseted": "Your password has been successfuly reseted."
     },
     "field": {
       "know-type-name": "Type Name",
@@ -21,7 +25,11 @@
       "login-login" : "Login",
       "login-sign-up" : "Sign up",
       "verify-verify" : "Verify",
-      "user-back-to-login": "Back to login"
+      "user-back-to-login": "Back to login",
+      "forgot-email":"E-Mail",
+      "forgot-retrieve-password": "Retrieve password",
+      "reset-reset-password": "Reset password",
+      "login-forgot": "Forgot password"
     },
     "error": {
         "required": "The field is required!",

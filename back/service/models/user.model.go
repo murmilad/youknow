@@ -20,6 +20,11 @@ type User struct {
 	UpdatedAt        time.Time `gorm:"not null"`
 }
 
+type ChangePasswordInput struct {
+	VerifyHash      string `json:"verifyHash"`
+	Password        string `json:"password" binding:"required,min=8"`
+	PasswordConfirm string `json:"passwordConfirm" binding:"required"`
+}
 type SignUpInput struct {
 	Name            string `json:"name" binding:"required"`
 	Email           string `json:"email" binding:"required"`
@@ -34,6 +39,9 @@ type SignInInput struct {
 	Password string `json:"password"  binding:"required"`
 }
 
+type ForgotInput struct {
+	Email string `json:"email"  binding:"required"`
+}
 type UserResponse struct {
 	ID        uuid.UUID `json:"id,omitempty"`
 	Name      string    `json:"name,omitempty"`

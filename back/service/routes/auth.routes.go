@@ -18,7 +18,9 @@ func (rc *AuthRouteController) AuthRoute(rg *gin.RouterGroup) {
 	router := rg.Group("/auth")
 
 	router.POST("/register", rc.authController.SignUpUser)
+	router.POST("/forgotpassword", rc.authController.ForgotPassword)
 	router.POST("/login", rc.authController.SignInUser)
+	router.POST("/resetpassword", rc.authController.ResetPassword)
 	router.GET("/logout", middleware.DeserializeUser(), rc.authController.LogoutUser)
 	router.GET("/verifyemail/:verificationCode", rc.authController.VerifyEmail)
 }

@@ -1,4 +1,11 @@
-export const reducer = (state = { knowtype: {list:[], open: null, error: false, close:false},  signed_up: false, verified: false}, action) => {
+export const reducer = (state = { 
+  knowtype: {list:[], open: null, error: false, close:false},
+  signed_up: false,
+  verified: false,
+  reseted: false,
+  forgot_password: false
+}, action) => {
+
   switch (action.type) {
     case "FETCH_KNOWTYPES":
       return {
@@ -70,6 +77,16 @@ export const reducer = (state = { knowtype: {list:[], open: null, error: false, 
       return {
         ...state,
         user:action.payload.user
+      }
+    case "SET_FORGOT_PASSWORD": 
+      return {
+        ...state,
+        forgot_password:action.payload.forgot_password,
+      }
+    case "SET_RESET": 
+      return {
+        ...state,
+        reseted:action.payload.reseted,
       }
     default:
       return state

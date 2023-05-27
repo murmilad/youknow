@@ -27,6 +27,12 @@ export function* callServerLastest() {
     yield takeLatest("SIGN_UP", submitForm, '/api/auth/register', request => request.signup, response =>  ({ 
       signed_up: true,
     }), 'SET_SIGN_UP')
+    yield takeLatest("FORGOT_PASSWORD", submitForm, '/api/auth/forgotpassword', request => request.forgot, response =>  ({ 
+      forgot_password: true,
+    }), 'SET_FORGOT_PASSWORD')
+    yield takeLatest("RESET_PASSWORD", submitForm, '/api/auth/resetpassword', request => request.reset, response =>  ({ 
+      reseted: true,
+    }), 'SET_RESET')
     yield takeLatest("LOG_IN", submitForm, '/api/auth/login', request => request.login, response =>  ({ 
       token: response.data.token,
     }), 'CHECK_LOG_IN')

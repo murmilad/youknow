@@ -8,6 +8,8 @@ import LoginPage from "../forms/Login/Login"
 import SignedUp from "../forms/Login/SignedUp"
 import SignUp from "../forms/Login/SignUp"
 import Verify from "../forms/Login/Verify"
+import ResetPasswordPage from "../forms/Login/ResetPassword";
+import ForgotPasswordPage from "../forms/Login/ForgotPassword";
 
 
 function RoutesPage() {
@@ -47,6 +49,14 @@ function RoutesPage() {
                             : <SignUp/>
                     }
                     />
+                <Route
+                    path="/resetpassword/:verifyHash"
+                    element={<ResetPasswordPage/>}
+                    />
+                <Route
+                    path="/forgot"
+                    element={<ForgotPasswordPage/>}
+                    />                
                 <Route
                     path="/verifyemail/:verifyHash"
                     element={

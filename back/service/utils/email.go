@@ -18,6 +18,8 @@ type EmailData struct {
 	URL       string
 	FirstName string
 	Subject   string
+	Header    string
+	Button    string
 }
 
 // ? Email template parser
