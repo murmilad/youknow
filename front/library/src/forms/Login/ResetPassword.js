@@ -4,6 +4,7 @@ import * as yup from "yup"
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
+import FormPage from "../Form";
 
 
 function ResetPasswordPage() {
@@ -19,27 +20,21 @@ function ResetPasswordPage() {
   }
 
   return (
-    <>
-    <div className="text-center">
-      <img
-        src="/images/logo_big.png"
-        className="esc-logo slide-top center-block" alt="logo"
-      />
-    </div>
-
-    <div className="wrapper _wrapper">
+    <FormPage>
     {reseted 
       ? <>
         <h2 className="page_title">{t('header.reseted')}</h2>
-        <div className="line_element form-group field">
+        <div className="form-wrapper">
+        <div className="text-center form-group field">
           <button type="button" className="btn btn-primary" onClick={goLogin}>{t('field.user-back-to-login')}</button>
+        </div>
         </div>
         </>
       : 
       <>
 
 
-        <h2 className="page_title">{t('header.sign-up')}</h2>
+        <h2 className="page_title">{t('header.reset-password')}</h2>
       
         <Formik
           initialValues = {{
@@ -101,8 +96,7 @@ function ResetPasswordPage() {
         </Formik>
       </>
     }
-    </div>
-    </>
+    </FormPage>
   )
 }
 export default ResetPasswordPage

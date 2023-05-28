@@ -2,6 +2,7 @@
   max-width: 700px;
   margin: 0 auto;
   padding: 15px 15px;
+  position: relative;
 }
 
 ._wrapper {
@@ -190,4 +191,33 @@
 .horizontal {
   display: inline;
   float: left;
+}
+
+/*loading*/
+
+.loading {
+  height: 3px !important;
+  padding: 0px !important;
+  margin-bottom: -20px !important;
+}
+
+.loading_fade {
+  background-color: white;
+  opacity: 0.6;
+  z-index: var(--zindex-modal-backdrop);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.progress-bar.indeterminate {
+  position: relative;
+  animation: progress-indeterminate 2s linear infinite;
+}
+
+@keyframes progress-indeterminate {
+   from { left: -75%; width: 75%; }
+   to { left: 100%; width: 75%;}
 }

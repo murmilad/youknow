@@ -3,6 +3,7 @@ export const reducer = (state = {
   signed_up: false,
   verified: false,
   reseted: false,
+  is_loading: false,
   forgot_password: false
 }, action) => {
 
@@ -87,6 +88,11 @@ export const reducer = (state = {
       return {
         ...state,
         reseted:action.payload.reseted,
+      }
+    case "SET_LOADING": 
+      return {
+        ...state,
+        is_loading:action.payload.loading,
       }
     default:
       return state

@@ -82,21 +82,25 @@ function* deleteResource(linkCallback, successAction, action) {
 
   function* submitGet(linkCallback, resultCallback, successAction, action) {
     try {
+      yield put({ type: 'SET_LOADING', payload: {loading: true}})
       const result = yield call(SERVER.get, linkCallback(action))
       yield put({type: successAction, payload: resultCallback(result)})
     } catch (error) {
       yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.response ? error.response.data.message : error.message}})
     }
+    yield put({ type: 'SET_LOADING', payload: {loading: false}})
   }
  
 
   function* submitForm(link, requestCallback, resultCallback, successAction, action) {
     try {
+      yield put({ type: 'SET_LOADING', payload: {loading: true}})
       const result = yield call(SERVER.post, link, requestCallback(action))
       yield put({type: successAction, payload: resultCallback(result)})
     } catch (error) {
       yield put({type: "SHOW_ERROR_MODAL", payload: {message: error.response ? error.response.data.message : error.message}})
     }
+    yield put({ type: 'SET_LOADING', payload: {loading: false}})
   }
 
   function* postResource(link, requestCallback, successAction, action) {

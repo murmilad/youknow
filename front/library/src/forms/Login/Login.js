@@ -6,6 +6,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getGitHubUrl } from "../../utils/getGithubUrl"
 import { getGoogleUrl } from "../../utils/getGoogleUrl"
 import { Google, Github } from 'react-bootstrap-icons';
+import FormPage from "../Form";
 
 function LoginPage() {
   const dispatch = useDispatch()
@@ -20,19 +21,9 @@ function LoginPage() {
     navigate("/signup");
   }
 
-  function goReset(){
-    navigate("/forgot");
-  }
 
   return (
-    <>
-    <div className="text-center">
-      <img
-        src="/images/logo_big.png"
-        className="esc-logo slide-top center-block" alt="logo"
-      />
-    </div>
-    <div className="wrapper _wrapper">
+    <FormPage>
     <h2 className="page_title">{t('header.login')}</h2>
   
     <Formik
@@ -74,6 +65,7 @@ function LoginPage() {
               <div className="form_element form-group field" >
                 <input type="password" placeholder={t('field.login-password')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
                 {meta.touched && meta.error && ( <span className="invalid-feedback">{t('error.password')}</span>)}
+                <Link to="/forgot" >{t('field.login-forgot')}</Link>
               </div>
             )}
           </Field>
@@ -83,9 +75,6 @@ function LoginPage() {
             </div>
             <div className="line_element ">
               <button type="button" className="btn btn-primary" onClick={goSignUp}>{t('field.login-sign-up')}</button>
-            </div>
-            <div className="line_element ">
-              <button type="button" className="btn btn-primary" onClick={goReset}>{t('field.login-forgot')}</button>
             </div>
             <div className="line_element ">
               <Link to={getGitHubUrl(from)}>
@@ -102,8 +91,7 @@ function LoginPage() {
       </Form>
     </Formik>
     
-    </div>
-    </>
+    </FormPage>
   )
 }
 export default LoginPage
