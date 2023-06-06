@@ -17,13 +17,17 @@ func NewYouKnowController(DB *gorm.DB) YouKnowController {
 }
 
 func (yc *YouKnowController) GetKnowTypes(ctx *gin.Context) {
-	var knowtypes []models.KnowType
+	currentUser := ctx.MustGet("currentUser").(models.User)
+
+	var knowtypes []models.KnowTypeResponse
 	yc.DB.Order("id").Find(&knowtypes)
+	yc.DB.Find(&knowtypes, "user_id = ?", currentUser.ID)
 
 	ctx.IndentedJSON(http.StatusOK, knowtypes)
 }
 
 func (yc *YouKnowController) PostKnowType(ctx *gin.Context) {
+	currentUser := ctx.MustGet("currentUser").(models.User)
 
 	var knowtype models.KnowType
 
@@ -31,13 +35,15 @@ func (yc *YouKnowController) PostKnowType(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "JWT generator error"})
 	}
 
+	knowtype.UserID = currentUser.ID
+
 	yc.DB.Save(&knowtype)
 
 	ctx.IndentedJSON(http.StatusCreated, knowtype)
 }
 
 func (yc *YouKnowController) GetKnowTypeByID(ctx *gin.Context) {
-	var knowtypes []models.KnowType
+	var knowtypes []models.KnowTypeResponse
 	yc.DB.Find(&knowtypes, "id = ?", ctx.Param("id"))
 
 	if len(knowtypes) > 0 {
@@ -50,7 +56,7 @@ func (yc *YouKnowController) GetKnowTypeByID(ctx *gin.Context) {
 }
 
 func (yc *YouKnowController) DeleteKnowTypeByID(ctx *gin.Context) {
-	var knowtypes []models.KnowType
+	var knowtypes []models.KnowTypeResponse
 	yc.DB.Find(&knowtypes, "id = ?", ctx.Param("id"))
 
 	if len(knowtypes) > 0 {
