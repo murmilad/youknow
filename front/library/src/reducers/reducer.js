@@ -9,14 +9,6 @@ export const reducer = (state = {
 }, action) => {
 
   switch (action.type) {
-    case "SET_CURRENT_KNOWTYPE":
-      return {
-        ...state,
-        knowtype: {
-          ...state.knowtype,
-          current:action.payload.knowtype
-        }
-      }
     case "FETCH_KNOWTYPES":
       return {
         ...state,
@@ -58,7 +50,7 @@ export const reducer = (state = {
       }
 
 
-      case "FETCH_KNOW":
+      case "FETCH_KNOWS":
         return {
           ...state,
           know: {

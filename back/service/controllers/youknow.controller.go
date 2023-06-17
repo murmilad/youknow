@@ -107,7 +107,7 @@ func (yc *YouKnowController) DeleteKnowByID(ctx *gin.Context) {
 	yc.DB.Find(&knows, "id = ?", ctx.Param("id"))
 
 	if len(knows) > 0 {
-		yc.DB.Delete(&models.KnowType{}, 10, ctx.Param("id"))
+		yc.DB.Delete(&models.Know{}, 10, ctx.Param("id"))
 
 		ctx.IndentedJSON(http.StatusOK, knows[0])
 		return
