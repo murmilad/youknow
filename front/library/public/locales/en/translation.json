@@ -2,6 +2,7 @@
 {
     "header": {
         "know-types":"Types of Know",
+        "know":"Know",
         "login":"Log In",
         "sign-up":"Sign up",
         "signed-up" : "Please check and confirm your E-Mail",
@@ -15,6 +16,8 @@
     "field": {
       "know-type-name": "Type Name",
       "know-type-style": "Style",
+      "know-name": "Name",
+      "know-value": "Value",
       "user-name":"Name",
       "user-email":"E-Mail",
       "user-password":"Password",
@@ -42,7 +45,9 @@
     },
     "action": {
         "create-know-type": "Create",
-        "delete-know-type": "Delete"
+        "delete-know-type": "Delete",
+        "create-know": "Create",
+        "delete-know": "Delete"
     },
     "message":{
         "loading": "Loading...",

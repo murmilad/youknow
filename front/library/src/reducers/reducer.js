@@ -1,5 +1,6 @@
 export const reducer = (state = { 
   knowtype: {list:[], open: null, error: false, close:false},
+  know: {list:[], open: null, error: false, close:false},
   signed_up: false,
   verified: false,
   reseted: false,

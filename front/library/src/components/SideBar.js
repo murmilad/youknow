@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { Plus, ChatDotsFill, PlusLg } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next'
 import AddKnowtypeForm from '../forms/Workarea/KnowTypes/AddKnowtypeForm'
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import SidebarMenu from 'react-bootstrap-sidebar-menu';
 //https://github.com/ivp-dev/react-bootstrap-sidebar-menu
 const SideBar = (props) => {
-  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+ 
 
+  const { t, i18n } = useTranslation();
   const [isAdding, setIsAdding] = useState(false);
 
   return (
@@ -22,7 +25,7 @@ const SideBar = (props) => {
         <SidebarMenu.Body>
           <SidebarMenu.Nav>
             {props.knowtypes?.map((knowtype, idx) =>
-              <SidebarMenu.Nav.Link eventKey={idx + "_type"}>
+              <SidebarMenu.Nav.Link eventKey={knowtype.id + "_type"} onSelect={()=> navigate("/know/" + knowtype.id)}> 
                 <SidebarMenu.Nav.Icon><ChatDotsFill color={knowtype.style} /></SidebarMenu.Nav.Icon>
                 <SidebarMenu.Nav.Title>{knowtype.name}</SidebarMenu.Nav.Title>
               </SidebarMenu.Nav.Link>
