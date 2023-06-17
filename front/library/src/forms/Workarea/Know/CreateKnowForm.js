@@ -17,7 +17,7 @@ function CreateKnowForm() {
       onSubmit ={ (values, { setSubmitting, resetForm }) => {
         dispatch({type: 'CREATE_KNOW', know: {
           name: values.name,
-          value: values.value
+          value: values.value,
         }})
         resetForm()
       }}
