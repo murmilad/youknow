@@ -20,5 +20,6 @@ func init() {
 func main() {
 	initializers.DB.AutoMigrate(&models.User{})
 	initializers.DB.AutoMigrate(&models.KnowType{})
+	initializers.DB.AutoMigrate(&models.Know{})
 	fmt.Println("? Migration complete")
 }

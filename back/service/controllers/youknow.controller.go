@@ -20,8 +20,7 @@ func (yc *YouKnowController) GetKnowTypes(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
 	var knowtypes []models.KnowTypeResponse
-	yc.DB.Order("id").Find(&knowtypes)
-	yc.DB.Find(&knowtypes, "user_id = ?", currentUser.ID)
+	yc.DB.Find(&knowtypes, "user_id = ?", currentUser.ID).Order("id")
 
 	ctx.IndentedJSON(http.StatusOK, knowtypes)
 }
@@ -63,6 +62,54 @@ func (yc *YouKnowController) DeleteKnowTypeByID(ctx *gin.Context) {
 		yc.DB.Delete(&models.KnowType{}, 10, ctx.Param("id"))
 
 		ctx.IndentedJSON(http.StatusOK, knowtypes[0])
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Element not found"})
+
+}
+
+func (yc *YouKnowController) GetKnows(ctx *gin.Context) {
+	var knows []models.Know
+	yc.DB.Find(&knows, "knowtype_id = ?", ctx.Param("knowtype_id")).Order("id")
+
+	ctx.IndentedJSON(http.StatusOK, knows)
+}
+
+func (yc *YouKnowController) PostKnow(ctx *gin.Context) {
+
+	var know models.Know
+
+	if err := ctx.BindJSON(&know); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "JWT generator error"})
+	}
+
+	yc.DB.Save(&know)
+
+	ctx.IndentedJSON(http.StatusCreated, know)
+}
+
+func (yc *YouKnowController) GetKnowByID(ctx *gin.Context) {
+	var knows []models.Know
+	yc.DB.Find(&knows, "id = ?", ctx.Param("id"))
+
+	if len(knows) > 0 {
+		ctx.IndentedJSON(http.StatusOK, knows[0])
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Element not found"})
+
+}
+
+func (yc *YouKnowController) DeleteKnowByID(ctx *gin.Context) {
+	var knows []models.Know
+	yc.DB.Find(&knows, "id = ?", ctx.Param("id"))
+
+	if len(knows) > 0 {
+		yc.DB.Delete(&models.KnowType{}, 10, ctx.Param("id"))
+
+		ctx.IndentedJSON(http.StatusOK, knows[0])
 		return
 	}
 

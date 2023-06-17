@@ -23,4 +23,9 @@ func (yc *YouKnowRouteController) YouKnowRoute(rg *gin.RouterGroup) {
 	router.GET("/knowtypes", middleware.DeserializeUser(), yc.youKnowController.GetKnowTypes)
 	router.DELETE("/knowtype/:id", middleware.DeserializeUser(), yc.youKnowController.DeleteKnowTypeByID)
 
+	router.POST("/know", middleware.DeserializeUser(), yc.youKnowController.PostKnow)
+	router.GET("/know/:id", middleware.DeserializeUser(), yc.youKnowController.GetKnowByID)
+	router.GET("/knows/:knowtype_id", middleware.DeserializeUser(), yc.youKnowController.GetKnows)
+	router.DELETE("/know/:id", middleware.DeserializeUser(), yc.youKnowController.DeleteKnowByID)
+
 }
