@@ -48,6 +48,9 @@
         "loading": "Loading...",
         "wait": "Wait...",
         "login_incorrect": "User or Password incorrect"
+    },
+    "sidebar":{
+        "add-knowtype" : "New"
     }
 
 }

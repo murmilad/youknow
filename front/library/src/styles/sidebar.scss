@@ -66,22 +66,26 @@
 
 .main-container {
   grid-area: main;
-//  box-shadow: inset 2px 1px 9px 1px  rgba($dark, 0.10);
+  //  box-shadow: inset 2px 1px 9px 1px  rgba($dark, 0.10);
   overflow: auto;
   padding-top: 1rem;
 }
 
 table.api {
   width: 100%;
+
   th.name {
     width: 20%;
   }
+
   th.type {
     width: 20%;
   }
+
   th.default {
     width: 20%;
   }
+
   th.description {
     width: 40%;
   }
@@ -103,14 +107,21 @@ table.api {
 }
 
 .logo_big {
-  color : #1e56d8;
+  color: #1e56d8;
 }
 
 .logo_small {
-  color : #FFF;
+  color: #FFF;
 }
 
 .bg-dark {
-  color : #1e56d8;
+  color: #1e56d8;
 }
 
+.sidebar-menu-light {
+  .sidebar-menu-nav {
+    .sidebar-menu-nav-link.active {
+      color: #1e56d8;
+    }
+  }
+}
