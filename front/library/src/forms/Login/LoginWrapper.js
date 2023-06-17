@@ -1,18 +1,16 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import LogoBig  from '../../images/logo_big.png';
 
-function FormPage({ children }) {
+function LoginWrapper({ children }) {
   const { t, i18n } = useTranslation();
 
   const is_loading = useSelector(state => state.is_loading)
 
   return (
     <>
-    <div className="text-center">
-      <img
-        src="/images/logo_big.png"
-        className="esc-logo slide-top center-block" alt="logo"
-      />
+    <div className="logo_big text-center">
+      <img src= {LogoBig}/>
     </div>
       {is_loading &&
         <div className="loading wrapper">
@@ -29,4 +27,4 @@ function FormPage({ children }) {
     </>
   )
 }
-export default FormPage
+export default LoginWrapper

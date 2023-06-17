@@ -6,7 +6,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getGitHubUrl } from "../../utils/getGithubUrl"
 import { getGoogleUrl } from "../../utils/getGoogleUrl"
 import { Google, Github } from 'react-bootstrap-icons';
-import FormPage from "../Form";
+import LoginWrapper from "./LoginWrapper";
 
 function LoginPage() {
   const dispatch = useDispatch()
@@ -23,7 +23,7 @@ function LoginPage() {
 
 
   return (
-    <FormPage>
+    <LoginWrapper>
     <h2 className="page_title">{t('header.login')}</h2>
   
     <Formik
@@ -91,7 +91,7 @@ function LoginPage() {
       </Form>
     </Formik>
     
-    </FormPage>
+    </LoginWrapper>
   )
 }
 export default LoginPage

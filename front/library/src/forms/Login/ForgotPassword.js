@@ -6,7 +6,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getGitHubUrl } from "../../utils/getGithubUrl"
 import { getGoogleUrl } from "../../utils/getGoogleUrl"
 import { Google, Github } from 'react-bootstrap-icons';
-import FormPage from "../Form";
+import LoginWrapper from "./LoginWrapper";
 
 function ForgotPasswordPage() {
   const dispatch = useDispatch()
@@ -24,7 +24,7 @@ function ForgotPasswordPage() {
   }
 
   return (
-    <FormPage>
+    <LoginWrapper>
     {forgot_password 
       ? 
         <h2 className="page_title">{t('header.email-sent')}</h2>
@@ -73,7 +73,7 @@ function ForgotPasswordPage() {
       </>
     }
     
-    </FormPage>
+    </LoginWrapper>
 
   )
 }

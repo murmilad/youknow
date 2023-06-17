@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom';
-import FormPage from "../Form";
+import LoginWrapper from "./LoginWrapper";
 
 
 
@@ -18,7 +18,7 @@ function Verify() {
   }
 
   return (
-    <FormPage>
+    <LoginWrapper>
       <h2 className="page_title">{t('header.verify')}</h2>
   
       <div className="form-wrapper">
@@ -26,7 +26,7 @@ function Verify() {
           <button type="button" onClick={onSubmit} className="btn btn-primary" >{t('field.verify-verify')}</button>
         </div>
       </div>
-    </FormPage>
+    </LoginWrapper>
   )
 }
 export default Verify

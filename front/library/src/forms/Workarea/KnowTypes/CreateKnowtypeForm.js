@@ -2,7 +2,7 @@ import {useDispatch} from "react-redux";
 import {Formik, Field, Form} from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
-import PickerField from '../../components/PickerField'
+import PickerField from '../../../components/PickerField'
 
 
 function CreateKnowtypeForm() {

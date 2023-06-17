@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from "react-router-dom";
-import FormPage from "../Form";
+import LoginWrapper from "./LoginWrapper";
 
 
 function SignUpPage() {
@@ -16,7 +16,7 @@ function SignUpPage() {
   }
 
   return (
-    <FormPage>
+    <LoginWrapper>
     <h2 className="page_title">{t('header.sign-up')}</h2>
   
     <Formik
@@ -104,7 +104,7 @@ function SignUpPage() {
         </div>
       </Form>
     </Formik>
-    </FormPage>
+    </LoginWrapper>
   )
 }
 export default SignUpPage

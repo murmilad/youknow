@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './index.scss';
 import App from './App';
 import { applyMiddleware } from 'redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { reducer } from './reducers/reducer';
-import "bootstrap/dist/css/bootstrap.min.css"
 import {injectStoreToServer} from "./actions/server";
 
 

@@ -1,12 +1,12 @@
 import {useState} from "react";
-import {createKnowtype} from "../../actions/knowtype-actions";
+import {createKnowtype} from "../../../actions/knowtype-actions";
 import {useSelector, useDispatch} from "react-redux";
-import {isStringEmpty, isObjectEmpty} from "../../utils/utils"
+import {isStringEmpty, isObjectEmpty} from "../../../utils/utils"
 import {Formik, Field, Form} from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
-import PickerField from '../../components/PickerField'
-import ErrorInterceptor from '../../components/ErrorInterceptor'
+import PickerField from '../../../components/PickerField'
+import ErrorInterceptor from '../../../components/ErrorInterceptor'
 
 
 function EditKnowtypeForm(props) {

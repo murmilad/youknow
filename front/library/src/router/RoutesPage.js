@@ -3,7 +3,7 @@ import { Navigate, Routes, Route, BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 
 //pages
-import KnowTypesPage from "../forms/KnowTypes/KnowTypes"
+import KnowTypesPage from "../forms/Workarea/KnowTypes/KnowTypes"
 import LoginPage from "../forms/Login/Login"
 import SignedUp from "../forms/Login/SignedUp"
 import SignUp from "../forms/Login/SignUp"

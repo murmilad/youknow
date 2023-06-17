@@ -2,7 +2,7 @@ import {Formik, Field, Form} from "formik"
 import { useSelector, useDispatch } from 'react-redux'
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next'
-import FormPage from "../Form"
+import LoginWrapper from "./LoginWrapper"
 
 
 
@@ -11,10 +11,10 @@ function SignedUpPage() {
   const { t, i18n } = useTranslation();
 
   return (
-    <FormPage>
+    <LoginWrapper>
     <h2 className="page_title">{t('header.signed-up')}</h2>
   
-    </FormPage>
+    </LoginWrapper>
   )
 }
 export default SignedUpPage

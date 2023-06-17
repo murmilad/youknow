@@ -3,13 +3,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import EditKnowtypeForm from './EditKnowtypeForm'
 import CreateKnowtypeForm from './CreateKnowtypeForm'
-import NavigationBar from "../../components/NavigationBar";
+import WorkareaWrapper from "../WorkareaWrapper";
   
-function KnowTypes() {
+function KnowTypesPage() {
   const knowtypes = useSelector(state => state.knowtype.list)
   const open = useSelector(state => state.knowtype.open)
   const error = useSelector(state => state.knowtype.error)
-  const user = useSelector(state => state.user)
 
   const selectableList = useRef(null);
   const dispatch = useDispatch()
@@ -32,27 +31,23 @@ function KnowTypes() {
     };
   }, [selectableList, error])
 
-  let doLogOut = () => {
-    dispatch({type: "LOG_OUT"})
-  }
 
   return (
 
-    <>
-
-    <NavigationBar userName={user.name} onLogOut={doLogOut}/>
+    <WorkareaWrapper>
     <div className="wrapper _wrapper">
-    <h2 className="page_title">{t('header.know-types')}</h2>
 
-    <div ref={selectableList} className="list-group list">
-      {knowtypes.map((knowtype,idx) =>
-        <EditKnowtypeForm key={idx} knowtype={knowtype} open={open==knowtype.id}/>
-      )}
+      <h2 className="page_title">{t('header.know-types')}</h2>
+
+      <div ref={selectableList} className="list-group list">
+        {knowtypes.map((knowtype,idx) =>
+          <EditKnowtypeForm key={idx} knowtype={knowtype} open={open==knowtype.id}/>
+        )}
+      </div>
+      <CreateKnowtypeForm />
     </div>
-    <CreateKnowtypeForm />
-    </div>
-    </>
+    </WorkareaWrapper>
   )
 }
 
-export default KnowTypes
+export default KnowTypesPage

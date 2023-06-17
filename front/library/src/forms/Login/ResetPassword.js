@@ -4,7 +4,7 @@ import * as yup from "yup"
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
-import FormPage from "../Form";
+import LoginWrapper from "./LoginWrapper";
 
 
 function ResetPasswordPage() {
@@ -20,7 +20,7 @@ function ResetPasswordPage() {
   }
 
   return (
-    <FormPage>
+    <LoginWrapper>
     {reseted 
       ? <>
         <h2 className="page_title">{t('header.reseted')}</h2>
@@ -96,7 +96,7 @@ function ResetPasswordPage() {
         </Formik>
       </>
     }
-    </FormPage>
+    </LoginWrapper>
   )
 }
 export default ResetPasswordPage
