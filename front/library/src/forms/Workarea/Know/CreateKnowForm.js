@@ -1,10 +1,10 @@
-import {useDispatch} from "react-redux";
+import { useSelector, useDispatch } from 'react-redux'
 import {Formik, Field, Form} from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
 
 
-function CreateKnowForm() {
+function CreateKnowForm(props) {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch()
 
@@ -13,11 +13,13 @@ function CreateKnowForm() {
       initialValues = {{
         name: '',
         value: '',
+        knowtype_id: props.knowtypeId
       }}
       onSubmit ={ (values, { setSubmitting, resetForm }) => {
         dispatch({type: 'CREATE_KNOW', know: {
           name: values.name,
           value: values.value,
+          knowtype_id: props.knowtypeId
         }})
         resetForm()
       }}

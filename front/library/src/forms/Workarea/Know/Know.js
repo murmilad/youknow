@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 function Know() {
   let params = useParams();
   
-  const knowtype = useSelector(state => state.knowtype.list[params.id])
+  const knowtypes = useSelector(state => state.knowtype.list)
   const knows = useSelector(state => state.know.list)
   const open = useSelector(state => state.know.open)
   const error = useSelector(state => state.know.error)
@@ -18,10 +18,13 @@ function Know() {
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation();
 
+  let knowtype = knowtypes.filter((object) => object.id == params.id)[0];
+
+
   useEffect(() => {
     dispatch({
       type: "GET_KNOWS"
-      ,knowtype_id : params.id,
+      ,knowtype_id : params.id
     });
   }, [])
 
@@ -42,16 +45,16 @@ function Know() {
   return (
 
     <WorkareaWrapper>
-    <div className="wrapper _wrapper" style={{background:knowtype}}>
+    <div className="wrapper _wrapper" style={{background:knowtype.style}}>
 
       <h2 className="page_title">{t('header.know')}</h2>
 
       <div ref={selectableList} className="list-group list">
         {knows.map((know,idx) =>
-          <EditKnowForm key={idx} know={know} open={open==know.id}/>
+          <EditKnowForm knowtypeId = {knowtype.id} key={idx} know={know} open={open==know.id}/>
         )}
       </div>
-      <CreateKnowForm />
+      <CreateKnowForm knowtypeId = {knowtype.id}/>
     </div>
     </WorkareaWrapper>
   )

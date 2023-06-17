@@ -9,6 +9,14 @@ export const reducer = (state = {
 }, action) => {
 
   switch (action.type) {
+    case "SET_CURRENT_KNOWTYPE":
+      return {
+        ...state,
+        knowtype: {
+          ...state.knowtype,
+          current:action.payload.knowtype
+        }
+      }
     case "FETCH_KNOWTYPES":
       return {
         ...state,
@@ -48,6 +56,47 @@ export const reducer = (state = {
           error:action.payload.error
         }
       }
+
+
+      case "FETCH_KNOW":
+        return {
+          ...state,
+          know: {
+            ...state.know,
+            list:[
+              ...action.payload.knows
+            ]
+          }
+        }
+      case "CREATE_KNOW":
+        return {
+          ...state
+        }
+      case "OPEN_KNOW":
+  
+          return {
+            ...state,
+            know: {
+              ...state.know,
+              open:action.payload.id
+            }
+          }
+      case "CLOSE_KNOWS":
+        return {
+          ...state,
+          know: {
+            ...state.know,
+            close:action.payload.close
+          }
+      }
+      case "ERROR_KNOW":
+        return {
+          ...state,
+          know: {
+            ...state.know,
+            error:action.payload.error
+          }
+        }
     case "HIDE_ERROR_MODAL":
       return {
         ...state,

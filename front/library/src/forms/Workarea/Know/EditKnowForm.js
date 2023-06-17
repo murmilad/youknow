@@ -29,13 +29,15 @@ function EditKnowForm(props) {
         id: props.know.id,
         name: props.know.name,
         value: props.know.value,
+        knowtype_id: props.knowtypeId
       }}
       enableReinitialize
       onSubmit ={ (values)=> {
         dispatch({type: 'EDIT_KNOW', know: {
           id: values.id,
           name: values.name,
-          value: values.value
+          value: values.value,
+          knowtype_id: props.knowtypeId
         }})
         if (close) {
           dispatch({type: 'OPEN_KNOW', payload:{id:null}})
