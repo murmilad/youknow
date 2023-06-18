@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
-import { Plus, ChatDotsFill, PlusLg } from 'react-bootstrap-icons';
+import { PlusLg } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next'
 import AddKnowtypeForm from '../forms/Workarea/KnowTypes/AddKnowtypeForm'
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
+import {ReactComponent as ChatDotsComposite}  from '../images/chat_dots_composite.svg';
 
 import SidebarMenu from 'react-bootstrap-sidebar-menu';
 //https://github.com/ivp-dev/react-bootstrap-sidebar-menu
 const SideBar = (props) => {
   const navigate = useNavigate();
- 
+  const dispatch = useDispatch()
+
 
   const { t, i18n } = useTranslation();
   const [isAdding, setIsAdding] = useState(false);
+  const handleSelect = (knowtype) => {
+    dispatch({type: 'SET_CURRENT_KNOWTYPE', payload:{knowtype}});
+  };
 
   return (
     <SidebarMenu
@@ -25,8 +31,8 @@ const SideBar = (props) => {
         <SidebarMenu.Body>
           <SidebarMenu.Nav>
             {props.knowtypes?.map((knowtype, idx) =>
-              <SidebarMenu.Nav.Link eventKey={knowtype.id + "_type"} onSelect={()=> navigate("/know/" + knowtype.id)}> 
-                <SidebarMenu.Nav.Icon><ChatDotsFill color={knowtype.style} /></SidebarMenu.Nav.Icon>
+              <SidebarMenu.Nav.Link key={knowtype.id + "_type"} eventKey={knowtype.id + "_type"} onSelect={() => handleSelect(knowtype)}> 
+                <SidebarMenu.Nav.Icon><ChatDotsComposite color={knowtype.style} /></SidebarMenu.Nav.Icon>
                 <SidebarMenu.Nav.Title>{knowtype.name}</SidebarMenu.Nav.Title>
               </SidebarMenu.Nav.Link>
             )}

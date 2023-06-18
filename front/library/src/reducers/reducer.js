@@ -9,6 +9,14 @@ export const reducer = (state = {
 }, action) => {
 
   switch (action.type) {
+    case "SET_CURRENT_KNOWTYPE":
+      return {
+        ...state,
+        knowtype: {
+          ...state.knowtype,
+          current:action.payload.knowtype
+        }
+      }
     case "FETCH_KNOWTYPES":
       return {
         ...state,
@@ -16,7 +24,8 @@ export const reducer = (state = {
           ...state.knowtype,
           list:[
             ...action.payload.knowtypes
-          ]
+          ],
+          current: state.knowtype.current ? action.payload.knowtypes.filter((item) => item.id == state.knowtype.current.id)[0] : null
         }
       }
     case "CREATE_KNOWTYPE":

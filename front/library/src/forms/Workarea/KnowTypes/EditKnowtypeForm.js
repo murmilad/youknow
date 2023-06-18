@@ -1,53 +1,52 @@
-import {useState} from "react";
-import {createKnowtype} from "../../../actions/knowtype-actions";
-import {useSelector, useDispatch} from "react-redux";
-import {isStringEmpty, isObjectEmpty} from "../../../utils/utils"
-import {Formik, Field, Form} from "formik"
+import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Formik, Field, Form } from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
 import PickerField from '../../../components/PickerField'
-import ErrorInterceptor from '../../../components/ErrorInterceptor'
-
+import { Nav } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import { TwitterPicker } from 'react-color';
 
 function EditKnowtypeForm(props) {
   const { t, i18n } = useTranslation();
-  const dispatch = useDispatch()
-  const error = useSelector(state => state.knowtype.error)
-  const close = useSelector(state => state.knowtype.close)
-  const open = useSelector(state => state.knowtype.open)
+  const dispatch = useDispatch();
+  const [isEditing, setIsEditing] = useState(false);
+  const [isStyling, setIsStyling] = useState(false);
+  const picker = useRef(null);
 
-
-  var handleClick = () => {
-    if (!error){
-      if (props.knowtype.id == open) {
-        dispatch({type: 'OPEN_KNOWTYPE', payload:{id:null}})
-      } else
-        dispatch({type: 'OPEN_KNOWTYPE', payload:{id:props.knowtype.id}})
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (picker.current && !picker.current.contains(event.target)) {
+        setIsStyling(false);
+      }
     }
-  }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [picker]);
 
   return (
-    <div onClick={handleClick} key={props.idx} style={{background:props.knowtype.style}} className="list-group-item d-flex justify-content-between align-items-center">
-
     <Formik
-      initialValues = {{
+      initialValues={{
         id: props.knowtype.id,
         name: props.knowtype.name,
         style: props.knowtype.style,
       }}
       enableReinitialize
-      onSubmit ={ (values)=> {
-        dispatch({type: 'EDIT_KNOWTYPE', knowtype: {
-          id: values.id,
-          name: values.name,
-          style: values.style
-        }})
-        if (close) {
-          dispatch({type: 'OPEN_KNOWTYPE', payload:{id:null}})
-          dispatch({type: 'CLOSE_KNOWTYPES', payload:{close:false}})
-        }
+      onSubmit={(values) => {
+        dispatch({
+          type: 'EDIT_KNOWTYPE', knowtype: {
+            id: values.id,
+            name: values.name,
+            style: values.style
+          }
+        });
+        setIsEditing(false);
+        setIsStyling(false);
       }}
-      validationSchema = {
+      validationSchema={
         yup.object().shape({
           name: yup.string().required(),
           style: yup.string().required(),
@@ -55,61 +54,61 @@ function EditKnowtypeForm(props) {
       }
     >
       <Form className="edit_form row" >
-        
-        <div className="edit_form_wrapper form-wrapper" >
-          { !props.open 
-            && <>
-              <div className="line_element"><strong>{props.knowtype.name}</strong></div>
-              </>
-            || <> 
-              <Field name="name" > 
-                {({
-                  field,
-                  form,
-                  meta,
-                }) => (
-                  <div className="line_element form-group" >
-                    <input 
-                      autoFocus 
-                      placeholder={t('field.know-type-name')} 
-                      className={(meta.error) ? 'form-control is-invalid' : 'form-control'} 
-                      {...field}
-                      onClick={(e)=>e.stopPropagation()} 
-                      onBlur={(e) => {
-                          form.submitForm()
-                          if (!form.isValid)
-                            dispatch({type: 'CLOSE_KNOWTYPES', payload:{close:false}})
-                          dispatch({type: 'ERROR_KNOWTYPE', payload:{error:!form.isValid}})
-                      }}/>
-                  </div>
-                )}
-              </Field>
-              <Field name="style">
-                {({
-                  field,
-                  form,
-                  meta,
-                }) => (
-                  <div className="line_element form-group">
-                    <PickerField header={t('field.know-type-style')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} value={field.value} onChange={(e)=>{
-                      dispatch({type: 'CLOSE_KNOWTYPES', payload:{close:true}})
-                      form.submitForm()
-                    }}/>
-                  </div>
-                )}
-              </Field>
-            </>
-          }
-          <button style={{display:'none'}} type="submit"/>
 
-          <div className="line_element form-gfield.onChangeroup">
-              <button type="button" data-testid="delete-button"   className="btn btn-outline-danger btn-sm button_delete"
-                      onClick={()=>dispatch({type: "DELETE_KNOWTYPE", knowtype: props.knowtype})}>{t('action.delete-know-type')}</button>
-          </div>
+        <div className="edit_form_wrapper form-wrapper" >
+          {isEditing ?
+            <Field name="name" >
+              {({
+                field,
+                form,
+                meta,
+              }) => {
+                field.onBlur = () => {
+                  form.submitForm();
+                };
+                return (
+                  <div className="line_element form-group" >
+                    <input
+                      autoFocus
+                      placeholder={t('field.know-type-name')}
+                      className={(meta.error) ? 'form-control is-invalid' : 'form-control'}
+                      {...field}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                )
+              }}
+            </Field>
+            :
+            <Nav.Link onClick={() => setIsEditing(true)}>{t('action.edit-know-type')}</Nav.Link>
+          }
+          <Field name="style">
+            {({
+              field,
+              form,
+              meta,
+            }) => (
+              <Nav.Link onClick={() => setIsStyling(true)}>{t('action.edit-style-know-type')}
+                {isStyling &&
+                  <div ref={picker} className="picker_popover" >
+                    <TwitterPicker
+                      colors={['#F3F8FF', '#DEECFF', '#C6CFFF', '#E8D3FF', '#CDF0EA', '#F9F9F9', '#F6C6EA', '#FFF6BD', '#CEEDC7', '#B2C8DF']}
+                      onChange={(color) => {
+                        form.setFieldValue("style", color.hex);
+                        setIsStyling(false);
+                        form.submitForm();
+                      }} />
+                  </div>
+                }
+              </Nav.Link>
+            )}
+          </Field>
+
+          <Nav.Link onClick={() => dispatch({ type: "DELETE_KNOWTYPE", knowtype: props.knowtype })} variant="btn btn-outline-light">{t('action.delete-know-type')}</Nav.Link>
         </div>
       </Form>
     </Formik>
-    </div>
-  )}
+  )
+}
 
 export default EditKnowtypeForm

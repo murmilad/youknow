@@ -28,7 +28,7 @@ function RoutesPage() {
                     path="/"
                     element={
                         user ?
-                            <WorkareaWrapper />
+                            <Know />
                             : <Navigate to={{ pathname: '/login' }} />
                     }
                 />

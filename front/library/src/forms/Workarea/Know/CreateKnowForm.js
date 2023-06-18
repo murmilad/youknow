@@ -1,3 +1,4 @@
+import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import {Formik, Field, Form} from "formik"
 import * as yup from "yup"
@@ -8,8 +9,14 @@ function CreateKnowForm(props) {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    form.resetForm();
+  }, [props.knowtypeId])
+
+  let form;
   return (
     <Formik
+      innerRef={(p) => (form = p)}
       initialValues = {{
         name: '',
         value: '',

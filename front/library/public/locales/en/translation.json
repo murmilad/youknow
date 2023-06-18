@@ -46,6 +46,8 @@
     "action": {
         "create-know-type": "Create",
         "delete-know-type": "Delete",
+        "edit-know-type": "Edit name",
+        "edit-style-know-type": "Change style",
         "create-know": "Create",
         "delete-know": "Delete"
     },
