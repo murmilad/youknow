@@ -56,7 +56,7 @@
         "add-knowtype" : "New"
     },
     "message":{
-        "delete-know-type": "Do you want delete all Know type with all it's Knows?",
+        "delete-know-type": "Do you want delete Know type with all it's Knows?",
         "loading": "Loading...",
         "wait": "Wait...",
         "login_incorrect": "User or Password incorrect"

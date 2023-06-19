@@ -20,7 +20,7 @@ func (yc *YouKnowController) GetKnowTypes(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
 	var knowtypes []models.KnowTypeResponse
-	yc.DB.Find(&knowtypes, "user_id = ?", currentUser.ID).Order("id")
+	yc.DB.Find(&knowtypes, "user_id = ? AND deleted = false", currentUser.ID).Order("id")
 
 	ctx.IndentedJSON(http.StatusOK, knowtypes)
 }
@@ -43,7 +43,7 @@ func (yc *YouKnowController) PostKnowType(ctx *gin.Context) {
 
 func (yc *YouKnowController) GetKnowTypeByID(ctx *gin.Context) {
 	var knowtypes []models.KnowTypeResponse
-	yc.DB.Find(&knowtypes, "id = ?", ctx.Param("id"))
+	yc.DB.Find(&knowtypes, "id = ? AND deleted = false", ctx.Param("id"))
 
 	if len(knowtypes) > 0 {
 		ctx.IndentedJSON(http.StatusOK, knowtypes[0])
@@ -56,10 +56,11 @@ func (yc *YouKnowController) GetKnowTypeByID(ctx *gin.Context) {
 
 func (yc *YouKnowController) DeleteKnowTypeByID(ctx *gin.Context) {
 	var knowtypes []models.KnowTypeResponse
-	yc.DB.Find(&knowtypes, "id = ?", ctx.Param("id"))
+	yc.DB.Find(&knowtypes, "id = ? AND deleted = false", ctx.Param("id"))
 
 	if len(knowtypes) > 0 {
-		yc.DB.Delete(&models.KnowType{}, 10, ctx.Param("id"))
+		knowtypes[0].Deleted = true
+		yc.DB.Save(knowtypes[0])
 
 		ctx.IndentedJSON(http.StatusOK, knowtypes[0])
 		return
@@ -71,7 +72,7 @@ func (yc *YouKnowController) DeleteKnowTypeByID(ctx *gin.Context) {
 
 func (yc *YouKnowController) GetKnows(ctx *gin.Context) {
 	var knows []models.Know
-	yc.DB.Find(&knows, "knowtype_id = ?", ctx.Param("knowtype_id")).Order("id")
+	yc.DB.Find(&knows, "knowtype_id = ? AND deleted = false", ctx.Param("knowtype_id")).Order("id")
 
 	ctx.IndentedJSON(http.StatusOK, knows)
 }
@@ -91,7 +92,7 @@ func (yc *YouKnowController) PostKnow(ctx *gin.Context) {
 
 func (yc *YouKnowController) GetKnowByID(ctx *gin.Context) {
 	var knows []models.Know
-	yc.DB.Find(&knows, "id = ?", ctx.Param("id"))
+	yc.DB.Find(&knows, "id = ? AND deleted = false", ctx.Param("id"))
 
 	if len(knows) > 0 {
 		ctx.IndentedJSON(http.StatusOK, knows[0])
@@ -104,10 +105,11 @@ func (yc *YouKnowController) GetKnowByID(ctx *gin.Context) {
 
 func (yc *YouKnowController) DeleteKnowByID(ctx *gin.Context) {
 	var knows []models.Know
-	yc.DB.Find(&knows, "id = ?", ctx.Param("id"))
+	yc.DB.Find(&knows, "id = ? AND deleted = false", ctx.Param("id"))
 
 	if len(knows) > 0 {
-		yc.DB.Delete(&models.Know{}, 10, ctx.Param("id"))
+		knows[0].Deleted = true
+		yc.DB.Save(knows[0])
 
 		ctx.IndentedJSON(http.StatusOK, knows[0])
 		return
