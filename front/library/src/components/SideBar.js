@@ -45,7 +45,7 @@ const SideBar = (props) => {
               </SidebarMenu.Nav.Link>
               : <SidebarMenu.Nav.Link onSelect={()=>setIsAdding(true)} eventKey="add">
                 <SidebarMenu.Nav.Icon><PlusLg /></SidebarMenu.Nav.Icon>
-                <SidebarMenu.Nav.Title>{t('sidebar.add-knowtype')}</SidebarMenu.Nav.Title>
+                <SidebarMenu.Nav.Title>{t('action.add-knowtype')}</SidebarMenu.Nav.Title>
               </SidebarMenu.Nav.Link>
           }
           </SidebarMenu.Nav>

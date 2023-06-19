@@ -1,6 +1,7 @@
 
 {
     "header": {
+        "error":"Error",
         "know-types":"Types of Know",
         "know":"Know",
         "login":"Log In",
@@ -49,15 +50,16 @@
         "edit-know-type": "Edit name",
         "edit-style-know-type": "Change style",
         "create-know": "Create",
-        "delete-know": "Delete"
+        "delete-know": "Delete",
+        "close-error":"Close",
+        "close-dialog":"Close",
+        "add-knowtype" : "New"
     },
     "message":{
+        "delete-know-type": "Do you want delete all Know type with all it's Knows?",
         "loading": "Loading...",
         "wait": "Wait...",
         "login_incorrect": "User or Password incorrect"
-    },
-    "sidebar":{
-        "add-knowtype" : "New"
     }
-
+ 
 }

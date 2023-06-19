@@ -1,11 +1,15 @@
-export const reducer = (state = { 
-  knowtype: {list:[], open: null, error: false, close:false},
-  know: {list:[], open: null, error: false, close:false},
+export const reducer = (state = {
+  knowtype: { list: [] },
+  know: { list: [], open: null, error: false, close: false },
   signed_up: false,
   verified: false,
   reseted: false,
   is_loading: false,
-  forgot_password: false
+  forgot_password: false,
+  modal: {
+    error: null,
+    dialog: null
+  }
 }, action) => {
 
   switch (action.type) {
@@ -14,7 +18,7 @@ export const reducer = (state = {
         ...state,
         knowtype: {
           ...state.knowtype,
-          current:action.payload.knowtype
+          current: action.payload.knowtype
         }
       }
     case "FETCH_KNOWTYPES":
@@ -22,7 +26,7 @@ export const reducer = (state = {
         ...state,
         knowtype: {
           ...state.knowtype,
-          list:[
+          list: [
             ...action.payload.knowtypes
           ],
           current: state.knowtype.current ? action.payload.knowtypes.filter((item) => item.id == state.knowtype.current.id)[0] : null
@@ -32,78 +36,56 @@ export const reducer = (state = {
       return {
         ...state
       }
-    case "OPEN_KNOWTYPE":
 
-        return {
-          ...state,
-          knowtype: {
-            ...state.knowtype,
-            open:action.payload.id
-          }
-        }
-    case "CLOSE_KNOWTYPES":
+
+    case "FETCH_KNOWS":
       return {
         ...state,
-        knowtype: {
-          ...state.knowtype,
-          close:action.payload.close
+        know: {
+          ...state.know,
+          list: [
+            ...action.payload.knows
+          ]
         }
-    }
-    case "ERROR_KNOWTYPE":
+      }
+    case "CREATE_KNOW":
+      return {
+        ...state
+      }
+    case "OPEN_KNOW":
+
       return {
         ...state,
-        knowtype: {
-          ...state.knowtype,
-          error:action.payload.error
+        know: {
+          ...state.know,
+          open: action.payload.id
         }
       }
-
-
-      case "FETCH_KNOWS":
-        return {
-          ...state,
-          know: {
-            ...state.know,
-            list:[
-              ...action.payload.knows
-            ]
-          }
+    case "CLOSE_KNOWS":
+      return {
+        ...state,
+        know: {
+          ...state.know,
+          close: action.payload.close
         }
-      case "CREATE_KNOW":
-        return {
-          ...state
-        }
-      case "OPEN_KNOW":
-  
-          return {
-            ...state,
-            know: {
-              ...state.know,
-              open:action.payload.id
-            }
-          }
-      case "CLOSE_KNOWS":
-        return {
-          ...state,
-          know: {
-            ...state.know,
-            close:action.payload.close
-          }
       }
-      case "ERROR_KNOW":
-        return {
-          ...state,
-          know: {
-            ...state.know,
-            error:action.payload.error
-          }
+    case "ERROR_KNOW":
+      return {
+        ...state,
+        know: {
+          ...state.know,
+          error: action.payload.error
         }
+      }
     case "HIDE_ERROR_MODAL":
       return {
         ...state,
         modal: {
           ...state.modal,
-          isShow: false
+          error: {
+            ...state.modal.error,
+            isShow: false
+          }
         }
       }
     case "SHOW_ERROR_MODAL":
@@ -111,39 +93,68 @@ export const reducer = (state = {
         ...state,
         modal: {
           ...state.modal,
-          message: action.payload.message,
-          isShow: true
+          error: {
+            ...state.modal.error,
+            message: action.payload.message,
+            isShow: true
+          }
         }
       }
-    case "SET_SIGN_UP": 
+    case "HIDE_DIALOG_MODAL":
       return {
         ...state,
-        signed_up:action.payload.signed_up,
+        modal: {
+          ...state.modal,
+          dialog: {
+            ...state.modal.dialog,
+            isShow: false
+          }
+        }
       }
-    case "SET_VERIFIED": 
+    case "SHOW_DIALOG_MODAL":
       return {
         ...state,
-        verified:action.payload.verified
+        modal: {
+          ...state.modal,
+          dialog: {
+            ...state.modal.error,
+            message: action.payload.message,
+            header: action.payload.header,
+            callback: action.payload.callback,
+            isShow: true
+          }
+        }
       }
-    case "SET_USER": 
+
+    case "SET_SIGN_UP":
       return {
         ...state,
-        user:action.payload.user
+        signed_up: action.payload.signed_up,
       }
-    case "SET_FORGOT_PASSWORD": 
+    case "SET_VERIFIED":
       return {
         ...state,
-        forgot_password:action.payload.forgot_password,
+        verified: action.payload.verified
       }
-    case "SET_RESET": 
+    case "SET_USER":
       return {
         ...state,
-        reseted:action.payload.reseted,
+        user: action.payload.user
       }
-    case "SET_LOADING": 
+    case "SET_FORGOT_PASSWORD":
       return {
         ...state,
-        is_loading:action.payload.loading,
+        forgot_password: action.payload.forgot_password,
+      }
+    case "SET_RESET":
+      return {
+        ...state,
+        reseted: action.payload.reseted,
+      }
+    case "SET_LOADING":
+      return {
+        ...state,
+        is_loading: action.payload.loading,
       }
     default:
       return state

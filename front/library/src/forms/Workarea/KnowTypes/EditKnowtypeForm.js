@@ -104,7 +104,14 @@ function EditKnowtypeForm(props) {
             )}
           </Field>
 
-          <Nav.Link onClick={() => dispatch({ type: "DELETE_KNOWTYPE", knowtype: props.knowtype })} variant="btn btn-outline-light">{t('action.delete-know-type')}</Nav.Link>
+          <Nav.Link onClick={() => dispatch({
+            type: 'SHOW_DIALOG_MODAL', payload: {
+              message: t('message.delete-know-type'),
+              header: t('action.delete-know-type'),
+              callback: { type: "DELETE_KNOWTYPE", knowtype: props.knowtype }
+            }
+          })}
+            variant="btn btn-outline-light">{t('action.delete-know-type')}</Nav.Link>
         </div>
       </Form>
     </Formik>
