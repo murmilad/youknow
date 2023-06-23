@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import {Formik, Field, Form} from "formik"
+import { Formik, Field, Form } from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
 
@@ -17,55 +17,52 @@ function CreateKnowForm(props) {
   return (
     <Formik
       innerRef={(p) => (form = p)}
-      initialValues = {{
+      initialValues={{
         name: '',
         value: '',
         knowtype_id: props.knowtypeId
       }}
-      onSubmit ={ (values, { setSubmitting, resetForm }) => {
-        dispatch({type: 'CREATE_KNOW', know: {
-          name: values.name,
-          value: values.value,
-          knowtype_id: props.knowtypeId
-        }})
+      onSubmit={(values, { setSubmitting, resetForm }) => {
+        dispatch({
+          type: 'CREATE_KNOW', know: {
+            name: values.name,
+            value: values.value,
+            knowtype_id: props.knowtypeId
+          }
+        })
         resetForm()
       }}
-      validationSchema = {
+      validationSchema={
         yup.object().shape({
           name: yup.string().required(),
           value: yup.string().required(),
         })
       }
-    >
-      <Form className="create_form row" >
-        <div className="form-wrapper">
-          <Field name="name" > 
-            {({
-              field,
-              meta,
-            }) => (
-              <div className="form_element horizontal form-group" >
-                <input placeholder={t('field.know-name')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
-                {meta.touched && meta.error && ( <span className="invalid-feedback">{t('error.required')}</span>)}
-              </div>
-            )}
-          </Field>
-          <Field name="value" > 
-            {({
-              field,
-              meta,
-            }) => (
-              <div className="form_element horizontal form-group" >
-                <input placeholder={t('field.know-value')} className={(meta.touched && meta.error) ? 'form-control is-invalid' : 'form-control'} {...field} />
-                {meta.touched && meta.error && ( <span className="invalid-feedback">{t('error.required')}</span>)}
-              </div>
-            )}
-          </Field>
+    >{({touched, errors, handleSubmit, isSubmitting}) => (
+      <Form 
+        className="create_form row"
+        onKeyDown={(e) => {
+          if (e.ctrlKey && e.key === 'Enter' && !isSubmitting) {
+
+            handleSubmit();
+          }
+        }}>
+        <div style={{ display: 'flex' }}>
+          <div className="w-50 m-2 float-left" >
+          <Field name="name" placeholder={t('field.know-name')} className={(touched.name && errors.name) ? 'form-control is-invalid' : 'form-control'} as="textarea" rows={3} cols={5}/>
+          {touched.name && errors.name && (<div className="invalid-feedback">{t('error.required')}</div>)}
+          </div>
+          <div className="w-50 m-2 float-left" >
+          <Field name="value" placeholder={t('field.know-value')} className={(touched.value && errors.value) ? 'form-control is-invalid' : 'form-control'} as="textarea" rows={3} cols={5}/>
+          {touched.value && errors.value && (<div className="invalid-feedback">{t('error.required')}</div>)}
+          </div>
           <div className="form_element form-group">
             <button type="submit" className="btn btn-primary" >{t('action.create-know')}</button>
           </div>
         </div>
       </Form>
+    )
+      }
     </Formik>
   )
 }

@@ -20,7 +20,19 @@ function EditKnowForm(props) {
         dispatch({type: 'OPEN_KNOW', payload:{id:props.know.id}})
     }
   }
-
+/*   <input 
+  autoFocus 
+  placeholder={t('field.know-name')} 
+  className={(meta.error) ? 'form-control is-invalid' : 'form-control'} 
+  {...field}
+  onClick={(e)=>e.stopPropagation()} 
+  onBlur={(e) => {
+      form.submitForm()
+      if (!form.isValid)
+        dispatch({type: 'CLOSE_KNOWS', payload:{close:false}})
+      dispatch({type: 'ERROR_KNOW', payload:{error:!form.isValid}})
+  }}/>
+ */
   return (
     <div onClick={handleClick} key={props.idx}  className="list-group-item d-flex justify-content-between align-items-center">
 
@@ -66,18 +78,13 @@ function EditKnowForm(props) {
                   meta,
                 }) => (
                   <div className="line_element form-group" >
-                    <input 
-                      autoFocus 
-                      placeholder={t('field.know-name')} 
-                      className={(meta.error) ? 'form-control is-invalid' : 'form-control'} 
-                      {...field}
-                      onClick={(e)=>e.stopPropagation()} 
-                      onBlur={(e) => {
-                          form.submitForm()
-                          if (!form.isValid)
-                            dispatch({type: 'CLOSE_KNOWS', payload:{close:false}})
-                          dispatch({type: 'ERROR_KNOW', payload:{error:!form.isValid}})
-                      }}/>
+                    <Form.Control 
+                      autoFocus
+                      placeholder={t('field.know-name')}
+                      as="textarea"
+                      rows={3}
+                      className={(meta.error) ? 'form-control is-invalid' : 'form-control'}
+                      {...field}/>
                   </div>
                 )}
               </Field>
