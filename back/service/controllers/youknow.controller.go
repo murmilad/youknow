@@ -20,7 +20,7 @@ func (yc *YouKnowController) GetKnowTypes(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
 	var knowtypes []models.KnowTypeResponse
-	yc.DB.Find(&knowtypes, "user_id = ? AND deleted = false", currentUser.ID).Order("id")
+	yc.DB.Order("id desc").Find(&knowtypes, "user_id = ? AND deleted = false", currentUser.ID)
 
 	ctx.IndentedJSON(http.StatusOK, knowtypes)
 }
@@ -72,7 +72,7 @@ func (yc *YouKnowController) DeleteKnowTypeByID(ctx *gin.Context) {
 
 func (yc *YouKnowController) GetKnows(ctx *gin.Context) {
 	var knows []models.Know
-	yc.DB.Find(&knows, "knowtype_id = ? AND deleted = false", ctx.Param("knowtype_id")).Order("id")
+	yc.DB.Order("id desc").Find(&knows, "knowtype_id = ? AND deleted = false", ctx.Param("knowtype_id"))
 
 	ctx.IndentedJSON(http.StatusOK, knows)
 }

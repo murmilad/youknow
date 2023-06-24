@@ -38,6 +38,7 @@
     "run": "^1.4.0",
     "rxjs": "^7.3.0",
     "sass": "^1.63.4",
+    "textarea-autosize-reactjs": "0.0.1",
     "thunk": "^0.0.1",
     "universal-cookie": "^4.0.4",
     "web-vitals": "^1.1.2",

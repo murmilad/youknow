@@ -1,8 +1,10 @@
 import React, { useRef, useEffect } from "react";
+import { Button } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { Formik, Field, Form } from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
+import TextArea from 'textarea-autosize-reactjs';
 
 
 function CreateKnowForm(props) {
@@ -16,6 +18,7 @@ function CreateKnowForm(props) {
   let form;
   return (
     <Formik
+      validateOnBlur={false}
       innerRef={(p) => (form = p)}
       initialValues={{
         name: '',
@@ -38,8 +41,8 @@ function CreateKnowForm(props) {
           value: yup.string().required(),
         })
       }
-    >{({touched, errors, handleSubmit, isSubmitting}) => (
-      <Form 
+    >{({ touched, errors, handleSubmit, isSubmitting, isValidating }) => (
+      <Form
         className="create_form row"
         onKeyDown={(e) => {
           if (e.ctrlKey && e.key === 'Enter' && !isSubmitting) {
@@ -49,15 +52,25 @@ function CreateKnowForm(props) {
         }}>
         <div style={{ display: 'flex' }}>
           <div className="w-50 m-2 float-left" >
-          <Field name="name" placeholder={t('field.know-name')} className={(touched.name && errors.name) ? 'form-control is-invalid' : 'form-control'} as="textarea" rows={3} cols={5}/>
-          {touched.name && errors.name && (<div className="invalid-feedback">{t('error.required')}</div>)}
+            <Field name="name"  >
+              {({ field }) => (
+                <TextArea placeholder={t('field.know-name')} className={(touched.name && errors.name) ? 'form-control is-invalid' : 'form-control'} {...field} />
+              )}
+            </Field>
+            {touched.name && errors.name && (<div className="invalid-feedback">{t('error.required')}</div>)}
           </div>
           <div className="w-50 m-2 float-left" >
-          <Field name="value" placeholder={t('field.know-value')} className={(touched.value && errors.value) ? 'form-control is-invalid' : 'form-control'} as="textarea" rows={3} cols={5}/>
-          {touched.value && errors.value && (<div className="invalid-feedback">{t('error.required')}</div>)}
+            <Field name="value"  >
+              {({ field }) => (
+                <TextArea placeholder={t('field.know-value')} className={(touched.name && errors.name) ? 'form-control is-invalid' : 'form-control'} {...field} />
+              )}
+            </Field>
+            {touched.value && errors.value && (<div className="invalid-feedback">{t('error.required')}</div>)}
           </div>
-          <div className="form_element form-group">
-            <button type="submit" className="btn btn-primary" >{t('action.create-know')}</button>
+          <div className="m-2 float-left">
+            <Button onClick={() => {
+              handleSubmit();
+            }} variant="primary" >{t('action.create-know')}</Button>
           </div>
         </div>
       </Form>

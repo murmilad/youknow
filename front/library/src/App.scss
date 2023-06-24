@@ -224,3 +224,8 @@
    from { left: -75%; width: 75%; }
    to { left: 100%; width: 75%;}
 }
+
+/* newlines */
+.css-fix {
+  white-space: pre-wrap; /* or pre-line */
+}

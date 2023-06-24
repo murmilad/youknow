@@ -1,127 +1,124 @@
-import {useSelector, useDispatch} from "react-redux";
-import {Formik, Field, Form} from "formik"
+import { useState, useEffect, useRef } from "react";
+import { Button } from 'react-bootstrap'
+import { useSelector, useDispatch } from "react-redux";
+import { Formik, Field, Form } from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
+import TextArea from 'textarea-autosize-reactjs';
+
 
 
 function EditKnowForm(props) {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch()
-  const error = useSelector(state => state.know.error)
-  const close = useSelector(state => state.know.close)
-  const open = useSelector(state => state.know.open)
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingValue, setIsEditingValue] = useState(false);
 
-
-  var handleClick = () => {
-    if (!error){
-      if (props.know.id == open) {
-        dispatch({type: 'OPEN_KNOW', payload:{id:null}})
-      } else
-        dispatch({type: 'OPEN_KNOW', payload:{id:props.know.id}})
-    }
-  }
-/*   <input 
-  autoFocus 
-  placeholder={t('field.know-name')} 
-  className={(meta.error) ? 'form-control is-invalid' : 'form-control'} 
-  {...field}
-  onClick={(e)=>e.stopPropagation()} 
-  onBlur={(e) => {
-      form.submitForm()
-      if (!form.isValid)
-        dispatch({type: 'CLOSE_KNOWS', payload:{close:false}})
-      dispatch({type: 'ERROR_KNOW', payload:{error:!form.isValid}})
-  }}/>
- */
   return (
-    <div onClick={handleClick} key={props.idx}  className="list-group-item d-flex justify-content-between align-items-center">
+    <div className="list-group-item d-flex justify-content-between align-items-center">
 
-    <Formik
-      initialValues = {{
-        id: props.know.id,
-        name: props.know.name,
-        value: props.know.value,
-        knowtype_id: props.knowtypeId
-      }}
-      enableReinitialize
-      onSubmit ={ (values)=> {
-        dispatch({type: 'EDIT_KNOW', know: {
-          id: values.id,
-          name: values.name,
-          value: values.value,
+      <Formik
+        initialValues={{
+          id: props.know.id,
+          name: props.know.name,
+          value: props.know.value,
           knowtype_id: props.knowtypeId
-        }})
-        if (close) {
-          dispatch({type: 'OPEN_KNOW', payload:{id:null}})
-          dispatch({type: 'CLOSE_KNOWS', payload:{close:false}})
+        }}
+        enableReinitialize
+        onSubmit={(values) => {
+          dispatch({
+            type: 'EDIT_KNOW', know: {
+              id: values.id,
+              name: values.name,
+              value: values.value,
+              knowtype_id: props.knowtypeId
+            }
+          })
+        }}
+        validationSchema={
+          yup.object().shape({
+            name: yup.string().required(),
+            value: yup.string().required(),
+          })
         }
-      }}
-      validationSchema = {
-        yup.object().shape({
-          name: yup.string().required(),
-          value: yup.string().required(),
-        })
-      }
-    >
-      <Form className="edit_form row" >
-        
-        <div className="edit_form_wrapper form-wrapper" >
-          { !props.open 
-            && <>
-              <div className="line_element"><strong>{props.know.name}</strong></div>
-              </>
-            || <> 
-              <Field name="name" > 
-                {({
-                  field,
-                  form,
-                  meta,
-                }) => (
-                  <div className="line_element form-group" >
-                    <Form.Control 
-                      autoFocus
-                      placeholder={t('field.know-name')}
-                      as="textarea"
-                      rows={3}
-                      className={(meta.error) ? 'form-control is-invalid' : 'form-control'}
-                      {...field}/>
-                  </div>
-                )}
-              </Field>
-              <Field name="value" > 
-                {({
-                  field,
-                  form,
-                  meta,
-                }) => (
-                  <div className="line_element form-group" >
-                    <input 
-                      autoFocus 
-                      placeholder={t('field.know-value')} 
-                      className={(meta.error) ? 'form-control is-invalid' : 'form-control'} 
-                      {...field}
-                      onClick={(e)=>e.stopPropagation()} 
-                      onBlur={(e) => {
-                          form.submitForm()
-                          if (!form.isValid)
-                            dispatch({type: 'CLOSE_KNOWS', payload:{close:false}})
-                          dispatch({type: 'ERROR_KNOW', payload:{error:!form.isValid}})
-                      }}/>
-                  </div>
-                )}
-              </Field>
-           </>
-          }
-          <button style={{display:'none'}} type="submit"/>
-
-          <div className="line_element form-gfield.onChangeroup">
-              <button type="button" data-testid="delete-button"   className="btn btn-outline-danger btn-sm button_delete"
-                      onClick={()=>dispatch({type: "DELETE_KNOW", know: props.know})}>{t('action.delete-know')}</button>
+      >{({ touched, errors, handleSubmit, isSubmitting, isValidating }) => (
+        <Form
+          className="edit_form row "
+          onKeyDown={(e) => {
+            if (e.ctrlKey && e.key === 'Enter' ) {
+              setIsEditingName(false)
+              setIsEditingValue(false);
+              handleSubmit();
+            }
+          }}>
+          <div style={{ display: 'flex' }}>
+            {!isEditingName
+              &&
+              <div className="w-50 m-2 float-left" onClick={() => { setIsEditingName(true) }}><strong className="css-fix">{props.know.name}</strong></div>
+              ||
+              <div className="w-50 m-2 float-left" >
+                <Field name="name">
+                  {({ field, form }) => {
+                    field.onBlur = () => {
+                      form.submitForm();
+                      if (!errors.name) {
+                        setIsEditingName(false);
+                      }
+                    }
+                    return (<TextArea onKeyDown={(e) => {
+                      if (e.key === "Tab") {
+                        e.preventDefault();
+                        form.submitForm();
+                        if (!errors.name) {
+                          setIsEditingName(false);
+                          setIsEditingValue(true);
+                        }
+                      }
+                    }} autoFocus placeholder={t('field.know-name')} className={(touched.name && errors.name) ? 'form-control is-invalid' : 'form-control'} {...field} />)
+                  }}
+                </Field>
+                {touched.name && errors.name && (<div className="invalid-feedback">{t('error.required')}</div>)}
+              </div>
+            }
+            {!isEditingValue
+              &&
+              <div className="w-50 m-2 float-left" onClick={() => { setIsEditingValue(true) }}><strong className="css-fix">{props.know.value}</strong></div>
+              ||
+              <div className="w-50 m-2 float-left" >
+                <Field name="value"  >
+                  {({ field, form }) => {
+                    field.onBlur = () => {
+                      form.submitForm();
+                      if (!errors.value) {
+                        setIsEditingValue(false);
+                      }
+                    }
+                    return (<TextArea onKeyDown={(e) => {
+                      if (e.shiftKey && e.key === "Tab") {
+                        e.preventDefault();
+                        form.submitForm();
+                        if (!errors.value) {
+                          setIsEditingValue(false);
+                          setIsEditingName(true);
+                        }
+                      }
+                    }} autoFocus placeholder={t('field.know-value')} className={(touched.value && errors.value) ? 'form-control is-invalid' : 'form-control'} {...field} />)
+                  }}
+                </Field>
+                {touched.value && errors.value && (<div className="invalid-feedback">{t('error.required')}</div>)}
+              </div>
+            }
+            <div className="m-2 float-left">
+              <Button tabIndex="-1" onClick={() => {
+                dispatch({ type: "DELETE_KNOW", know: props.know })
+              }} variant="outline-danger" >{t('action.delete-know')}</Button>
+            </div>
           </div>
-        </div>
-      </Form>
-    </Formik>
+        </Form>
+      )}
+      </Formik>
     </div>
-  )}
+  )
+}
 
 export default EditKnowForm

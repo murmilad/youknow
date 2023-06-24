@@ -58,11 +58,7 @@ function EditKnowtypeForm(props) {
         <div className="edit_form_wrapper form-wrapper" >
           {isEditing ?
             <Field name="name" >
-              {({
-                field,
-                form,
-                meta,
-              }) => {
+              {({field,form,meta,}) => {
                 field.onBlur = () => {
                   form.submitForm();
                 };
@@ -83,11 +79,7 @@ function EditKnowtypeForm(props) {
             <Nav.Link onClick={() => setIsEditing(true)}>{t('action.edit-know-type')}</Nav.Link>
           }
           <Field name="style">
-            {({
-              field,
-              form,
-              meta,
-            }) => (
+            {({form}) => (
               <Nav.Link onClick={() => setIsStyling(true)}>{t('action.edit-style-know-type')}
                 {isStyling &&
                   <div ref={picker} className="picker_popover" >
