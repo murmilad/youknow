@@ -24,6 +24,7 @@ const SideBar = (props) => {
       bg="light"
       expand="lg"
       hide="md"
+      activeKey={props.current?.id + "_type"}
     >
       <SidebarMenu.Collapse>
         <SidebarMenu.Header className=''>

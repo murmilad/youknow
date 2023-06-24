@@ -20,7 +20,7 @@ func (yc *YouKnowController) GetKnowTypes(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
 	var knowtypes []models.KnowTypeResponse
-	yc.DB.Order("id desc").Find(&knowtypes, "user_id = ? AND deleted = false", currentUser.ID)
+	yc.DB.Order("id").Find(&knowtypes, "user_id = ? AND deleted = false", currentUser.ID)
 
 	ctx.IndentedJSON(http.StatusOK, knowtypes)
 }

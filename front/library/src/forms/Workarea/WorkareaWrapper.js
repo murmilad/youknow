@@ -21,7 +21,7 @@ const WorkareaWrapper = ({ children }) => {
   return (
     <div className='main-wrapper'>
       <NavigationBar knowtype={knowtype} userName={user.name} onLogOut={doLogOut}/>
-      <SideBar knowtypes={knowtypes}/>
+      <SideBar knowtypes={knowtypes} current={knowtype}/>
       <main className="main-container container-fluid">
         {children}
       </main>

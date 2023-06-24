@@ -44,14 +44,20 @@ export function* callServerLastest() {
   yield takeLatest("LOG_OUT", logOut)
 
   yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/youknow/knowtype/' + action.knowtype.id, action => ({ type: 'GET_KNOWTYPES' }))
-  yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/youknow/knowtype', request => request.knowtype, action => ({ type: 'GET_KNOWTYPES' }))
+  yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/youknow/knowtype', request => request.knowtype, (action, result) => ({ type: 'GET_KNOWTYPES', payload:{current : result.data} }))
   yield takeLatest("EDIT_KNOWTYPE", postResource, '/api/youknow/knowtype', request => request.knowtype, action => ({ type: 'GET_KNOWTYPES' }))
-  yield takeLatest("GET_KNOWTYPES", fetchResource, action => '/api/youknow/knowtypes', response => ({ knowtypes: response.data }), action => ({ type: 'FETCH_KNOWTYPES' }))
+  yield takeLatest("GET_KNOWTYPES", fetchResource, action => '/api/youknow/knowtypes', response => {}, (action, result) => {
+    if (action.payload?.current) {
+      return ([{ type: 'FETCH_KNOWTYPES', payload: {knowtypes: result.data}},{type: 'SET_CURRENT_KNOWTYPE', payload:{knowtype: action.payload?.current}}])
+    }else{
+      return ([{ type: 'FETCH_KNOWTYPES', payload: {knowtypes: result.data}}])
+    }
+  })
 
   yield takeLatest("DELETE_KNOW", deleteResource, action => '/api/youknow/know/' + action.know.id, action => ({type: 'GET_KNOWS', knowtype_id : action.know.knowtype_id }))
   yield takeLatest("CREATE_KNOW", postResource, '/api/youknow/know', request => request.know, action => ({type: 'GET_KNOWS', knowtype_id : action.know.knowtype_id }))
   yield takeLatest("EDIT_KNOW", postResource, '/api/youknow/know', request => request.know, action => ({type: 'GET_KNOWS', knowtype_id : action.know.knowtype_id }))
-  yield takeLatest("GET_KNOWS", fetchResource, action => '/api/youknow/knows/' + action.knowtype_id, response => ({ knows: response.data }), action => ({ type: 'FETCH_KNOWS' }))
+  yield takeLatest("GET_KNOWS", fetchResource, action => '/api/youknow/knows/' + action.knowtype_id, response => {}, (action, result) => ([{ type: 'FETCH_KNOWS', payload: {knows: result.data}}]))
 }
 
 function* checkLogin(action) {
@@ -74,7 +80,7 @@ function* logOut(action) {
 function* deleteResource(linkCallback, successAction, action) {
   try {
     const result = yield call(SERVER.delete, linkCallback(action))
-    yield put(successAction(action))
+    yield put(successAction(action, result))
   } catch (error) {
     yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
   }
@@ -116,16 +122,18 @@ function* submitForm(link, requestCallback, resultCallback, successAction, actio
 function* postResource(link, requestCallback, successAction, action) {
   try {
     const result = yield call(SERVER.post, link, requestCallback(action))
-    yield put(successAction(action))
+    yield put(successAction(action, result))
   } catch (error) {
     yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
   }
 }
 
-function* fetchResource(linkCallback, resultCallback, successAction, action) {
+function* fetchResource(linkCallback, resultCallback, successActions, action) {
   try {
     const result = yield call(SERVER.get, linkCallback(action))
-    yield put({...successAction(action), payload: resultCallback(result)})
+    for (let successAction of successActions(action,result)) {
+      yield put(successAction)
+    }
   } catch (error) {
     yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
   }
