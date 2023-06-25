@@ -2,7 +2,7 @@ import { Button, Modal } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next';
 
-function ErrorModal() {
+function ModalError() {
   const { t, i18n } = useTranslation();
   const errorModal = useSelector(state => state.modal.error)
   const dispatch = useDispatch()
@@ -26,4 +26,4 @@ function ErrorModal() {
   )
 }
 
-export default ErrorModal
+export default ModalError

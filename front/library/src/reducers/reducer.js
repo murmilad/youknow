@@ -8,7 +8,8 @@ export const reducer = (state = {
   forgot_password: false,
   modal: {
     error: null,
-    dialog: null
+    dialog: null,
+    dialog_upload: null,
   }
 }, action) => {
 
@@ -117,6 +118,31 @@ export const reducer = (state = {
         modal: {
           ...state.modal,
           dialog: {
+            ...state.modal.error,
+            message: action.payload.message,
+            header: action.payload.header,
+            callback: action.payload.callback,
+            isShow: true
+          }
+        }
+      }
+    case "HIDE_UPLOAD_DIALOG_MODAL":
+      return {
+        ...state,
+        modal: {
+          ...state.modal,
+          dialog_upload: {
+            ...state.modal.dialog,
+            isShow: false
+          }
+        }
+      }
+    case "SHOW_UPLOAD_DIALOG_MODAL":
+      return {
+        ...state,
+        modal: {
+          ...state.modal,
+          dialog_upload: {
             ...state.modal.error,
             message: action.payload.message,
             header: action.payload.header,

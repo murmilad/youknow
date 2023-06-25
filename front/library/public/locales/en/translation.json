@@ -53,13 +53,15 @@
         "delete-know": "Delete",
         "close-error":"Close",
         "close-dialog":"Close",
-        "add-knowtype" : "New"
+        "add-knowtype" : "New",
+        "upload-know-types" : "Upload Knows"
     },
     "message":{
         "delete-know-type": "Do you want delete Know type with all it's Knows?",
         "loading": "Loading...",
         "wait": "Wait...",
-        "login_incorrect": "User or Password incorrect"
+        "login_incorrect": "User or Password incorrect",
+        "upload-know-types": "Please select CSV (Comma-Separated Values) which values separated by '|' and lines by 'newline' symbol file for upload Knows"
     }
  
 }

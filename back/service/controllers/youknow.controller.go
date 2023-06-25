@@ -1,7 +1,11 @@
 package controllers
 
 import (
+	"encoding/csv"
+	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"akosarev.info/youknow/models"
 	"github.com/gin-gonic/gin"
@@ -68,6 +72,57 @@ func (yc *YouKnowController) DeleteKnowTypeByID(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Element not found"})
 
+}
+
+func (yc *YouKnowController) PostKnowTypesById(ctx *gin.Context) {
+	knowTypeId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	reader := csv.NewReader(src)
+	reader.Comma = '|'
+	records, _ := reader.ReadAll()
+
+	loadedCount := 0
+	duplicatedCount := 0
+	for _, record := range records {
+
+		if record[0] != "" && record[1] != "" {
+
+			var knows []models.Know
+
+			yc.DB.Where("knowtype_id = ? AND deleted = false AND name = ? AND value = ?",
+				knowTypeId, strings.ToLower(strings.Trim(record[0], " ")), strings.ToLower(strings.Trim(record[1], " "))).
+				Find(&knows)
+
+			if len(knows) > 0 {
+				duplicatedCount++
+			} else {
+				loadedCount++
+				var know models.Know
+				know.KnowtypeId = uint(knowTypeId)
+				know.Name = record[0]
+				know.Value = record[1]
+				yc.DB.Save(&know)
+			}
+		}
+	}
+
+	ctx.IndentedJSON(http.StatusOK, gin.H{"status": "loaded", "message": fmt.Sprintf("Uploaded %d, Duplicated %d", loadedCount, duplicatedCount)})
 }
 
 func (yc *YouKnowController) GetKnows(ctx *gin.Context) {

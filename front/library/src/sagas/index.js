@@ -53,6 +53,7 @@ export function* callServerLastest() {
       return ([{ type: 'FETCH_KNOWTYPES', payload: {knowtypes: result.data}}])
     }
   })
+  yield takeLatest("UPLOAD_KNOWTYPES", postResource, action => '/api/youknow/knowtypes/' + action.knowtype.id, request => request.payload.file, action => ({ type: 'GET_KNOWTYPES' }))
 
   yield takeLatest("DELETE_KNOW", deleteResource, action => '/api/youknow/know/' + action.know.id, action => ({type: 'GET_KNOWS', knowtype_id : action.know.knowtype_id }))
   yield takeLatest("CREATE_KNOW", postResource, '/api/youknow/know', request => request.know, action => ({type: 'GET_KNOWS', knowtype_id : action.know.knowtype_id }))
@@ -119,7 +120,11 @@ function* submitForm(link, requestCallback, resultCallback, successAction, actio
   yield put({ type: 'SET_LOADING', payload: { loading: false } })
 }
 
-function* postResource(link, requestCallback, successAction, action) {
+function* postResource(linkOrCallback, requestCallback, successAction, action) {
+  let link = linkOrCallback;
+  if (typeof linkOrCallback == "function") {
+    link = linkOrCallback(action)
+  }
   try {
     const result = yield call(SERVER.post, link, requestCallback(action))
     yield put(successAction(action, result))

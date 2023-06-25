@@ -2,7 +2,7 @@ import { Button, Modal } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next';
 
-function DialogModal() {
+function ModalDialog() {
   const { t, i18n } = useTranslation();
   const dialog = useSelector(state => state.modal.dialog)
   const dispatch = useDispatch()
@@ -32,4 +32,4 @@ function DialogModal() {
   )
 }
 
-export default DialogModal
+export default ModalDialog

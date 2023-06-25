@@ -7,6 +7,7 @@ import PickerField from '../../../components/PickerField'
 import { Nav } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { TwitterPicker } from 'react-color';
+import { ArrowUpCircle, Palette, PencilSquare, XCircle } from "react-bootstrap-icons";
 
 function EditKnowtypeForm(props) {
   const { t, i18n } = useTranslation();
@@ -58,7 +59,7 @@ function EditKnowtypeForm(props) {
         <div className="edit_form_wrapper form-wrapper" >
           {isEditing ?
             <Field name="name" >
-              {({field,form,meta,}) => {
+              {({ field, form, meta, }) => {
                 field.onBlur = () => {
                   form.submitForm();
                 };
@@ -75,12 +76,14 @@ function EditKnowtypeForm(props) {
                 )
               }}
             </Field>
-            :
-            <Nav.Link onClick={() => setIsEditing(true)}>{t('action.edit-know-type')}</Nav.Link>
+            : <>
+              <Nav.Link onClick={() => setIsEditing(true)} title={t('action.edit-know-type')}><h5 className="d-inline text-lg">{props.knowtype.name}</h5></Nav.Link>
+              <Nav.Link onClick={() => setIsEditing(true)} title={t('action.edit-know-type')}><PencilSquare className="mr-4" /></Nav.Link>
+            </>
           }
           <Field name="style">
-            {({form}) => (
-              <Nav.Link onClick={() => setIsStyling(true)}>{t('action.edit-style-know-type')}
+            {({ form }) => (
+              <Nav.Link onClick={() => setIsStyling(true)} title={t('action.edit-style-know-type')} ><Palette />
                 {isStyling &&
                   <div ref={picker} className="picker_popover" >
                     <TwitterPicker
@@ -97,13 +100,24 @@ function EditKnowtypeForm(props) {
           </Field>
 
           <Nav.Link onClick={() => dispatch({
+            type: 'SHOW_UPLOAD_DIALOG_MODAL', payload: {
+              message: t('message.upload-know-types'),
+              header: t('action.upload-know-types'),
+              callback: { type: "UPLOAD_KNOWTYPES", knowtype: props.knowtype}
+            }
+          })}
+            variant="btn btn-outline-light" title={t('action.upload-know-types')} ><ArrowUpCircle /></Nav.Link>
+
+          <Nav.Link onClick={() => dispatch({
             type: 'SHOW_DIALOG_MODAL', payload: {
               message: t('message.delete-know-type'),
               header: t('action.delete-know-type'),
               callback: { type: "DELETE_KNOWTYPE", knowtype: props.knowtype }
             }
           })}
-            variant="btn btn-outline-light">{t('action.delete-know-type')}</Nav.Link>
+            variant="btn btn-outline-light" title={t('action.delete-know-type')} ><XCircle /></Nav.Link>
+
+
         </div>
       </Form>
     </Formik>

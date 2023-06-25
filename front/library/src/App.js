@@ -2,13 +2,14 @@ import React, { lazy, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 //forms
-import ErrorModal from "./forms/Popup/ErrorModal"
+import ModalError from "./forms/Popup/ModalError"
+import ModalDialog from './forms/Popup/ModalDialog';
+import ModalDialogUpload from './forms/Popup/ModalDialogUpload';
 import RoutesPage from "./router/RoutesPage"
 
 //styles
 import './App.scss';
 import { useTranslation } from 'react-i18next';
-import DialogModal from './forms/Popup/DialogModal';
 
 
 
@@ -25,8 +26,9 @@ function App() {
   return (
     <>
       <RoutesPage />
-      <ErrorModal />
-      <DialogModal />
+      <ModalError />
+      <ModalDialog />
+      <ModalDialogUpload />
     </>
   );
 }
