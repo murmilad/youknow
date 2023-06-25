@@ -1,8 +1,11 @@
 package controllers
 
 import (
+	"bytes"
 	"encoding/csv"
 	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -81,37 +84,75 @@ func (yc *YouKnowController) PostKnowTypesById(ctx *gin.Context) {
 		return
 	}
 
-	file, err := ctx.FormFile("file")
+	file, _, err := ctx.Request.FormFile("file")
+	defer file.Close()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
 
-	src, err := file.Open()
-	if err != nil {
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, file); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
 
-	reader := csv.NewReader(src)
-	reader.Comma = '|'
-	records, _ := reader.ReadAll()
+	/* 	file, err := ctx.FormFile("file")
+	   	if err != nil {
+	   		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+	   		return
+	   	}
+
+	   	src, err := file.Open()
+	   	if err != nil {
+	   		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+	   		return
+	   	}
+	*/
+	/* 	log.Println("file ", string(buf.Bytes()))
+		in := `first_name|last_name|username
+	"Rob"|"Pike"|rob
+	# lines beginning with a # character are ignored
+	Ken|Thompson|ken
+	"Robert"|"Griesemer"|"gri"
+	`
+	*/
+	r := csv.NewReader(
+		strings.NewReader(
+			strings.ReplaceAll(
+				strings.ReplaceAll(
+					strings.ReplaceAll(
+						strings.ReplaceAll(string(buf.Bytes()),
+							`"`, `""`),
+						`\\`, `<DOUBLESLASH>`),
+					`\`, `"`),
+				`<DOUBLESLASH>`, `\`)))
+
+	r.Comma = '|'
+	r.Comment = '#'
+
+	records, err := r.ReadAll()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+	fmt.Print(records)
 
 	loadedCount := 0
 	duplicatedCount := 0
 	for _, record := range records {
-
 		if record[0] != "" && record[1] != "" {
 
 			var knows []models.Know
 
-			yc.DB.Where("knowtype_id = ? AND deleted = false AND name = ? AND value = ?",
-				knowTypeId, strings.ToLower(strings.Trim(record[0], " ")), strings.ToLower(strings.Trim(record[1], " "))).
+			yc.DB.Where("knowtype_id = ? AND deleted = false AND LOWER(TRIM(name)) = LOWER(TRIM(?)) AND LOWER(TRIM(value)) = LOWER(TRIM(?))",
+				knowTypeId, record[0], record[1]).
 				Find(&knows)
 
 			if len(knows) > 0 {
 				duplicatedCount++
 			} else {
+				log.Println("record: ", record[0], record[1])
 				loadedCount++
 				var know models.Know
 				know.KnowtypeId = uint(knowTypeId)
