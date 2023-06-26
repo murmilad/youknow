@@ -61,7 +61,7 @@
         "loading": "Loading...",
         "wait": "Wait...",
         "login_incorrect": "User or Password incorrect",
-        "upload-know-types": "Please select CSV (Comma-Separated Values) which values separated by '|' and lines by 'newline' symbol file for upload Knows"
+        "upload-know-types": "Please select CSV (Comma-Separated Values) file for upload Knows with values \"/name/|/value/\" "
     }
  
 }

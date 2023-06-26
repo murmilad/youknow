@@ -5,6 +5,7 @@ import { Formik, Field, Form } from "formik"
 import * as yup from "yup"
 import { useTranslation } from 'react-i18next';
 import TextArea from 'textarea-autosize-reactjs';
+import { XCircle } from 'react-bootstrap-icons';
 
 
 
@@ -51,10 +52,10 @@ function EditKnowForm(props) {
               handleSubmit();
             }
           }}>
-          <div style={{ display: 'flex' }}>
+          <div className="d-flex p-0">
             {!isEditingName
               &&
-              <div className="w-50 m-2 float-left" onClick={() => { setIsEditingName(true) }}><strong className="css-fix">{props.know.name}</strong></div>
+              <div className="w-50 m-2 float-left text-break" onClick={() => { setIsEditingName(true) }}><strong className="css-fix text-break">{props.know.name}</strong></div>
               ||
               <div className="w-50 m-2 float-left" >
                 <Field name="name">
@@ -82,7 +83,7 @@ function EditKnowForm(props) {
             }
             {!isEditingValue
               &&
-              <div className="w-50 m-2 float-left" onClick={() => { setIsEditingValue(true) }}><strong className="css-fix">{props.know.value}</strong></div>
+              <div className="w-50 m-2 float-left text-break" onClick={() => { setIsEditingValue(true) }}><strong className="css-fix text-break">{props.know.value}</strong></div>
               ||
               <div className="w-50 m-2 float-left" >
                 <Field name="value"  >
@@ -109,9 +110,13 @@ function EditKnowForm(props) {
               </div>
             }
             <div className="m-2 float-left">
-              <Button tabIndex="-1" onClick={() => {
-                dispatch({ type: "DELETE_KNOW", know: props.know })
-              }} variant="outline-danger" >{t('action.delete-know')}</Button>
+               <div className="icon-warning btn-outline-danger " tabIndex="-1" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  dispatch({ type: "DELETE_KNOW", know: props.know });
+                }}
+                placeholder={t('action.delete-know')} ><XCircle className="m-0"/></div>
+
             </div>
           </div>
         </Form>

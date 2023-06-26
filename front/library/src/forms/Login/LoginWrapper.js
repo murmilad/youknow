@@ -13,14 +13,14 @@ function LoginWrapper({ children }) {
       <img src= {LogoBig}/>
     </div>
       {is_loading &&
-        <div className="loading wrapper">
+        <div className="loading login-wrapper">
           <div className="loading progress" >
             <div className="progress-bar progressbar indeterminate">
             </div>
           </div>
         </div>
       }
-      <div className="wrapper _wrapper">
+      <div className="login-wrapper _wrapper">
         {is_loading && <div className="loading_fade"></div>}
         {children}
       </div>
