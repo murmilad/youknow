@@ -53,7 +53,7 @@ export function* callServerLastest() {
       return ([{ type: 'FETCH_KNOWTYPES', payload: { knowtypes: result.data } }])
     }
   })
-  yield takeLatest("UPLOAD_KNOWTYPES", uploadResource, action => '/api/youknow/knowtypes/' + action.knowtype.id, request => request.payload.file, action => ({ type: 'GET_KNOWTYPES' }))
+  yield takeLatest("UPLOAD_KNOWTYPES", uploadResource, action => '/api/youknow/knowtypes/' + action.knowtype.id, request => request.payload.file, action => ([{ type: 'GET_KNOWTYPES' }, { type: "HIDE_UPLOAD_DIALOG_MODAL" }]))
 
   yield takeLatest("DELETE_KNOW", deleteResource, action => '/api/youknow/know/' + action.know.id, action => ({ type: 'GET_KNOWS', knowtype_id: action.know.knowtype_id }))
   yield takeLatest("CREATE_KNOW", postResource, '/api/youknow/know', request => request.know, action => ({ type: 'GET_KNOWS', knowtype_id: action.know.knowtype_id }))
@@ -120,21 +120,22 @@ function* submitForm(link, requestCallback, resultCallback, successAction, actio
   yield put({ type: 'SET_LOADING', payload: { loading: false } })
 }
 
-function* uploadResource(linkCallback, requestCallback, successAction, action) {
+function* uploadResource(linkCallback, requestCallback, successActions, action) {
   const formData = new FormData();
   yield fetch(requestCallback(action))
     .then(res => res.blob()).then(blob => {
       formData.append("file", blob);
     }
   )
-
   try {
     const result = yield call(SERVER.post, linkCallback(action), formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
-    yield put(successAction(action, result))
+    for (let successAction of successActions(action, result)) {
+      yield put(successAction)
+    }
   } catch (error) {
     yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
   }
