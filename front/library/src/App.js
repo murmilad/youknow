@@ -2,6 +2,7 @@ import React, { lazy, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 //forms
+import ModalInfo from './forms/Popup/ModalInfo';
 import ModalError from "./forms/Popup/ModalError"
 import ModalDialog from './forms/Popup/ModalDialog';
 import ModalDialogUpload from './forms/Popup/ModalDialogUpload';
@@ -26,6 +27,7 @@ function App() {
   return (
     <>
       <RoutesPage />
+      <ModalInfo />
       <ModalError />
       <ModalDialog />
       <ModalDialogUpload />

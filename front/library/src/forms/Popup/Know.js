@@ -40,11 +40,9 @@ function Know() {
           <h2 className="page_title">{knowtype.name}</h2>
 
           <CreateKnowForm knowtypeId={knowtype.id} />
-          { isLoading &&
-            <div className="list-group">
-              <div className="list-group-item justify-content-center d-flex" >
-                <Spinner animation="border" variant="primary" role="status" />
-              </div>
+          {isLoading &&
+            <div className="list-group list align-items-center " >
+              <Spinner animation="border" variant="primary" role="status" />
             </div>
           }
           <div className={"list-group list" + (isLoading && " d-none")}>

@@ -103,7 +103,7 @@ function EditKnowtypeForm(props) {
             type: 'SHOW_UPLOAD_DIALOG_MODAL', payload: {
               message: t('message.upload-know-types'),
               header: t('action.upload-know-types'),
-              callback: { type: "UPLOAD_KNOWTYPES", knowtype: props.knowtype}
+              callback: { type: "UPLOAD_KNOWS", knowtype: props.knowtype}
             }
           })}
             variant="btn btn-outline-light" title={t('action.upload-know-types')} ><ArrowUpCircle /></Nav.Link>

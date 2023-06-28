@@ -57,12 +57,15 @@ export function* callServerLastest() {
       return ([{ type: 'SET_STATE_KNOWTYPES', payload: { knowtypes: result.data } }])
     }
   })
-  yield takeLatest("UPLOAD_KNOWTYPES", uploadResource, action => '/api/youknow/knowtypes/' + action.knowtype.id, request => request.payload.file, action => ([{ type: 'GET_KNOWTYPES' }, { type: "HIDE_UPLOAD_DIALOG_MODAL" }]))
 
   yield takeLatest("DELETE_KNOW", deleteResource, action => '/api/youknow/know/' + action.know.id, (action, result) => ([{ type: 'DELETE_STATE_KNOW', payload: {know: result.data} }]))
   yield takeLatest("CREATE_KNOW", postResource, '/api/youknow/know', request => request.know, (action, result) => ([{ type: 'CREATE_STATE_KNOW', payload: {know: result.data} }]))
   yield takeLatest("EDIT_KNOW", postResource, '/api/youknow/know', request => request.know, (action, result) => ([{ type: 'UPDATE_STATE_KNOW', payload: {know: result.data} }]))
   yield takeLatest("GET_KNOWS", fetchResource, action => '/api/youknow/knows/' + action.knowtype_id, response => { }, (action, result) => ([{ type: 'SET_STATE_KNOWS', payload: { knows: result.data } }]))
+  yield takeLatest("UPLOAD_KNOWS", uploadResource, action => '/api/youknow/knowtypes/' + action.knowtype.id, request => request.payload.file, (action, result) => ([
+    { type: 'GET_KNOWS', knowtype_id: action.knowtype.id },
+    { type: "HIDE_UPLOAD_DIALOG_MODAL" },
+    { type: "SHOW_INFO_MODAL", payload: {message: result.data.message} }]))
 }
 
 function* checkLogin(action) {

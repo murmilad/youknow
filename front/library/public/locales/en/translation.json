@@ -2,6 +2,7 @@
 {
     "header": {
         "error":"Error",
+        "info":"Message",
         "know-types":"Types of Know",
         "know":"Know",
         "login":"Log In",
@@ -51,6 +52,7 @@
         "edit-style-know-type": "Change style",
         "create-know": "Create",
         "delete-know": "Delete",
+        "close-info":"Close",
         "close-error":"Close",
         "close-dialog":"Close",
         "add-knowtype" : "New",
