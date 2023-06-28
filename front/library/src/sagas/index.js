@@ -18,9 +18,9 @@ const cookies = new Cookies();
 function getErrorMessage(error) {
   let errorMessage = error.response?.data.message || error.response?.data || error.message;
   if (errorMessage === "invalidate token: Token is expired") {
-    logOut();
+    return [errorMessage, { type: "LOG_OUT" }]
   }
-  return errorMessage;
+  return [errorMessage];
 }
 
 export function* callServerLastest() {
@@ -58,14 +58,14 @@ export function* callServerLastest() {
     }
   })
 
-  yield takeLatest("DELETE_KNOW", deleteResource, action => '/api/youknow/know/' + action.know.id, (action, result) => ([{ type: 'DELETE_STATE_KNOW', payload: {know: result.data} }]))
-  yield takeLatest("CREATE_KNOW", postResource, '/api/youknow/know', request => request.know, (action, result) => ([{ type: 'CREATE_STATE_KNOW', payload: {know: result.data} }]))
-  yield takeLatest("EDIT_KNOW", postResource, '/api/youknow/know', request => request.know, (action, result) => ([{ type: 'UPDATE_STATE_KNOW', payload: {know: result.data} }]))
+  yield takeLatest("DELETE_KNOW", deleteResource, action => '/api/youknow/know/' + action.know.id, (action, result) => ([{ type: 'DELETE_STATE_KNOW', payload: { know: result.data } }]))
+  yield takeLatest("CREATE_KNOW", postResource, '/api/youknow/know', request => request.know, (action, result) => ([{ type: 'CREATE_STATE_KNOW', payload: { know: result.data } }]))
+  yield takeLatest("EDIT_KNOW", postResource, '/api/youknow/know', request => request.know, (action, result) => ([{ type: 'UPDATE_STATE_KNOW', payload: { know: result.data } }]))
   yield takeLatest("GET_KNOWS", fetchResource, action => '/api/youknow/knows/' + action.knowtype_id, response => { }, (action, result) => ([{ type: 'SET_STATE_KNOWS', payload: { knows: result.data } }]))
   yield takeLatest("UPLOAD_KNOWS", uploadResource, action => '/api/youknow/knowtypes/' + action.knowtype.id, request => request.payload.file, (action, result) => ([
     { type: 'GET_KNOWS', knowtype_id: action.knowtype.id },
     { type: "HIDE_UPLOAD_DIALOG_MODAL" },
-    { type: "SHOW_INFO_MODAL", payload: {message: result.data.message} }]))
+    { type: "SHOW_INFO_MODAL", payload: { message: result.data.message } }]))
 }
 
 function* checkLogin(action) {
@@ -92,7 +92,11 @@ function* deleteResource(linkCallback, successActions, action) {
       yield put(successAction)
     }
   } catch (error) {
-    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: errorMessage } })
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
   }
 }
 
@@ -112,7 +116,11 @@ function* submitGet(linkCallback, resultCallback, successAction, action) {
     const result = yield call(SERVER.get, linkCallback(action))
     yield put({ type: successAction, payload: resultCallback(result) })
   } catch (error) {
-    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: errorMessage } })
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
   }
   yield put({ type: 'SET_LOADING', payload: { loading: false } })
 }
@@ -124,7 +132,11 @@ function* submitForm(link, requestCallback, resultCallback, successAction, actio
     const result = yield call(SERVER.post, link, requestCallback(action))
     yield put({ type: successAction, payload: resultCallback(result) })
   } catch (error) {
-    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: errorMessage} })
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
   }
   yield put({ type: 'SET_LOADING', payload: { loading: false } })
 }
@@ -135,7 +147,7 @@ function* uploadResource(linkCallback, requestCallback, successActions, action) 
     .then(res => res.blob()).then(blob => {
       formData.append("file", blob);
     }
-  )
+    )
   try {
     const result = yield call(SERVER.post, linkCallback(action), formData, {
       headers: {
@@ -146,7 +158,11 @@ function* uploadResource(linkCallback, requestCallback, successActions, action) 
       yield put(successAction)
     }
   } catch (error) {
-    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: errorMessage} })
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
   }
 }
 
@@ -157,7 +173,11 @@ function* postResource(link, requestCallback, successActions, action) {
       yield put(successAction)
     }
   } catch (error) {
-    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: errorMessage} })
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
   }
 }
 
@@ -168,7 +188,11 @@ function* fetchResource(linkCallback, resultCallback, successActions, action) {
       yield put(successAction)
     }
   } catch (error) {
-    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: "SHOW_ERROR_MODAL", payload: { message: errorMessage} })
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
   }
 }
 

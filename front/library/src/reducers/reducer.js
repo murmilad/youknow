@@ -80,7 +80,6 @@ export const reducer = (state = {
           ]
         }
       }
-
     case "HIDE_INFO_MODAL":
       return {
         ...state,
