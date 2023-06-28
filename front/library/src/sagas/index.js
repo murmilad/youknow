@@ -16,7 +16,11 @@ import {
 const cookies = new Cookies();
 
 function getErrorMessage(error) {
-  return error.response?.data.message || error.response?.data || error.message
+  let errorMessage = error.response?.data.message || error.response?.data || error.message;
+  if (errorMessage === "invalidate token: Token is expired") {
+    logOut();
+  }
+  return errorMessage;
 }
 
 export function* callServerLastest() {
@@ -43,22 +47,22 @@ export function* callServerLastest() {
   yield takeLatest("CHECK_LOG_IN", checkLogin)
   yield takeLatest("LOG_OUT", logOut)
 
-  yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/youknow/knowtype/' + action.knowtype.id, action => ({ type: 'GET_KNOWTYPES' }))
-  yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/youknow/knowtype', request => request.knowtype, (action, result) => ({ type: 'GET_KNOWTYPES', payload: { current: result.data } }))
-  yield takeLatest("EDIT_KNOWTYPE", postResource, '/api/youknow/knowtype', request => request.knowtype, action => ({ type: 'GET_KNOWTYPES' }))
+  yield takeLatest("DELETE_KNOWTYPE", deleteResource, action => '/api/youknow/knowtype/' + action.knowtype.id, action => ([{ type: 'GET_KNOWTYPES' }]))
+  yield takeLatest("CREATE_KNOWTYPE", postResource, '/api/youknow/knowtype', request => request.knowtype, (action, result) => ([{ type: 'GET_KNOWTYPES', payload: { current: result.data } }]))
+  yield takeLatest("EDIT_KNOWTYPE", postResource, '/api/youknow/knowtype', request => request.knowtype, action => ([{ type: 'GET_KNOWTYPES' }]))
   yield takeLatest("GET_KNOWTYPES", fetchResource, action => '/api/youknow/knowtypes', response => { }, (action, result) => {
     if (action.payload?.current) {
-      return ([{ type: 'FETCH_KNOWTYPES', payload: { knowtypes: result.data } }, { type: 'SET_CURRENT_KNOWTYPE', payload: { knowtype: action.payload?.current } }])
+      return ([{ type: 'SET_STATE_KNOWTYPES', payload: { knowtypes: result.data } }, { type: 'SET_CURRENT_STATE_KNOWTYPE', payload: { knowtype: action.payload?.current } }])
     } else {
-      return ([{ type: 'FETCH_KNOWTYPES', payload: { knowtypes: result.data } }])
+      return ([{ type: 'SET_STATE_KNOWTYPES', payload: { knowtypes: result.data } }])
     }
   })
   yield takeLatest("UPLOAD_KNOWTYPES", uploadResource, action => '/api/youknow/knowtypes/' + action.knowtype.id, request => request.payload.file, action => ([{ type: 'GET_KNOWTYPES' }, { type: "HIDE_UPLOAD_DIALOG_MODAL" }]))
 
-  yield takeLatest("DELETE_KNOW", deleteResource, action => '/api/youknow/know/' + action.know.id, action => ({ type: 'GET_KNOWS', knowtype_id: action.know.knowtype_id }))
-  yield takeLatest("CREATE_KNOW", postResource, '/api/youknow/know', request => request.know, action => ({ type: 'GET_KNOWS', knowtype_id: action.know.knowtype_id }))
-  yield takeLatest("EDIT_KNOW", postResource, '/api/youknow/know', request => request.know, action => ({ type: 'GET_KNOWS', knowtype_id: action.know.knowtype_id }))
-  yield takeLatest("GET_KNOWS", fetchResource, action => '/api/youknow/knows/' + action.knowtype_id, response => { }, (action, result) => ([{ type: 'FETCH_KNOWS', payload: { knows: result.data } }]))
+  yield takeLatest("DELETE_KNOW", deleteResource, action => '/api/youknow/know/' + action.know.id, (action, result) => ([{ type: 'DELETE_STATE_KNOW', payload: {know: result.data} }]))
+  yield takeLatest("CREATE_KNOW", postResource, '/api/youknow/know', request => request.know, (action, result) => ([{ type: 'CREATE_STATE_KNOW', payload: {know: result.data} }]))
+  yield takeLatest("EDIT_KNOW", postResource, '/api/youknow/know', request => request.know, (action, result) => ([{ type: 'UPDATE_STATE_KNOW', payload: {know: result.data} }]))
+  yield takeLatest("GET_KNOWS", fetchResource, action => '/api/youknow/knows/' + action.knowtype_id, response => { }, (action, result) => ([{ type: 'SET_STATE_KNOWS', payload: { knows: result.data } }]))
 }
 
 function* checkLogin(action) {
@@ -78,10 +82,12 @@ function* logOut(action) {
   yield put({ type: 'SET_USER', payload: { user: null } })
 }
 
-function* deleteResource(linkCallback, successAction, action) {
+function* deleteResource(linkCallback, successActions, action) {
   try {
     const result = yield call(SERVER.delete, linkCallback(action))
-    yield put(successAction(action, result))
+    for (let successAction of successActions(action, result)) {
+      yield put(successAction)
+    }
   } catch (error) {
     yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
   }
@@ -141,10 +147,12 @@ function* uploadResource(linkCallback, requestCallback, successActions, action) 
   }
 }
 
-function* postResource(link, requestCallback, successAction, action) {
+function* postResource(link, requestCallback, successActions, action) {
   try {
     const result = yield call(SERVER.post, link, requestCallback(action))
-    yield put(successAction(action, result))
+    for (let successAction of successActions(action, result)) {
+      yield put(successAction)
+    }
   } catch (error) {
     yield put({ type: "SHOW_ERROR_MODAL", payload: { message: getErrorMessage(error) } })
   }

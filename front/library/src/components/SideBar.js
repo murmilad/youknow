@@ -16,7 +16,7 @@ const SideBar = (props) => {
   const { t, i18n } = useTranslation();
   const [isAdding, setIsAdding] = useState(false);
   const handleSelect = (knowtype) => {
-    dispatch({type: 'SET_CURRENT_KNOWTYPE', payload:{knowtype}});
+    dispatch({type: 'SET_CURRENT_STATE_KNOWTYPE', payload:{knowtype}});
   };
 
   return (

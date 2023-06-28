@@ -11,6 +11,8 @@ import { XCircle } from 'react-bootstrap-icons';
 
 function EditKnowForm(props) {
   const { t, i18n } = useTranslation();
+  const know = useSelector(state => state.know.hash[props.id])
+
   const dispatch = useDispatch()
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingValue, setIsEditingValue] = useState(false);
@@ -20,9 +22,9 @@ function EditKnowForm(props) {
 
       <Formik
         initialValues={{
-          id: props.know.id,
-          name: props.know.name,
-          value: props.know.value,
+          id: know.id,
+          name: know.name,
+          value: know.value,
           knowtype_id: props.knowtypeId
         }}
         enableReinitialize
@@ -55,7 +57,7 @@ function EditKnowForm(props) {
           <div className="d-flex p-0">
             {!isEditingName
               &&
-              <div className="w-50 m-2 float-left text-break" onClick={() => { setIsEditingName(true) }}><strong className="css-fix text-break">{props.know.name}</strong></div>
+              <div className="w-50 m-2 float-left text-break" onClick={() => { setIsEditingName(true) }}><strong className="css-fix text-break">{know.name}</strong></div>
               ||
               <div className="w-50 m-2 float-left" >
                 <Field name="name">
@@ -83,7 +85,7 @@ function EditKnowForm(props) {
             }
             {!isEditingValue
               &&
-              <div className="w-50 m-2 float-left text-break" onClick={() => { setIsEditingValue(true) }}><strong className="css-fix text-break">{props.know.value}</strong></div>
+              <div className="w-50 m-2 float-left text-break" onClick={() => { setIsEditingValue(true) }}><strong className="css-fix text-break">{know.value}</strong></div>
               ||
               <div className="w-50 m-2 float-left" >
                 <Field name="value"  >
@@ -113,7 +115,7 @@ function EditKnowForm(props) {
                <div className="icon-warning btn-outline-danger " tabIndex="-1" 
                 onClick={(e) => {
                   e.preventDefault();
-                  dispatch({ type: "DELETE_KNOW", know: props.know });
+                  dispatch({ type: "DELETE_KNOW", know: know });
                 }}
                 placeholder={t('action.delete-know')} ><XCircle className="m-0"/></div>
 

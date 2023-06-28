@@ -14,7 +14,7 @@ export const reducer = (state = {
 }, action) => {
 
   switch (action.type) {
-    case "SET_CURRENT_KNOWTYPE":
+    case "SET_CURRENT_STATE_KNOWTYPE":
       return {
         ...state,
         knowtype: {
@@ -22,7 +22,7 @@ export const reducer = (state = {
           current: action.payload.knowtype
         }
       }
-    case "FETCH_KNOWTYPES":
+    case "SET_STATE_KNOWTYPES":
       return {
         ...state,
         knowtype: {
@@ -33,156 +33,158 @@ export const reducer = (state = {
           current: state.knowtype.current ? action.payload.knowtypes.filter((item) => item.id == state.knowtype.current.id)[0] : null
         }
       }
-    case "CREATE_KNOWTYPE":
+
+    case "SET_STATE_KNOWS":
       return {
-        ...state
+        ...state,
+        know: {
+          ...state.know,
+          list: action.payload.knows,
+          hash: action.payload.knows.reduce((map, item) => (map[item.id] = item, map), {})
+        }
       }
 
+    case "UPDATE_STATE_KNOW":
+      return {
+        ...state,
+        know: {
+          ...state.know,
+          hash: {
+            ...state.know.hash,
+            [action.payload.know.id]: action.payload.know
+          }
+        }
+      }
+    case "DELETE_STATE_KNOW":
+        return {
+          ...state,
+          know: {
+            ...state.know,
+            list: state.know.list.filter(item => (item.id !== action.payload.know.id))
+          }
+        }
 
-    case "FETCH_KNOWS":
-      return {
-        ...state,
-        know: {
-          ...state.know,
-          list: [
-            ...action.payload.knows
-          ]
+    case "CREATE_STATE_KNOW":
+        return {
+          ...state,
+          know: {
+            ...state.know,
+            hash: {
+              ...state.know.hash,
+              [action.payload.know.id] : action.payload.know
+            },
+            list: [
+              action.payload.know,
+              ...state.know.list
+            ]
+          }
         }
-      }
-    case "CREATE_KNOW":
-      return {
-        ...state
-      }
-    case "OPEN_KNOW":
 
-      return {
-        ...state,
-        know: {
-          ...state.know,
-          open: action.payload.id
-        }
-      }
-    case "CLOSE_KNOWS":
-      return {
-        ...state,
-        know: {
-          ...state.know,
-          close: action.payload.close
-        }
-      }
-    case "ERROR_KNOW":
-      return {
-        ...state,
-        know: {
-          ...state.know,
-          error: action.payload.error
-        }
-      }
     case "HIDE_ERROR_MODAL":
-      return {
-        ...state,
-        modal: {
-          ...state.modal,
-          error: {
-            ...state.modal.error,
-            isShow: false
+        return {
+          ...state,
+          modal: {
+            ...state.modal,
+            error: {
+              ...state.modal.error,
+              isShow: false
+            }
           }
         }
-      }
     case "SHOW_ERROR_MODAL":
-      return {
-        ...state,
-        modal: {
-          ...state.modal,
-          error: {
-            ...state.modal.error,
-            message: action.payload.message,
-            isShow: true
+        return {
+          ...state,
+          modal: {
+            ...state.modal,
+            error: {
+              ...state.modal.error,
+              message: action.payload.message,
+              isShow: true
+            }
           }
         }
-      }
     case "HIDE_DIALOG_MODAL":
-      return {
-        ...state,
-        modal: {
-          ...state.modal,
-          dialog: {
-            ...state.modal.dialog,
-            isShow: false
+        return {
+          ...state,
+          modal: {
+            ...state.modal,
+            dialog: {
+              ...state.modal.dialog,
+              isShow: false
+            }
           }
         }
-      }
     case "SHOW_DIALOG_MODAL":
-      return {
-        ...state,
-        modal: {
-          ...state.modal,
-          dialog: {
-            ...state.modal.error,
-            message: action.payload.message,
-            header: action.payload.header,
-            callback: action.payload.callback,
-            isShow: true
+        return {
+          ...state,
+          modal: {
+            ...state.modal,
+            dialog: {
+              ...state.modal.error,
+              message: action.payload.message,
+              header: action.payload.header,
+              callback: action.payload.callback,
+              isShow: true
+            }
           }
         }
-      }
     case "HIDE_UPLOAD_DIALOG_MODAL":
-      return {
-        ...state,
-        modal: {
-          ...state.modal,
-          dialog_upload: {
-            ...state.modal.dialog,
-            isShow: false
+        return {
+          ...state,
+          modal: {
+            ...state.modal,
+            dialog_upload: {
+              ...state.modal.dialog,
+              isShow: false
+            }
           }
         }
-      }
     case "SHOW_UPLOAD_DIALOG_MODAL":
-      return {
-        ...state,
-        modal: {
-          ...state.modal,
-          dialog_upload: {
-            ...state.modal.error,
-            message: action.payload.message,
-            header: action.payload.header,
-            callback: action.payload.callback,
-            isShow: true
+        return {
+          ...state,
+          modal: {
+            ...state.modal,
+            dialog_upload: {
+              ...state.modal.error,
+              message: action.payload.message,
+              header: action.payload.header,
+              callback: action.payload.callback,
+              isShow: true
+            }
           }
         }
-      }
 
     case "SET_SIGN_UP":
-      return {
-        ...state,
-        signed_up: action.payload.signed_up,
-      }
+        return {
+          ...state,
+          signed_up: action.payload.signed_up,
+        }
     case "SET_VERIFIED":
-      return {
-        ...state,
-        verified: action.payload.verified
-      }
+        return {
+          ...state,
+          verified: action.payload.verified
+        }
     case "SET_USER":
-      return {
-        ...state,
-        user: action.payload.user
-      }
+        return {
+          ...state,
+          user: action.payload.user
+        }
     case "SET_FORGOT_PASSWORD":
-      return {
-        ...state,
-        forgot_password: action.payload.forgot_password,
-      }
+        return {
+          ...state,
+          forgot_password: action.payload.forgot_password,
+        }
     case "SET_RESET":
-      return {
-        ...state,
-        reseted: action.payload.reseted,
-      }
+        return {
+          ...state,
+          reseted: action.payload.reseted,
+        }
     case "SET_LOADING":
-      return {
-        ...state,
-        is_loading: action.payload.loading,
-      }
+        return {
+          ...state,
+          is_loading: action.payload.loading,
+        }
     default:
       return state
+      }
   }
-}

@@ -2,7 +2,7 @@
 
 --CREATE DATABASE youknow;
 
-CREATE TABLE know_types (
+/* CREATE TABLE know_types (
     id SERIAL PRIMARY KEY,
     name varchar(255) NOT NULL,
     style varchar(255)
@@ -22,3 +22,4 @@ CREATE TABLE answers (
     answer_time TIMESTAMP,
     show_time TIMESTAMP NOT NULL
 );
+ */

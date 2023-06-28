@@ -3,7 +3,7 @@ import SERVER from "./server";
 export const fetchKnowtypes = async dispatch => {
     let res = await SERVER.get('/api/knowtypes')
     let knowtypes = res.data
-    dispatch({type: "FETCH_KNOWTYPES", payload: {knowtypes}})
+    dispatch({type: "SET_STATE_KNOWTYPES", payload: {knowtypes}})
 }
 
 export const createKnowtype = knowtype => async dispatch => {
