@@ -1,7 +1,7 @@
 # Description
 
-Frontend part for ![YouknoW](https://github.com/murmilad/youknow/blob/main/front/library/public/images/logo_small.png "") Project
-Expand your memory project
+![YouknoW](https://github.com/murmilad/youknow/blob/main/front/library/public/images/logo_small.png "") Project
+Encrease your memory project
 
 ## Forget curve
 
