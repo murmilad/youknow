@@ -7,7 +7,7 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { reducer } from './reducers/reducer';
 import {injectStoreToServer} from "./actions/server";
-
+    
 
 import createSagaMiddleware from 'redux-saga'
 import rootSaga from './sagas'
