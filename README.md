@@ -112,3 +112,13 @@ REACT_APP_GITHUB_OAUTH_REDIRECT=http://<backend server address:port ex. localhos
 ```
 
 # Deploying application
+
+* Download package from GIT
+* Build containers
+```shell
+docker-compose build
+```
+* Up containers
+```shell
+docker-compose up
+```

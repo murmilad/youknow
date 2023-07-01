@@ -3,31 +3,31 @@ services:
   # DB
   db:
     environment:
-      -DB_HOST
-      -DB_PORT
+      - DB_HOST
+      - DB_PORT
     build:
-      context: ./db
+      context: ./back/db
     ports:
       - ${DB_PORT}:5432
   # DB
   backend:
     environment:
-      -BACKEND_PORT
-      -FRONTEND_PORT
-      -DB_HOST
-      -DB_PORT
+      - BACKEND_PORT
+      - FRONTEND_PORT
+      - DB_HOST
+      - DB_PORT
     build:
       context: ./back/service
     depends_on:
       - db
     ports:
-      - ${BACKEND_PORT}:{BACKEND_PORT}
+      - ${BACKEND_PORT}:${BACKEND_PORT}
 
   # Frontend web application
   frontend:
     environment:
-      -BACKEND_PORT
-      -FRONTEND_PORT
+      - BACKEND_PORT
+      - FRONTEND_PORT
     build:
       context: ./front/library
     depends_on:
