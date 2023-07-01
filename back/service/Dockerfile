@@ -10,6 +10,8 @@ RUN go mod download
 
 COPY ./ ./
 
+RUN go run migrate/migrate.go
+
 RUN CGO_ENABLED=0 GOOS=linux go build -o /youknow-backend-image
 
 EXPOSE 8000
