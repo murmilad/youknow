@@ -35,6 +35,9 @@ All this methods correspond to [forgetting curve](https://en.wikipedia.org/wiki/
 
 # Configuration
 * Download package from GIT
+```shell
+    git clone https://github.com/murmilad/youknow.git
+```
 ## Environment variables
 * Create .app file in project root directory
 * Add project configuration
@@ -93,18 +96,18 @@ Register your OAuth application correspond to [GitHub documentation](https://doc
 ```
 React application configuration
 ```conf
-REACT_APP_BACKEND_ADDRESS=<Frontend application address ex. http://localhost>
-REACT_APP_BACKEND_PORT=<Frontend application port ex. 8000>
+    REACT_APP_BACKEND_ADDRESS=<Frontend application address ex. http://localhost>
+    REACT_APP_BACKEND_PORT=<Frontend application port ex. 8000>
 ```
 
 ```conf
-REACT_APP_GOOGLE_OAUTH_CLIENT_ID=<Google O-Auth client ID>
-REACT_APP_GOOGLE_OAUTH_REDIRECT=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/google
+    REACT_APP_GOOGLE_OAUTH_CLIENT_ID=<Google O-Auth client ID>
+    REACT_APP_GOOGLE_OAUTH_REDIRECT=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/google
 ```
 
 ```conf
-REACT_APP_GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
-REACT_APP_GITHUB_OAUTH_REDIRECT=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
+    REACT_APP_GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
+    REACT_APP_GITHUB_OAUTH_REDIRECT=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
 ```
 
 ## Deploying application
