@@ -34,10 +34,10 @@ Encrease your memory project
 All this methods correspond to [forgetting curve](https://en.wikipedia.org/wiki/Forgetting_curve)
 
 # Configuration
-
-## Backend configuration
-
-### set ./back/service/app.env parameters
+* Download package from GIT
+## Environment variables
+* Create .app file in project root directory
+* Add project configuration
 
 Database confuguration
 
@@ -51,7 +51,7 @@ Database confuguration
 
 Backend connections configuration
 ```conf
-    PORT=<backend port>
+    BACKEND_PORT=<backend port>
     CLIENT_ORIGIN=<frontend address form CORS checking ex. http://localhost:3001>
 ```
 
@@ -91,10 +91,6 @@ Register your OAuth application correspond to [GitHub documentation](https://doc
     GITHUB_OAUTH_CLIENT_SECRET=<GitHub O-Auth client secret>
     GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
 ```
-## Web frontend configuration
-
-### set ./front/library/.env parameters
-
 React application configuration
 ```conf
 REACT_APP_BACKEND_ADDRESS=<Frontend application address ex. http://localhost>
@@ -111,9 +107,8 @@ REACT_APP_GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
 REACT_APP_GITHUB_OAUTH_REDIRECT=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
 ```
 
-# Deploying application
+## Deploying application
 
-* Download package from GIT
 * Build containers
 ```shell
 docker-compose build
