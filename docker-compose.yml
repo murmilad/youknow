@@ -3,19 +3,42 @@ services:
   # DB
   db:
     environment:
-      - DB_HOST
-      - DB_PORT
+      - POSTGRES_HOST
+      - POSTGRES_PORT
     build:
       context: ./back/db
     ports:
-      - ${DB_PORT}:5432
-  # DB
+      - ${POSTGRES_PORT}:5432
+  # Backend application
   backend:
     environment:
+      - POSTGRES_HOST
+      - POSTGRES_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+
       - BACKEND_PORT
-      - FRONTEND_PORT
-      - DB_HOST
-      - DB_PORT
+      - CLIENT_ORIGIN
+
+      - EMAIL_FROM
+      - SMTP_HOST
+      - SMTP_USER
+      - SMTP_PASS
+      - SMTP_PORT
+
+      - TOKEN_EXPIRED_IN
+      - TOKEN_MAXAGE
+
+      - TOKEN_SECRET
+
+      - GOOGLE_OAUTH_CLIENT_ID
+      - GOOGLE_OAUTH_CLIENT_SECRET
+      - GOOGLE_OAUTH_REDIRECT_URL
+
+      - GITHUB_OAUTH_CLIENT_ID
+      - GITHUB_OAUTH_CLIENT_SECRET
+      - GITHUB_OAUTH_REDIRECT_URL
     build:
       context: ./back/service
     depends_on:
@@ -26,11 +49,19 @@ services:
   # Frontend web application
   frontend:
     environment:
-      - BACKEND_PORT
       - FRONTEND_PORT
+
+      - REACT_APP_BACKEND_ADDRESS
+      - REACT_APP_BACKEND_PORT
+
+      - REACT_APP_GOOGLE_OAUTH_CLIENT_ID
+      - REACT_APP_GOOGLE_OAUTH_REDIRECT
+
+      - REACT_APP_GITHUB_OAUTH_CLIENT_ID
+      - REACT_APP_GITHUB_OAUTH_REDIRECT
     build:
       context: ./front/library
     depends_on:
       - backend
     ports:
-      - ${FRONTEND_PORT}:${FRONTEND_PORT}
+      - ${FRONTEND_PORT}:3000

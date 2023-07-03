@@ -12,7 +12,7 @@ type Config struct {
 	DBUserPassword string `mapstructure:"POSTGRES_PASSWORD"`
 	DBName         string `mapstructure:"POSTGRES_DB"`
 	DBPort         string `mapstructure:"POSTGRES_PORT"`
-	ServerPort     string `mapstructure:"PORT"`
+	ServerPort     string `mapstructure:"BACKEND_PORT"`
 
 	ClientOrigin string `mapstructure:"CLIENT_ORIGIN"`
 
@@ -38,7 +38,7 @@ type Config struct {
 func LoadConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigType("env")
-	viper.SetConfigName("app")
+	viper.SetConfigName(".env")
 
 	viper.AutomaticEnv()
 
