@@ -103,6 +103,10 @@ Register your OAuth application correspond to [GitHub documentation](https://doc
 ```
 React application configuration
 ```conf
+    FRONTEND_PORT=<frontend port>
+```
+Other react application parameters ./front/library/.env
+```conf
     REACT_APP_BACKEND_ADDRESS=<Frontend application address ex. http://localhost>
     REACT_APP_BACKEND_PORT=<Frontend application port ex. 8000>
 ```
