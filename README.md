@@ -42,6 +42,13 @@ All this methods correspond to [forgetting curve](https://en.wikipedia.org/wiki/
 * Create .app file in project root directory
 * Add project configuration
 
+Server external proxy configuration
+
+```conf
+SERVER_NAME=172.17.0.1
+SERVER_PORT=80
+```
+
 Database confuguration
 
 ```conf

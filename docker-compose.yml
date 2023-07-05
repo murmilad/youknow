@@ -65,3 +65,17 @@ services:
       - backend
     ports:
       - ${FRONTEND_PORT}:3000
+  # External proxy
+  proxy:
+    environment:
+      - SERVER_IP
+      - SERVER_NAME
+      - SERVER_PORT
+      - FRONTEND_PORT
+      - BACKEND_PORT
+    build: ./proxy
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    depends_on:
+      - frontend
+    command: /bin/bash /bin/start_nginx.sh

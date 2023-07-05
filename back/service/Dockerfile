@@ -13,7 +13,7 @@ COPY ./ ./
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /youknow-backend-image
 
-EXPOSE 8000
+EXPOSE ${BACKEND_PORT}
 
 
 CMD ["/youknow-backend-image"]

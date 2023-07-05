@@ -1,0 +1,1 @@
+envsubst '${SERVER_PORT}${FRONTEND_PORT}${BACKEND_PORT}${SERVER_NAME}${SERVER_IP}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
