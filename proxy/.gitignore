@@ -2,3 +2,4 @@
 
 # production
 fail2ban.env
+log/

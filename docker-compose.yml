@@ -42,9 +42,9 @@ services:
     build:
       context: ./back/service
     volumes:
-      - log-backend:/log
+      - log-proxy:/log
     depends_on:
-      - db
+      - proxy
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
 
@@ -81,30 +81,27 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     depends_on:
-      - frontend
+      - db
     command: /bin/bash /bin/start_nginx.sh
   fail2ban:
-    image: crazymax/fail2ban:latest
+    image: lscr.io/linuxserver/fail2ban:latest
     container_name: fail2ban
-    restart: "unless-stopped"
-    network_mode: "host"
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - VERBOSITY=-vv #optional
     volumes:
-      - log-proxy:/var/log/nginx
-      - log-backend:/log
-      - log-file2ban:/var/log
-      - "./proxy/fail2ban-data:/data"
-      - "/var/log:/var/log:ro"
-      - "/var/lib/docker/containers/:/container-logs/:ro"
-    env_file:
-      - "./proxy/fail2ban.env"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "10"
+      - ./proxy:/config
+      - /var/log:/var/log:ro
+      - log-proxy:/remotelogs/nginx:ro
+    restart: unless-stopped
+    depends_on:
+      - frontend
 volumes:
   log-backend:
   log-proxy:
