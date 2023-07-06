@@ -1,0 +1,48 @@
+[DEFAULT]
+
+bantime = 1m
+findtime = 10m
+maxretry = 5
+
+action = %(action_mwl)s
+
+# Prevents banning LAN subnets
+ignoreip    = 127.0.0.1/8 ::1
+              10.0.0.0/8
+
+[nginx-bad-request]
+# configuration inherits from jail.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+maxretry = 10
+
+[nginx-http-auth]
+# configuration inherits from jail.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
+[nginx-badbots]
+# configuration inherits from jail.d/nginx-badbots.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
+[nginx-botsearch]
+# configuration inherits from jail.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
+[nginx-deny]
+# configuration inherits from jail.d/nginx-deny.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
+[nginx-unauthorized]
+# configuration inherits from jail.d/nginx-unauthorized.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
