@@ -41,6 +41,8 @@ services:
       - GITHUB_OAUTH_REDIRECT_URL
     build:
       context: ./back/service
+    volumes:
+      - log-backend:/log
     depends_on:
       - db
     ports:
@@ -74,8 +76,36 @@ services:
       - FRONTEND_PORT
       - BACKEND_PORT
     build: ./proxy
+    volumes:
+      - log-proxy:/var/log/nginx
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     depends_on:
       - frontend
     command: /bin/bash /bin/start_nginx.sh
+  fail2ban:
+    image: crazymax/fail2ban:latest
+    container_name: fail2ban
+    restart: "unless-stopped"
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - log-proxy:/var/log/nginx
+      - log-backend:/log
+      - log-file2ban:/var/log
+      - "./proxy/fail2ban-data:/data"
+      - "/var/log:/var/log:ro"
+      - "/var/lib/docker/containers/:/container-logs/:ro"
+    env_file:
+      - "./proxy/fail2ban.env"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "10"
+volumes:
+  log-backend:
+  log-proxy:
+  log-file2ban:
