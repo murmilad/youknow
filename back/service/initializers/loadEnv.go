@@ -14,7 +14,9 @@ type Config struct {
 	DBPort         string `mapstructure:"POSTGRES_PORT"`
 	ServerPort     string `mapstructure:"BACKEND_PORT"`
 
-	ClientOrigin string `mapstructure:"CLIENT_ORIGIN"`
+	ClientOrigin           string `mapstructure:"CLIENT_ORIGIN"`
+	ExternalBackendAddress string `mapstructure:"EXTERNAL_BACKEND_ADDRESS"`
+	ExternalBackendPort    string `mapstructure:"EXTERNAL_BACKEND_PORT"`
 
 	TokenSecret    string        `mapstructure:"TOKEN_SECRET"`
 	TokenExpiresIn time.Duration `mapstructure:"TOKEN_EXPIRED_IN"`

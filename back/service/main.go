@@ -67,7 +67,7 @@ func main() {
 	}
 
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:8000", config.ClientOrigin}
+	corsConfig.AllowOrigins = []string{config.ExternalBackendAddress + ":" + config.ExternalBackendPort, config.ClientOrigin}
 	corsConfig.AllowCredentials = true
 	corsConfig.AllowHeaders = []string{"*"}
 
