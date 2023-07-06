@@ -33,6 +33,9 @@ type Config struct {
 	GithubClientID         string `mapstructure:"GITHUB_OAUTH_CLIENT_ID"`
 	GithubClientSecret     string `mapstructure:"GITHUB_OAUTH_CLIENT_SECRET"`
 	GithubOAuthRedirectUrl string `mapstructure:"GITHUB_OAUTH_REDIRECT_URL"`
+
+	GinNginxLogPath string `mapstructure:"GIN_NGINX_LOG_PATH"`
+	LogPath         string `mapstructure:"LOG_PATH"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

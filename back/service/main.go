@@ -3,9 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"akosarev.info/youknow/controllers"
 	"akosarev.info/youknow/initializers"
+	"akosarev.info/youknow/middleware"
 	"akosarev.info/youknow/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -31,6 +33,16 @@ func init() {
 		log.Fatal("? Could not load environment variables", err)
 	}
 
+	f, err := os.OpenFile(config.LogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+
+	defer f.Close()
+
+	log.SetOutput(f)
+	log.Println("Youknow application starts")
+
 	initializers.ConnectDB(&config)
 
 	AuthController = controllers.NewAuthController(initializers.DB)
@@ -45,6 +57,7 @@ func init() {
 	SessionRouteController = routes.NewSessionRouteController(AuthController)
 
 	server = gin.Default()
+
 }
 
 func main() {
@@ -59,6 +72,7 @@ func main() {
 	corsConfig.AllowHeaders = []string{"*"}
 
 	server.Use(cors.New(corsConfig))
+	server.Use(middleware.NginxLogMiddleware())
 
 	router := server.Group("/api")
 	router.GET("/healthchecker", func(ctx *gin.Context) {
