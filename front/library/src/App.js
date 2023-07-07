@@ -13,8 +13,6 @@ import './App.scss';
 import { useTranslation } from 'react-i18next';
 
 
-
-
 function App() {
   const { t, i18n } = useTranslation();
   let dispatch = useDispatch()
@@ -22,7 +20,6 @@ function App() {
   useEffect(() => {
     dispatch({ type: 'CHECK_LOG_IN' })
   });
-
 
   return (
     <>

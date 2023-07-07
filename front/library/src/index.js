@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import { reducer } from './reducers/reducer';
 import {injectStoreToServer} from "./actions/server";
     
-
 import createSagaMiddleware from 'redux-saga'
 import rootSaga from './sagas'
 
@@ -22,8 +21,7 @@ const store = configureStore({
     
 sagaMiddleware.run(rootSaga)
 
-    
-    
+ 
 injectStoreToServer(store)
 
 ReactDOM.render(

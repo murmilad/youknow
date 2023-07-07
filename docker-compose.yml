@@ -9,6 +9,11 @@ services:
       context: ./back/db
     ports:
       - ${POSTGRES_PORT}:5432
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
   # Backend application
   backend:
     environment:
@@ -27,18 +32,51 @@ services:
       - SMTP_USER
       - SMTP_PASS
       - SMTP_PORT
+      - CLIENT_ORIGIN
+
+      - TOKEN_EXPIRED_IN
+      - TOKEN_MAXAGE
+
+      - TOKEN_SECRET
+
+      - GOOGLE_OAUTH_CLIENT_ID
+      - GOOGLE_OAUTH_CLIENT_SECRET
+      - GOOGLE_OAUTH_REDIRECT_URL
+
+      - GITHUB_OAUTH_CLIENT_ID
+      - GITHUB_OAUTH_CLIENT_SECRET
+      - GITHUB_OAUTH_REDIRECT_URL
 
     build:
       context: ./back/service
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
 
   # Frontend web application
   frontend:
+    environment:
+      - EXTERNAL_BACKEND_ADDRESS
+      - EXTERNAL_BACKEND_PORT
+
+      - GOOGLE_OAUTH_CLIENT_ID
+      - GOOGLE_OAUTH_REDIRECT_URL
+
+      - GITHUB_OAUTH_CLIENT_ID
+      - GITHUB_OAUTH_REDIRECT_URL
     build:
       context: ./front/library
+      args:
+        - EXTERNAL_BACKEND_ADDRESS=${EXTERNAL_BACKEND_ADDRESS}
+        - EXTERNAL_BACKEND_PORT=${EXTERNAL_BACKEND_PORT}
+
+        - REACT_APP_GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID}
+        - REACT_APP_GOOGLE_OAUTH_REDIRECT=${GOOGLE_OAUTH_REDIRECT_URL}
+
+        - REACT_APP_GITHUB_OAUTH_CLIENT_ID=${GITHUB_OAUTH_CLIENT_ID}
+        - REACT_APP_GITHUB_OAUTH_REDIRECT=${GITHUB_OAUTH_REDIRECT_URL}
     depends_on:
       - backend
     ports:
@@ -75,11 +113,10 @@ services:
       - ./proxy/log/nginx:/remotelogs/nginx:ro
     restart: unless-stopped
     depends_on:
-      - proxy
+      proxy:
+        condition: service_started
   logrotate:
     image: thommeo/logrotate
     volumes:
       - ./proxy/log/nginx:/var/log/rotate
     restart: always
-    depends_on:
-      - fail2ban

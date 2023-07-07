@@ -1,7 +1,13 @@
+SELECT 'CREATE USER postgres'
+WHERE NOT EXISTS(SELECT FROM pg_catalog.pg_roles WHERE rolname = 'postgres')\gexec
+
 SELECT 'CREATE DATABASE youknow'
 WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'youknow')\gexec
-\c youknow;
 
+GRANT ALL PRIVILEGES ON DATABASE youknow TO postgres;
+
+\c youknow;
+ 
 CREATE TABLE IF NOT EXISTS users (
     id uuid DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     name character varying(255) NOT NULL,
