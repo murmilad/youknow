@@ -1,4 +1,3 @@
-action.d/
 filter.d/
 *.conf
 fail2ban.sqlite3

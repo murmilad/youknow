@@ -10,6 +10,7 @@ RUN go mod download
 
 COPY ./ ./
 
+RUN mkdir /log
 RUN CGO_ENABLED=0 GOOS=linux go build -o /youknow-backend-image
 
 EXPOSE ${BACKEND_PORT}

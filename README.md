@@ -131,3 +131,8 @@ docker-compose build
 ```shell
 docker-compose up
 ```
+## load multiport for fail2ban
+modprobe -v xt_multiport
+
+## if DOCKER chain not found
+sudo systemctl restart docker

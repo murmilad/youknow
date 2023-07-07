@@ -1,21 +1,20 @@
 [DEFAULT]
 
 bantime = 1m
-findtime = 10m
-maxretry = 5
+findtime = 3m
+maxretry = 3
 
-action = %(action_mwl)s
+#action = iptables-nft[type=allports, chain=DOCKER-USER]
 
 # Prevents banning LAN subnets
-ignoreip    = 127.0.0.1/8 ::1
-              10.0.0.0/8
+#ignoreip    = 127.0.0.1/8 ::1
+ignoreself = false
 
 [nginx-bad-request]
 # configuration inherits from jail.conf
 enabled = true
 chain   = DOCKER-USER
 action  = %(known/action)s
-maxretry = 10
 
 [nginx-http-auth]
 # configuration inherits from jail.conf

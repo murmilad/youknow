@@ -19,7 +19,8 @@ services:
       - POSTGRES_DB
 
       - BACKEND_PORT
-      - CLIENT_ORIGIN
+      - EXTERNAL_BACKEND_ADDRESS
+      - EXTERNAL_BACKEND_PORT
 
       - EMAIL_FROM
       - SMTP_HOST
@@ -27,40 +28,15 @@ services:
       - SMTP_PASS
       - SMTP_PORT
 
-      - TOKEN_EXPIRED_IN
-      - TOKEN_MAXAGE
-
-      - TOKEN_SECRET
-
-      - GOOGLE_OAUTH_CLIENT_ID
-      - GOOGLE_OAUTH_CLIENT_SECRET
-      - GOOGLE_OAUTH_REDIRECT_URL
-
-      - GITHUB_OAUTH_CLIENT_ID
-      - GITHUB_OAUTH_CLIENT_SECRET
-      - GITHUB_OAUTH_REDIRECT_URL
     build:
       context: ./back/service
-    volumes:
-      - log-proxy:/log
     depends_on:
-      - proxy
+      - db
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
 
   # Frontend web application
   frontend:
-    environment:
-      - FRONTEND_PORT
-
-      - REACT_APP_BACKEND_ADDRESS
-      - REACT_APP_BACKEND_PORT
-
-      - REACT_APP_GOOGLE_OAUTH_CLIENT_ID
-      - REACT_APP_GOOGLE_OAUTH_REDIRECT
-
-      - REACT_APP_GITHUB_OAUTH_CLIENT_ID
-      - REACT_APP_GITHUB_OAUTH_REDIRECT
     build:
       context: ./front/library
     depends_on:
@@ -69,19 +45,18 @@ services:
       - ${FRONTEND_PORT}:3000
   # External proxy
   proxy:
+    network_mode: bridge
     environment:
-      - SERVER_IP
+      - PROXY_REDIRECT_ADDRESS
       - SERVER_NAME
       - SERVER_PORT
       - FRONTEND_PORT
       - BACKEND_PORT
     build: ./proxy
     volumes:
-      - log-proxy:/var/log/nginx
+      - ./proxy/log/nginx:/var/log/nginx
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
-    depends_on:
-      - db
     command: /bin/bash /bin/start_nginx.sh
   fail2ban:
     image: lscr.io/linuxserver/fail2ban:latest
@@ -97,12 +72,14 @@ services:
       - VERBOSITY=-vv #optional
     volumes:
       - ./proxy:/config
-      - /var/log:/var/log:ro
-      - log-proxy:/remotelogs/nginx:ro
+      - ./proxy/log/nginx:/remotelogs/nginx:ro
     restart: unless-stopped
     depends_on:
-      - frontend
-volumes:
-  log-backend:
-  log-proxy:
-  log-file2ban:
+      - proxy
+  logrotate:
+    image: thommeo/logrotate
+    volumes:
+      - ./proxy/log/nginx:/var/log/rotate
+    restart: always
+    depends_on:
+      - fail2ban

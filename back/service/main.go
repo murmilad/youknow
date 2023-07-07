@@ -7,7 +7,6 @@ import (
 
 	"akosarev.info/youknow/controllers"
 	"akosarev.info/youknow/initializers"
-	"akosarev.info/youknow/middleware"
 	"akosarev.info/youknow/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -72,7 +71,6 @@ func main() {
 	corsConfig.AllowHeaders = []string{"*"}
 
 	server.Use(cors.New(corsConfig))
-	server.Use(middleware.NginxLogMiddleware())
 
 	router := server.Group("/api")
 	router.GET("/healthchecker", func(ctx *gin.Context) {
