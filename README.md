@@ -157,7 +157,9 @@ sudo systemctl restart docker
 ```
 ### No errors in log, but IPs is not blocked
 I had some conflicts  or something using a lot of containers, and dropping all of them was solve this.
-:warning: **!it will removes all your Docker containers!**
+> **Warning**
+> 
+> !it will removes all your Docker containers!
 ```shell
 docker system prune -a
 ```
