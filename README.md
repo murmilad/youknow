@@ -34,66 +34,86 @@ Encrease your memory project
 All this methods correspond to [forgetting curve](https://en.wikipedia.org/wiki/Forgetting_curve)
 
 # Configuration
-* Download package from GIT
+
+## GIT
+Clone YouknoW
 ```shell
     git clone https://github.com/murmilad/youknow.git
 ```
 ## Environment variables
-* Create .app file in project root directory
-* Add project configuration
+* Copy .app.expample file in project root directory
+```shell
+    cd ./youknow
+    cp .env.examples ./env
+```
 
-Server external proxy configuration
+
+Add project configuration
+
+* Server external proxy configuration
 
 ```conf
-SERVER_NAME=172.17.0.1
+# Proxy server
+SERVER_NAME=<external server name>
 SERVER_PORT=80
+
+PROXY_REDIRECT_ADDRESS=http://<external server address>
 ```
 
-Database confuguration
+* Database confuguration
 
 ```conf
-    POSTGRES_HOST=<database host>
-    POSTGRES_PORT=<database port>
-    POSTGRES_USER=<database user>
-    POSTGRES_PASSWORD=<database password>
-    POSTGRES_DB=youknow
+# Database
+POSTGRES_HOST=<database server ip address>
+POSTGRES_PORT=5560
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=<database password>
+POSTGRES_DB=youknow
 ```
 
-Backend connections configuration
+* Email sending configuration
+
 ```conf
-    BACKEND_PORT=<backend port>
-    CLIENT_ORIGIN=<frontend address form CORS checking ex. http://localhost:3001>
+# Email sending
+EMAIL_FROM=<sender e-mail address>
+SMTP_HOST=<SMTP server host>
+SMTP_USER=<SMTP server user>
+SMTP_PASS=<SMTP server password>
+SMTP_PORT=<SMTP server port>
 ```
 
-E-Mail sending configuration
+* Backend connections configuration
+
 ```conf
-    EMAIL_FROM=<sender e-mail address>
-    SMTP_HOST=<SMTP server host>
-    SMTP_USER=<SMTP server user>
-    SMTP_PASS=<SMTP server password>
-    SMTP_PORT=<SMTP server port>
+# Backend
+BACKEND_PORT=8000
+EXTERNAL_BACKEND_ADDRESS=http://<external server address>
+EXTERNAL_BACKEND_PORT=80
+CLIENT_ORIGIN=http://<external server address>
 ```
 
-JWT token configuration
+
+* JWT token configuration
 ```conf
-    TOKEN_EXPIRED_IN=<token expire time ex. 60m>
-    TOKEN_MAXAGE=<token max age ex. 60>
-    TOKEN_SECRET=<token encode word ex. Any word>
+TOKEN_EXPIRED_IN=<token expire time ex. 60m>
+TOKEN_MAXAGE=<token max age ex. 60>
+TOKEN_SECRET=<token encode word ex. Any word>
 ```
 
 
-Google OAuth configuration
+* Google OAuth configuration
 
 Go to google cloud create your own token, and permit your application address [api](https://console.cloud.google.com/apis/)
 Add your jwt token as it described in [documentation](https://blog.logrocket.com/guide-adding-google-login-react-app/#acquiring-google-client-id-project)
 
 ```conf
-    GOOGLE_OAUTH_CLIENT_ID=<Google O-Auth client ID>
-    GOOGLE_OAUTH_CLIENT_SECRET=<Google O-Auth client Secret>
-    GOOGLE_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/google
+GOOGLE_OAUTH_CLIENT_ID=<Google O-Auth client ID>
+GOOGLE_OAUTH_CLIENT_SECRET=<Google O-Auth client Secret>
+GOOGLE_OAUTH_REDIRECT_URL=http://<external server name:port ex. localhost:8000>/api/sessions/oauth/google
 ```
 
-GitHub OAuth configuration
+* GitHub OAuth configuration
+
 Register your OAuth application correspond to [GitHub documentation](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#web-application-flow)
 
 ```conf
@@ -101,38 +121,44 @@ Register your OAuth application correspond to [GitHub documentation](https://doc
     GITHUB_OAUTH_CLIENT_SECRET=<GitHub O-Auth client secret>
     GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
 ```
-React application configuration
+* Frontend web application configuration
 ```conf
     FRONTEND_PORT=<frontend port>
 ```
-Other react application parameters ./front/library/.env
-```conf
-    REACT_APP_BACKEND_ADDRESS=<Frontend application address ex. http://localhost>
-    REACT_APP_BACKEND_PORT=<Frontend application port ex. 8000>
-```
-
-```conf
-    REACT_APP_GOOGLE_OAUTH_CLIENT_ID=<Google O-Auth client ID>
-    REACT_APP_GOOGLE_OAUTH_REDIRECT=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/google
-```
-
-```conf
-    REACT_APP_GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
-    REACT_APP_GITHUB_OAUTH_REDIRECT=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
-```
 
 ## Deploying application
-
+* enable and start ipconfig for fail2ban
+```shell
+sudo systemctl enable ipconfig
+sudo systemctl start ipconfig
+```
 * Build containers
 ```shell
 docker-compose build
 ```
 * Up containers
 ```shell
-docker-compose up
+docker-compose up -p
 ```
-## load multiport for fail2ban
-modprobe -v xt_multiport
 
-## if DOCKER chain not found
+# Trouble shooting
+## fail2ban
+### iptables 'No chain/target/match by that name.' error
+Errors on Bun IPs in ./proxy/log/fail2ban/fail2ban.log
+```log
+2023-07-07 04:41:15,742 7F4E11DD0B38 ERROR 7f4e12a19d70 -- exec: iptables -w -F f2b-nginx-bad-request
+2023-07-07 04:41:15,742 7F4E11DD0B38 ERROR 7f4e12a19d70 -- stderr: 'iptables: No chain/target/match by that name.'
+2023-07-07 04:41:15,742 7F4E11DD0B38 ERROR 7f4e12a19d70 -- returned 1
+```
+Try load multiport for fail2ban
+```shell
+modprobe -v xt_multiport
+sudo systemctl start ipconfig
 sudo systemctl restart docker
+```
+### No errors in log, but IPs is not blocked
+You can remove all docker containers
+:warning: **it will removes all your Docker containers!**
+```shell
+docker system prune -a
+```
