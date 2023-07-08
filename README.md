@@ -116,13 +116,17 @@ GOOGLE_OAUTH_REDIRECT_URL=http://<external server name:port ex. localhost:8000>/
 Register your OAuth application correspond to [GitHub documentation](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#web-application-flow)
 
 ```conf
-    GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
-    GITHUB_OAUTH_CLIENT_SECRET=<GitHub O-Auth client secret>
-    GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
+GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
+GITHUB_OAUTH_CLIENT_SECRET=<GitHub O-Auth client secret>
+GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
 ```
 * Frontend web application configuration
 ```conf
-    FRONTEND_PORT=<frontend port>
+FRONTEND_PORT=<frontend port>
+```
+* Munin stats port
+```conf
+MUNIN_PORT=<munin gui port>
 ```
 
 ## Deploying application

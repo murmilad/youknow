@@ -5,9 +5,11 @@ Backend part for ![YouknoW](https://github.com/murmilad/youknow/blob/main/front/
 
 Look for configuration info on the root of the project.
 Environment variables is in docker-compose.yml (backend service)
-## Build image
+
+## For separate using
+### Build image
 docker build --tag youknow-backend-image .
-## Run image
+### Run image
 For localhost 
     docker run --network="host" youknow-backend-image
 For public

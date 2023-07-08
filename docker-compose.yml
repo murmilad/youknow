@@ -98,7 +98,6 @@ services:
     command: /bin/bash /bin/start_nginx.sh
   fail2ban:
     image: lscr.io/linuxserver/fail2ban:latest
-    container_name: fail2ban
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -120,3 +119,27 @@ services:
     volumes:
       - ./proxy/log/nginx:/var/log/rotate
     restart: always
+  netdata:
+    volumes:
+      - ./proxy/netdata/netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - ./proxy/log/fail2ban:/external-log/fail2ban
+      - ./proxy/log/nginx:/external-log/nginx
+      - ./proxy/fail2ban:/etc/fail2ban
+    ports:
+      - ${MUNIN_PORT}:19999
+    restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
+    cap_add:
+      - SYS_PTRACE
+    image: 'netdata/netdata'
+volumes:
+  netdatalib:
+  netdatacache:

@@ -1,2 +1,4 @@
 
-*.conf
+*
+!.gitignore
+!iptables-nft.local

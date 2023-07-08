@@ -1,3 +1,5 @@
-filter.d/
-*.conf
-fail2ban.sqlite3
+*
+!.gitignore
+!action.d/
+!jail.local
+!README.md
