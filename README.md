@@ -124,6 +124,12 @@ GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000
 ```conf
 FRONTEND_PORT=<frontend port>
 ```
+* Netdata monitor port
+```conf
+# Netdata
+
+NETDATA_PORT=81
+```
 
 ## Change permissions for Netdata monitor
 

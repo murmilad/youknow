@@ -133,7 +133,7 @@ services:
       - ./proxy/log/nginx:/external-log/nginx
       - ./proxy/fail2ban:/etc/fail2ban
     ports:
-      - ${MUNIN_PORT}:19999
+      - ${NETDATA_PORT}:19999
     restart: unless-stopped
     security_opt:
       - apparmor:unconfined
