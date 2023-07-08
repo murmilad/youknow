@@ -3,7 +3,7 @@
 
 # But not these files...
 !.gitignore
-!go.d/*
-!python.d/*
+!*/go.d/*
+!*/python.d/*
 # etc...
 
