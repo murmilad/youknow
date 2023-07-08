@@ -124,9 +124,13 @@ GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000
 ```conf
 FRONTEND_PORT=<frontend port>
 ```
-* Munin stats port
-```conf
-MUNIN_PORT=<munin gui port>
+
+## Change permissions for Netdata monitor
+
+```shell
+sudo chmod a+r proxy/netdata/netdataconfig/go.d/nginx.conf
+sudo chmod a+r proxy/netdata/netdataconfig/python.d/fail2ban.conf
+sudo chmod a+r proxy/log/fail2ban/fail2ban.log 
 ```
 
 ## Deploying application
