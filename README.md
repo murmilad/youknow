@@ -1,7 +1,6 @@
 # Description
 
-![YouknoW](https://github.com/murmilad/youknow/blob/main/front/library/public/images/logo_small.svg "") Project
-Encrease your memory project
+![YouknoW](https://github.com/murmilad/youknow/blob/main/front/library/public/images/logo_small.svg "") Encrease your memory project
 
 ## Forget curve
 
