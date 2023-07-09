@@ -2,6 +2,7 @@ FROM netdata/netdata
 
 COPY ./nginx.conf /etc/netdata/go.d/
 COPY ./fail2ban.conf /etc/netdata/python.d/
+COPY ./netdata.conf /etc/netdata/
 
 ARG PROXY_REDIRECT_ADDRESS
 

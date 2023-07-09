@@ -140,6 +140,7 @@ GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
 GITHUB_OAUTH_CLIENT_SECRET=<GitHub O-Auth client secret>
 GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
 ```
+
 ###  For sign your own certificate
 
 Example of generation own signed certificate as pointed in [Manual](https://dgu2000.medium.com/working-with-self-signed-certificates-in-chrome-walkthrough-edition-a238486e6858)
@@ -201,13 +202,19 @@ openssl verify -CAfile web.youknow.app.pem -verify_hostname youknow.app web.youk
 sudo systemctl enable ipconfig
 sudo systemctl start ipconfig
 ```
-* Build containers
+* Build and Up containers
 ```shell
-docker-compose build
+docker compose up --build -d
 ```
-* Up containers
-```shell
-docker-compose up -p
+
+* Add permissions for netdata fail2ban plugin 
+
+```bash
+docker compose exec netdata chmod -R a+r /external-log/fail2ban
+docker compose exec netdata chmod -R a+r /external-log/nginx
+docker compose exec netdata chmod -R a+r /etc/fail2ban
+docker compose exec netdata chmod -R a+r /etc/netdata/go.d
+docker compose exec netdata chmod -R a+r /etc/netdata/python.d
 ```
 
 # Trouble shooting
