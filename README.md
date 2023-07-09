@@ -192,6 +192,8 @@ openssl x509 -req \
 ```bash
 openssl verify -CAfile web.youknow.app.pem -verify_hostname youknow.app web.youknow.app.tls.crt
 ```
+* Add certification center certificate (web.youknow.app.pem) to browser
+* Add your project certificate (web.youknow.app.tls.crt and web.youknow.app.tls.key) to proxy/ssl
 
 ## Deploying application
 * enable and start ipconfig for fail2ban
