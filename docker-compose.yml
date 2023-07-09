@@ -127,6 +127,7 @@ services:
       - ./proxy/log/nginx:/var/log/rotate
     restart: always
   netdata:
+    environment:
       - PUID=1000
       - PGID=1000
     volumes:
