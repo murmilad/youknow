@@ -18,6 +18,8 @@ services:
   # Backend application
   backend:
     environment:
+      - SERVER_NAME
+      
       - POSTGRES_HOST
       - POSTGRES_PORT
       - POSTGRES_USER

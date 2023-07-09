@@ -248,14 +248,16 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.SetCookie("token", token, config.TokenMaxAge*60, "/", "localhost", false, true)
+	ctx.SetCookie("token", token, config.TokenMaxAge*60, "/", config.ServerName, false, true)
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "token": token})
 }
 
 // [...] SignOut User
 func (ac *AuthController) LogoutUser(ctx *gin.Context) {
-	ctx.SetCookie("token", "", -1, "/", "localhost", false, true)
+	config, _ := initializers.LoadConfig(".")
+
+	ctx.SetCookie("token", "", -1, "/", config.ServerName, false, true)
 	ctx.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -327,7 +329,7 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 		return
 	}
 
-	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", "localhost", false, false)
+	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
 	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
 }
@@ -406,7 +408,7 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 		return
 	}
 
-	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", "localhost", false, false)
+	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
 	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
 }

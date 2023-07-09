@@ -38,6 +38,8 @@ type Config struct {
 
 	GinNginxLogPath string `mapstructure:"GIN_NGINX_LOG_PATH"`
 	LogPath         string `mapstructure:"LOG_PATH"`
+
+	ServerName string `mapstructure:"SERVER_NAME"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
