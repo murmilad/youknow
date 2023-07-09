@@ -150,7 +150,7 @@ services:
     build:
       context: ./proxy/netdata
       args:
-        - PROXY_REDIRECT_ADDRESS
+        - SERVER_NAME
     image: 'netdata/netdata'
 volumes:
   netdatalib:
