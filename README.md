@@ -55,6 +55,7 @@ Add project configuration
 # Proxy server
 SERVER_NAME=<external server name>
 SERVER_PORT=80
+SERVER_STATS_PORT=<statistics port>
 ```
 
 * Internal proxy redirects
