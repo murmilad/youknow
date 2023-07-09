@@ -3,7 +3,7 @@ FROM netdata/netdata
 COPY ./nginx.conf /etc/netdata/go.d/
 COPY ./fail2ban.conf /etc/netdata/python.d/
 
-ARG EXTERNAL_BACKEND_ADDRESS
+ARG PROXY_REDIRECT_ADDRESS
 
-RUN  sed -i  "s#\${EXTERNAL_BACKEND_ADDRESS}#$EXTERNAL_BACKEND_ADDRESS#" /etc/netdata/go.d/nginx.conf
+RUN  sed -i  "s#\${PROXY_REDIRECT_ADDRESS}#$PROXY_REDIRECT_ADDRESS#" /etc/netdata/go.d/nginx.conf
 

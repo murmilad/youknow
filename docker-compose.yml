@@ -151,7 +151,7 @@ services:
     build:
       context: ./proxy/netdata
       args:
-        - EXTERNAL_BACKEND_ADDRESS
+        - PROXY_REDIRECT_ADDRESS
     image: 'netdata/netdata'
 volumes:
   netdatalib:
