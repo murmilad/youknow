@@ -121,7 +121,6 @@ services:
     restart: always
   netdata:
     volumes:
-      - ./proxy/netdata/netdataconfig:/etc/netdata
       - netdatalib:/var/lib/netdata
       - netdatacache:/var/cache/netdata
       - /etc/passwd:/host/etc/passwd:ro
@@ -139,6 +138,10 @@ services:
       - apparmor:unconfined
     cap_add:
       - SYS_PTRACE
+    build:
+      context: ./proxy/netdata
+      args:
+        - PROXY_REDIRECT_ADDRESS
     image: 'netdata/netdata'
 volumes:
   netdatalib:

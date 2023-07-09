@@ -128,15 +128,7 @@ FRONTEND_PORT=<frontend port>
 ```conf
 # Netdata
 
-NETDATA_PORT=81
-```
-
-## Change permissions for Netdata monitor
-
-```shell
-sudo chmod a+r proxy/netdata/netdataconfig/go.d/nginx.conf
-sudo chmod a+r proxy/netdata/netdataconfig/python.d/fail2ban.conf
-sudo chmod a+r proxy/log/fail2ban/fail2ban.log 
+NETDATA_PORT=<netdata monitor port>
 ```
 
 ## Deploying application

@@ -1,4 +1,46 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+.env
+.vscode/
+
+#front
+
+front/library/node_modules
+front/library/.pnp
+front/library/.pnp.js
+
+# testing
+front/library/coverage
 
 # production
-.env
+front/library/build
+front/library/apikeys
+front/library/.env
+
+# misc
+front/library/.DS_Store
+front/library/.env.local
+front/library/.env.development.local
+front/library/.env.test.local
+front/library/.env.production.local
+
+front/library/npm-debug.log*
+front/library/yarn-debug.log*
+front/library/yarn-error.log*
+
+#proxy Fail2Ban
+
+proxy/fail2ban/*
+!proxy/fail2ban/.gitignore
+!proxy/fail2ban/action.d/
+!proxy/fail2ban/jail.local
+!proxy/fail2ban/README.md
+
+proxy/fail2ban/action.d/*
+!proxy/fail2ban/action.d/.gitignore
+!proxy/fail2ban/action.d/iptables-nft.local
+
+#proxy logs
+
+proxy/log/fail2ban/
+proxy/log/*.log
+proxy/log/nginx/*.log
