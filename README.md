@@ -134,7 +134,7 @@ GOOGLE_OAUTH_REDIRECT_URL=http://<external server name:port ex. localhost:8000>/
 
 * GitHub OAuth configuration
 
-Register your OAuth application correspond to [GitHub documentation](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#web-application-flow)
+Register your OAuth application correspond to [GitHub documentation](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#web-application-flow) in [Oauth developer settings](https://github.com/settings/developers)
 
 ```conf
 GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
