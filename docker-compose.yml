@@ -153,6 +153,7 @@ services:
       context: ./proxy/netdata
       args:
         - PROXY_REDIRECT_ADDRESS
+        - SERVER_STATS_PORT
     image: 'netdata/netdata'
 volumes:
   netdatalib:
