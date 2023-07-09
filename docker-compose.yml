@@ -5,6 +5,7 @@ services:
     environment:
       - POSTGRES_HOST
       - POSTGRES_PORT
+      - POSTGRES_PASSWORD
     build:
       context: ./back/db
     ports:
@@ -90,9 +91,15 @@ services:
       - SERVER_PORT
       - FRONTEND_PORT
       - BACKEND_PORT
+      - NETDATA_PORT
+      - IS_HTTPS
+      - SSL_KEY_CERTIFICATE_PATH
+      - SSL_CRT_CERTIFICATE_PATH
+
     build: ./proxy
     volumes:
       - ./proxy/log/nginx:/var/log/nginx
+      - ./proxy/ssl:/etc/ssl
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     command: /bin/bash /bin/start_nginx.sh

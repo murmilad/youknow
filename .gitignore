@@ -44,3 +44,7 @@ proxy/fail2ban/action.d/*
 proxy/log/fail2ban/
 proxy/log/*.log
 proxy/log/nginx/*.log
+
+#proxy certs
+
+proxy/ssl/*

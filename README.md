@@ -55,8 +55,16 @@ Add project configuration
 # Proxy server
 SERVER_NAME=<external server name>
 SERVER_PORT=80
+```
 
+* Internal proxy redirects
+Frontend web application, Backend and Netdata monitor ports.
+Also point out an proxy redirect host
+```conf
 PROXY_REDIRECT_ADDRESS=http://<external server address>
+BACKEND_PORT=<frontend port ex. 8000>
+NETDATA_PORT=<netdata monitor port ex. 19999>
+FRONTEND_PORT=<frontend port ex. 3001>
 ```
 
 * Database confuguration
@@ -85,7 +93,6 @@ SMTP_PORT=<SMTP server port>
 
 ```conf
 # Backend
-BACKEND_PORT=8000
 EXTERNAL_BACKEND_ADDRESS=http://<external server address>
 EXTERNAL_BACKEND_PORT=80
 CLIENT_ORIGIN=http://<external server address>
@@ -99,6 +106,21 @@ TOKEN_MAXAGE=<token max age ex. 60>
 TOKEN_SECRET=<token encode word ex. Any word>
 ```
 
+* Enable/Disable HTTPS
+[source](https://www.howtogeek.com/devops/how-to-create-and-use-self-signed-ssl-on-nginx/)
+
+```conf
+# ssl certificate for nginx
+
+IS_HTTPS=<set YES for enable https> 
+SSL_KEY_CERTIFICATE_PATH=<certificate key name ex. localhost.key>
+SSL_CRT_CERTIFICATE_PATH=<certificate name ex. localhost.crt>
+
+```
+example of generation own signed certificate. 
+```bash
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout proxy/ssl/localhost.key -out proxy/ssl/localhost.crt
+```
 
 * Google OAuth configuration
 
@@ -119,16 +141,6 @@ Register your OAuth application correspond to [GitHub documentation](https://doc
 GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
 GITHUB_OAUTH_CLIENT_SECRET=<GitHub O-Auth client secret>
 GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
-```
-* Frontend web application configuration
-```conf
-FRONTEND_PORT=<frontend port>
-```
-* Netdata monitor port
-```conf
-# Netdata
-
-NETDATA_PORT=<netdata monitor port>
 ```
 
 ## Deploying application

@@ -4,8 +4,13 @@ log_format  proxy  '$remote_addr - $remote_user [$time_local] "$host$request_uri
                 '"$http_user_agent" "$http_x_forwarded_for"';
 
 server {
-    listen ${SERVER_PORT};
+    listen ${SERVER_PORT} ssl;
     server_name ${SERVER_NAME};
+    ssl_certificate     /etc/ssl/${SSL_CRT_CERTIFICATE_PATH};
+    ssl_certificate_key /etc/ssl/${SSL_KEY_CERTIFICATE_PATH};
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
 
     access_log /var/log/nginx/${SERVER_NAME}-access.log proxy;
     error_log /var/log/nginx/${SERVER_NAME}-error.log warn;
@@ -29,6 +34,33 @@ server {
         limit_req   zone=one  burst=1 nodelay;
     }
 
+
+    location = /netdata {
+        return 301 /netdata/;
+    }
+
+    location ~ /netdata/(?<ndpath>.*) {
+        proxy_redirect off;
+        proxy_set_header Host $host;
+
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
+        proxy_pass_request_headers on;
+        proxy_set_header Connection "keep-alive";
+        proxy_store off;
+
+        access_log /var/log/nginx/${SERVER_NAME}-netdata-access.log proxy;
+        error_log /var/log/nginx/${SERVER_NAME}-netdata-error.log warn;
+        proxy_pass ${PROXY_REDIRECT_ADDRESS}:${NETDATA_PORT}/$ndpath$is_args$args;
+
+        gzip on;
+        gzip_proxied any;
+        gzip_types *;
+
+        limit_req   zone=one  burst=1 nodelay;
+    }
 
     location /basic_status {
         stub_status;
