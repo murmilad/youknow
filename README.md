@@ -107,7 +107,8 @@ TOKEN_SECRET=<token encode word ex. Any word>
 ```
 
 * Enable/Disable HTTPS
-[source](https://www.howtogeek.com/devops/how-to-create-and-use-self-signed-ssl-on-nginx/)
+
+Put your certificates in proxy/ssl
 
 ```conf
 # ssl certificate for nginx
@@ -118,11 +119,6 @@ SSL_CRT_CERTIFICATE_PATH=<certificate name ex. localhost.crt>
 
 ```
 
-example of generation own signed certificate. 
-```bash
-mkdir proxy/ssl
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout proxy/ssl/localhost.key -out proxy/ssl/localhost.crt
-```
 
 * Google OAuth configuration
 
@@ -143,6 +139,58 @@ Register your OAuth application correspond to [GitHub documentation](https://doc
 GITHUB_OAUTH_CLIENT_ID=<GitHub O-Auth client ID>
 GITHUB_OAUTH_CLIENT_SECRET=<GitHub O-Auth client secret>
 GITHUB_OAUTH_REDIRECT_URL=http://<backend server address:port ex. localhost:8000>/api/sessions/oauth/github
+```
+###  For sign your own certificate
+
+Example of generation own signed certificate as pointed in [Manual](https://dgu2000.medium.com/working-with-self-signed-certificates-in-chrome-walkthrough-edition-a238486e6858)
+ 
+* Create certification center certificate
+```bash
+openssl genrsa -des3 -out web.youknow.app.key 2048
+openssl req -x509 -new -nodes -key web.youknow.app.key -sha256 -days 730 -out web.youknow.app.pem
+```
+
+* Check certification center certificate
+
+```bash
+openssl x509 -in web.youknow.app.pem -text -noout
+```
+
+* Create your project certificate
+
+```bash
+openssl genrsa -out web.youknow.app.tls.key 2048
+openssl req -new -key web.youknow.app.tls.key -out web.youknow.app.tls.csr
+```
+* Create config file web.youknow.app.cnf for signing
+
+```conf
+# Extensions to add to a certificate request
+basicConstraints       = CA:FALSE
+authorityKeyIdentifier = keyid:always, issuer:always
+keyUsage               = nonRepudiation, digitalSignature, keyEncipherment, dataEncipherment
+subjectAltName         = @alt_names
+[ alt_names ]
+DNS.1 = youknow.app
+```
+
+* Sign your certificate
+
+```bash
+openssl x509 -req \
+    -in web.youknow.app.tls.csr \
+    -CA web.youknow.app.pem \
+    -CAkey web.youknow.app.key \
+    -CAcreateserial \
+    -out web.youknow.app.tls.crt \
+    -days 730 \
+    -sha256 \
+    -extfile web.youknow.app.cnf
+```
+
+* Check if certificate is correct  
+```bash
+openssl verify -CAfile web.youknow.app.pem -verify_hostname youknow.app web.youknow.app.tls.crt
 ```
 
 ## Deploying application
