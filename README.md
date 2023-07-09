@@ -117,8 +117,10 @@ SSL_KEY_CERTIFICATE_PATH=<certificate key name ex. localhost.key>
 SSL_CRT_CERTIFICATE_PATH=<certificate name ex. localhost.crt>
 
 ```
+
 example of generation own signed certificate. 
 ```bash
+mkdir proxy/ssl
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout proxy/ssl/localhost.key -out proxy/ssl/localhost.crt
 ```
 
