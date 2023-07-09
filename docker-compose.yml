@@ -127,6 +127,8 @@ services:
       - ./proxy/log/nginx:/var/log/rotate
     restart: always
   netdata:
+      - PUID=1000
+      - PGID=1000
     volumes:
       - netdatalib:/var/lib/netdata
       - netdatacache:/var/cache/netdata
