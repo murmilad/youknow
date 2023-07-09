@@ -151,7 +151,7 @@ services:
     build:
       context: ./proxy/netdata
       args:
-        - SERVER_NAME
+        - EXTERNAL_BACKEND_ADDRESS
     image: 'netdata/netdata'
 volumes:
   netdatalib:
