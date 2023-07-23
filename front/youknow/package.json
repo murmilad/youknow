@@ -1,0 +1,32 @@
+{
+  "name": "youknow",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.19.1",
+    "@react-navigation/stack": "^6.3.17",
+    "@reduxjs/toolkit": "^1.9.5",
+    "axios": "^1.4.0",
+    "expo": "~48.0.18",
+    "expo-status-bar": "~1.4.4",
+    "i18next": "^23.2.11",
+    "react": "18.2.0",
+    "react-i18next": "^13.0.2",
+    "react-native": "0.71.8",
+    "react-native-toast-message": "^2.1.6",
+    "react-redux": "^8.1.1",
+    "redux-persist": "^6.0.0",
+    "redux-saga": "^1.2.3",
+    "twrnc": "^3.6.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}

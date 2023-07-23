@@ -1,0 +1,50 @@
+
+{
+    "header": {
+        "error":"Error",
+        "info":"Message",
+        "login":"Log In",
+        "sign-up":"Sign up",
+        "signed-up" : "Please check and confirm your E-Mail",
+        "verify" : "Verify E-Mail address",
+        "application" : "You know",
+        "forgot-password" : "Enter your email address and we’ll send you a link to reset your password.",
+        "email-sent": "We have sent you a password recovery email.",
+        "reset-password": "Reset password",
+        "reseted": "Your password has been successfuly reseted."
+    },
+    "field": {
+      "user-name":"Name",
+      "user-email":"E-Mail",
+      "user-password":"Password",
+      "user-retype-password":"Retype password",
+      "user-sign-up":"Sign Up",
+      "login-email":"E-Mail",
+      "login-password":"Password",
+      "login-login" : "Login",
+      "login-sign-up" : "Sign up",
+      "verify-verify" : "Verify",
+      "user-back-to-login": "Back to login",
+      "forgot-email":"E-Mail",
+      "forgot-retrieve-password": "Retrieve password",
+      "reset-reset-password": "Reset password",
+      "login-forgot": "Forgot password"
+    },
+    "error": {
+        "required": "The field is required!",
+        "email" : "Please enter correct email",
+        "name" : "Please enter name",
+        "password" : "Please enter password",
+        "password-match": "Passwords must match",
+        "password-letters": "Password can only contain Latin letters",
+        "password-short": "Password is too short - should be 8 chars minimum"
+    },
+    "action": {
+    },
+    "message":{
+        "loading": "Loading...",
+        "wait": "Wait...",
+        "login_incorrect": "User or Password incorrect"
+    }
+ 
+}
