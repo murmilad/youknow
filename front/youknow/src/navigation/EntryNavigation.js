@@ -3,8 +3,8 @@ import { connect, useDispatch } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import tw from './tailwind'
-import NavigationWelcome from './NavigationWelcome'
-import NavigationLogin from './NavigationLogin'
+import WelcomeNavigation from './WelcomeNavigation'
+import LoginNavigation from './LoginNavigation'
 
 const Navigator  = createStackNavigator()
 
@@ -17,9 +17,9 @@ const Entry = ({ user, status }) => {
         }} >
             {(status.connected ? (
                 user.token ? (
-                    <NavigationWelcome />
+                    <WelcomeNavigation />
                 ) : (
-                    <NavigationLogin />
+                    <LoginNavigation />
                 )
             ) : (
                 <Navigator.Screen options={{

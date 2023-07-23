@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import {Provider, connect, useDispatch} from 'react-redux'
 import {PersistGate} from 'redux-persist/integration/react'
 
-import NavigationEntry from './src/navigation/NavigationAuth'
-import ToastMessage from './src/message/ToastMessage'
+import EntryNavigation from './src/navigation/EntryNavigation'
+import MessageToast from './src/message/MessageToast'
 import './i18n';
 import {store, persistor} from './redux/store'
 
@@ -17,10 +17,10 @@ export default function App() {
     <StatusBar />
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-          <NavigationEntry />
+          <EntryNavigation />
         </NavigationContainer>
       </PersistGate>
-      <ToastMessage />
+      <MessageToast />
     </Provider>
   );
 }

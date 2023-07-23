@@ -15,6 +15,7 @@
     "axios": "^1.4.0",
     "expo": "~48.0.18",
     "expo-status-bar": "~1.4.4",
+    "formik": "^2.4.2",
     "i18next": "^23.2.11",
     "react": "18.2.0",
     "react-i18next": "^13.0.2",
@@ -23,7 +24,8 @@
     "react-redux": "^8.1.1",
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.2.3",
-    "twrnc": "^3.6.3"
+    "twrnc": "^3.6.3",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

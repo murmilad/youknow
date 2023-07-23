@@ -49,4 +49,4 @@ const mapStateToProps = state => ({
     message: state.message,
 })
 
-export default ToastMessage = connect(mapStateToProps)(Message)
+export default MessageToast = connect(mapStateToProps)(Message)

@@ -28,7 +28,9 @@
       "forgot-email":"E-Mail",
       "forgot-retrieve-password": "Retrieve password",
       "reset-reset-password": "Reset password",
-      "login-forgot": "Forgot password"
+      "login-forgot": "Forgot password",
+      "server": "YouknoW server url", 
+      "port": "YouknoW server port" 
     },
     "error": {
         "required": "The field is required!",
