@@ -8,7 +8,7 @@ export function* callServerLastest() {
   yield takeLatest(actions.VERIFY, submitGet, action => '/api/auth/verifyemail/' + action.verifyHash, (action, response) => [
     ({action: actions.SET_VERIFIED, payload: {verified: true}})
   ])
-  yield takeLatest(actions.CHECK_CONNECTION, checkConnection, action => '/api/auth/check', (action, response) => [
+  yield takeLatest(actions.CHECK_CONNECTION, checkConnection, action => '/api/ping/', (action, response) => [
     ({action: actions.GET_USER})
   ])
   yield takeLatest(actions.GET_USER, getUser, action => '/api/users/me', (action, response) => [
