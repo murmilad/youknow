@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
 })
 const { t, i18n } = useTranslation();
 
-function SettingsScreen(props) {
+function Settings(props) {
     const dispatch = useDispatch();
 
 
@@ -22,7 +22,12 @@ function SettingsScreen(props) {
         <Screen >
             <ApplicationForm
                 initialValues={{ server: "https://youknow.app", port: "443" }}
-                onSubmit={(values) => console.log(values)}
+                onSubmit={(values) => {
+                    dispatch({type: 'CONNECT_AND_SET_PARAMS', payload: {
+                        server: values.server,
+                        port: values.port
+                    }})
+                }}
                 validationSchema={validationSchema}
             >
                 <FormTextInput name="server" header={t('field.server')}/>
@@ -34,13 +39,9 @@ function SettingsScreen(props) {
     )
 }
 
-function mapStateToProps(state, props) {
-    return ({
-        config: state.config
-    })
-}
+const mapStateToProps = state => ({
+    status: state.status,
+})
 
+export default SettingsScreen = connect(mapStateToProps)(Settings)
 
-export default connect(
-    mapStateToProps
-)(SettingsScreen)

@@ -11,6 +11,10 @@ export function* callServerLastest() {
   yield takeLatest(actions.CHECK_CONNECTION, checkConnection, action => '/api/ping/', (action, response) => [
     ({action: actions.GET_USER})
   ])
+  yield takeLatest(actions.CONNECT_AND_SET_PARAMS, checkConnection, action => '/api/ping/', (action, response) => [
+    ({action: actions.SET_CONNECTION_PARAMS, payload: {server: action.payload.server, port: action.payload.port}}),
+    ({action: actions.GET_USER})
+  ])
   yield takeLatest(actions.GET_USER, getUser, action => '/api/users/me', (action, response) => [
     ({action: actions.SET_USER, payload: {user: response.data.data.user}})
   ])
