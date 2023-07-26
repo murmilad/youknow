@@ -42,6 +42,7 @@
         "password-short": "Password is too short - should be 8 chars minimum"
     },
     "action": {
+        "connect": "Connect"
     },
     "message":{
         "loading": "Loading...",
