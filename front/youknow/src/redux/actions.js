@@ -6,6 +6,8 @@ export const SET_RESET = 'SET_RESET'
 export const SET_LOADING = 'SET_LOADING'
 export const SET_TOKEN = 'SET_TOKEN'
 
+export const AUTH_GOOGLE = 'AUTH_GOOGLE'
+export const AUTH_GITHUB = 'AUTH_GITHUB'
 export const VERIFY = 'VERIFY'
 export const GET_USER = 'GET_USER'
 export const SIGN_UP = 'SIGN_UP'

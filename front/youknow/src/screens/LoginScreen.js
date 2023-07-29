@@ -7,7 +7,9 @@ import * as Yup from 'yup';
 
 import FormTextInput from '../components/form/widgets/input/FormTextInput';
 import FormButton from '../components/form/widgets/FormButton';
-import Screen from '../components/Screen';
+import AuthScreen from '../components/AuthScreen';
+import GoogleButton from '../components/button/GoogleButton';
+import GithubButton from '../components/button/GithubButton';
 
 const validationSchema = Yup.object().shape({
     server: Yup.string().required().server().label(t('field.server')),
@@ -20,23 +22,26 @@ function Settings(props) {
 
 
     return (
-        <Screen >
+        <AuthScreen >
             <ApplicationForm
-                initialValues={{ server: "https://youknow.app", port: "443" }}
                 onSubmit={(values) => {
-                    dispatch({type: 'CONNECT_AND_SET_PARAMS', payload: {
-                        server: values.server,
-                        port: values.port
-                    }})
+                    dispatch({
+                        type: 'LOG_IN', payload: {login: values}
+                    })
                 }}
                 validationSchema={validationSchema}
             >
-                <FormTextInput name="server" header={t('field.server')}/>
-                <FormTextInput name="port" header={t('field.port')}/>
-                <FormButton  header={t('action.connect')} />
-
+                <FormTextInput name="email" header={t('field.login-email')} />
+                <FormTextInput name="password" header={t('field.login-password')} />
+                <FormButton header={t('action.login')} />
+                <GoogleButton handleSubmit={()=>{
+                    dispatch({type: 'AUTH_GOOGLE'})
+                }} />
+                <GithubButton handleSubmit={()=>{
+                    dispatch({type: 'AUTH_GITHUB'})
+                }} />
             </ApplicationForm>
-        </Screen>
+        </AuthScreen>
     )
 }
 

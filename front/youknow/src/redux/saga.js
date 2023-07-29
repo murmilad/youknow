@@ -1,9 +1,20 @@
 import { all } from 'redux-saga/effects'
-import SERVER, { setCredentails, dropCredentails } from "../server";
+import SERVER, { setCredentails, dropCredentails } from "../api/server";
 import * as actions from './actions'
+import googleAuthorize from '../api/google'
+import githubAuthorize from '../api/github'
 
 
 export function* callServerLastest() {
+
+
+  yield takeLatest(actions.AUTH_GITHUB, oauth(githubAuthorize), (action, response) => [
+    ({action: actions.PUT_TOKEN_HEADER, payload: {token: response.accessToken}}),
+  ])
+
+  yield takeLatest(actions.AUTH_GOOGLE, oauth(googleAuthorize), (action, response) => [
+    ({action: actions.PUT_TOKEN_HEADER, payload: {token: response.accessToken}}),
+  ])
 
   yield takeLatest(actions.VERIFY, submitGet, action => '/api/auth/verifyemail/' + action.verifyHash, (action, response) => [
     ({action: actions.SET_VERIFIED, payload: {verified: true}})
@@ -91,6 +102,23 @@ function* checkConnection(linkCallback, successActions, action) {
   } catch (error) {
     yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } })
     yield put({ type: actions.SET_DISCONNECTED})
+  }
+  yield put({ type: actions.SET_LOADING, payload: { loading: false } })
+}
+
+function* oauth(handler, successActions, action) {
+  try {
+    yield put({ type: actions.SET_LOADING, payload: { loading: true } })
+    handler();
+    for (let successAction of successActions(action, result)) {
+      yield put(successAction)
+    }
+  } catch (error) {
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } })
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
   }
   yield put({ type: actions.SET_LOADING, payload: { loading: false } })
 }
