@@ -10,12 +10,11 @@ import {store, persistor} from './redux/store'
 import { NavigationContainer } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 
-const prefix = Linking.createURL('/');
 
 
 export default function App() {
   const linking = {
-    prefixes: [prefix],
+    prefixes: [Linking.createURL('/'), 'https://youknow.app'],
   };
 
   return (
