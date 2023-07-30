@@ -33,7 +33,12 @@ function ResetPassword({ navigation }) {
             <ApplicationForm
                 onSubmit={(values) => {
                     dispatch({
-                        type: 'RESET_PASSWORD', payload: { reset: values }
+                        type: 'RESET_PASSWORD', payload: { reset: {
+                            verifyHash: navigation.getParam("verifyHash"),
+                            password: values.password,
+                            passwordConfirm: values.passwordConfirm
+                        }
+                     }
                     })
                 }}
                 validationSchema={validationSchema}

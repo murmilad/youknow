@@ -32,10 +32,10 @@ export function* callServerLastest() {
   yield takeLatest(actions.SIGN_UP, submitForm, '/api/auth/register', request => request.payload.signup, (action, response) => [
     ({action: actions.SET_SIGN_UP, payload: {signed_up: true}})
   ])
-  yield takeLatest(actions.FORGOT_PASSWORD, submitForm, '/api/auth/forgotpassword', request => request.payload.forgot, (action, response) => [
+  yield takeLatest(actions.FORGOT_PASSWORD, submitForm, '/api/auth/forgotpasswordapp', request => request.payload.forgot, (action, response) => [
     ({action: actions.SET_FORGOT_PASSWORD, payload: {forgot_password: true}})
   ])
-  yield takeLatest(actions.RESET_PASSWORD, submitForm, '/api/auth/resetpassword', request => request.payload.reset, (action, response) => [
+  yield takeLatest(actions.RESET_PASSWORD, submitForm, '/api/auth/resetpasswordapp', request => request.payload.reset, (action, response) => [
     ({action: actions.SET_RESET, payload: {reseted: true}})
   ])
   yield takeLatest(actions.LOG_IN, submitForm, '/api/auth/login', request => request.payload.login, (action, response) => [

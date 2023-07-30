@@ -7,13 +7,13 @@ import AbstractText from '../../components/widgets/AbstractText';
 
 const { t, i18n } = useTranslation();
 
-function Resetted(props) {
+function Forgotten(props) {
     const dispatch = useDispatch();
 
 
     return (
         <AuthScreen >
-            <AbstractText>{t('header.reseted')}</AbstractText>
+            <AbstractText>{t('header.email-sent')}</AbstractText>
         </AuthScreen>
     )
 }
@@ -22,5 +22,5 @@ const mapStateToProps = state => ({
     status: state.status,
 })
 
-export default ResettedScreen = connect(mapStateToProps)(Resetted)
+export default ForgottenScreen = connect(mapStateToProps)(Forgotten)
 

@@ -8,6 +8,9 @@ import SignUpScreen from '../screens/auth/SignUpScreen'
 import SignedUpScreen from '../screens/auth/SignedUpScreen'
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen'
 import ResettedScreen from '../screens/auth/ResettedScreen'
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
+import ForgottenScreen from '../screens/auth/ForgottenScreen'
+import VerifyScreen from '../screens/auth/VerifyScreen'
 
 const Navigator = createStackNavigator()
 
@@ -23,6 +26,18 @@ const Auth = ({ navigation, user, status }) => {
                 navigation.navigate('ResettedScreen')
             }
         }, [status.reseted]);
+        useEffect(() => {
+            if (status.forgot_password) {
+                navigation.navigate('ForgottenScreen')
+            }
+        }, [status.forgot_password]);
+        useEffect(() => {
+            if (status.verified) {
+                navigation.navigate('LoginScreen')
+            }
+        }, [status.verified]);
+
+        
 
         
 
@@ -52,14 +67,32 @@ const Auth = ({ navigation, user, status }) => {
                 <Navigator.Screen options={{
                     headerShown: false
                 }}
-                    name="ResetPassword"
-                    component={ResetPassword}
+                    name="ResetPasswordScreen"
+                    component={ResetPasswordScreen}
                 />
                 <Navigator.Screen options={{
                     headerShown: false
                 }}
                     name="ResettedScreen"
                     component={ResettedScreen}
+                />
+                <Navigator.Screen options={{
+                    headerShown: false
+                }}
+                    name="ForgotPasswordScreen"
+                    component={ForgotPasswordScreen}
+                />
+                <Navigator.Screen options={{
+                    headerShown: false
+                }}
+                    name="ForgottenScreen"
+                    component={ForgottenScreen}
+                />
+                <Navigator.Screen options={{
+                    headerShown: false
+                }}
+                    name="VerifyScreen"
+                    component={VerifyScreen}
                 />
                 
             </Navigator.Navigator>

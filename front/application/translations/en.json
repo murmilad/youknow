@@ -35,8 +35,9 @@
         "sign-up":"Sign Up",
         "login" : "Login",
         "verify" : "Verify",
-        "reset-password": "Reset password"
-     },
+        "reset-password": "Reset password",
+        "retrieve-password": "Retrieve password"
+    },
     "message":{
         "loading": "Loading...",
         "wait": "Wait...",
