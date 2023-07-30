@@ -11,6 +11,7 @@ import AuthScreen from '../components/AuthScreen';
 import GoogleButton from '../components/widgets/GoogleButton';
 import GithubButton from '../components/widgets/GithubButton';
 import FormTextInputPassword from '../components/form/widgets/input/FormTextInputPassword';
+import AbstractButton from '../components/widgets/AbstractButton';
 
 const validationSchema = yup.object().shape({
     email: yup.string().email().required(),
@@ -18,7 +19,7 @@ const validationSchema = yup.object().shape({
 })
 const { t, i18n } = useTranslation();
 
-function Settings(props) {
+function Login({ navigation }) {
     const dispatch = useDispatch();
 
 
@@ -41,6 +42,9 @@ function Settings(props) {
                 <GithubButton handleSubmit={()=>{
                     dispatch({type: 'AUTH_GITHUB'})
                 }} />
+                <AbstractButton onPress={() =>
+                    navigation.navigate('SignUpScreen') 
+                }/>
             </ApplicationForm>
         </AuthScreen>
     )
@@ -50,5 +54,5 @@ const mapStateToProps = state => ({
     status: state.status,
 })
 
-export default SettingsScreen = connect(mapStateToProps)(Settings)
+export default LoginScreen = connect(mapStateToProps)(Login)
 

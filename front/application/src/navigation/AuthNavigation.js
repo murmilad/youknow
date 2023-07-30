@@ -4,16 +4,23 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import tw from './tailwind'
 import LoginScreen from '../screens/LoginScreen'
+import SignUpScreen from '../screens/SignUpScreen'
+import SignedUpScreen from '../screens/SignedUpScreen'
 
-const Navigator  = createStackNavigator()
+const Navigator = createStackNavigator()
 
 
-const Auth = ({ user, status }) => {
+const Auth = ({ navigation, user, status }) => {
+        useEffect(() => {
+            if (status.signed_up) {
+                navigation.navigate('SignedUpScreen')
+            }
+        }, [status.signed_up]);
 
-    return (
-        <Navigator.Navigator screenOptions={{
-            headerTintColor: tw.color('bg-slate-100'),
-        }} >
+        return (
+            <Navigator.Navigator screenOptions={{
+                headerTintColor: tw.color('bg-slate-100'),
+            }} >
                 <Navigator.Screen options={{
                     headerShown: false
                 }}
@@ -26,13 +33,19 @@ const Auth = ({ user, status }) => {
                     name="SignUpScreen"
                     component={SignUpScreen}
                 />
-        </Navigator.Navigator>
-    )
-}
+                <Navigator.Screen options={{
+                    headerShown: false
+                }}
+                    name="SignedUpScreen"
+                    component={SignedUpScreen}
+                />
+            </Navigator.Navigator>
+        )
+    }
 
 const mapStateToProps = state => ({
-    status: state.status,
-    user: state.user,
-})
+        status: state.status,
+        user: state.user,
+    })
 
-export default AuthNavigation = connect(mapStateToProps)(Auth)
+    export default AuthNavigation = connect(mapStateToProps)(Auth)

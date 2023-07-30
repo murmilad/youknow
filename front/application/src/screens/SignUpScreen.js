@@ -25,7 +25,7 @@ const validationSchema = yup.object().shape({
 
 const { t, i18n } = useTranslation();
 
-function Settings(props) {
+function SignUp(props) {
     const dispatch = useDispatch();
 
 
@@ -51,5 +51,5 @@ const mapStateToProps = state => ({
     status: state.status,
 })
 
-export default SettingsScreen = connect(mapStateToProps)(Settings)
+export default SignUpScreen = connect(mapStateToProps)(SignUp)
 

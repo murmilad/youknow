@@ -1,4 +1,4 @@
-import { Pressable } from "react-native";
+import { Text, Pressable } from "react-native";
 
 export default AbstractButton = ({ children, header, onPress }) => {
   return (
