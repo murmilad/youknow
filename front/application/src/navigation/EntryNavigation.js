@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import tw from './tailwind'
 import WelcomeNavigation from './WelcomeNavigation'
-import LoginNavigation from './LoginNavigation'
+import AuthNavigation from './AuthNavigation'
 
 const Navigator  = createStackNavigator()
 
@@ -13,13 +13,13 @@ const Entry = ({ user, status }) => {
 
     return (
         <Navigator.Navigator screenOptions={{
-            headerTintColor: tw.color('stone-100'),
+            headerTintColor: tw.color('bg-slate-100'),
         }} >
             {(status.connected ? (
                 user.token ? (
                     <WelcomeNavigation />
                 ) : (
-                    <LoginNavigation />
+                    <AuthNavigation />
                 )
             ) : (
                 <Navigator.Screen options={{

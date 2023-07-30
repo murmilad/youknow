@@ -18,13 +18,9 @@
       "user-email":"E-Mail",
       "user-password":"Password",
       "user-retype-password":"Retype password",
-      "user-sign-up":"Sign Up",
       "login-email":"E-Mail",
       "login-password":"Password",
-      "login-login" : "Login",
-      "login-sign-up" : "Sign up",
       "verify-verify" : "Verify",
-      "user-back-to-login": "Back to login",
       "forgot-email":"E-Mail",
       "forgot-retrieve-password": "Retrieve password",
       "reset-reset-password": "Reset password",
@@ -42,7 +38,9 @@
         "password-short": "Password is too short - should be 8 chars minimum"
     },
     "action": {
-        "connect": "Connect"
+        "connect": "Connect",
+        "sign-up":"Sign Up",
+        "login" : "Login"
     },
     "message":{
         "loading": "Loading...",

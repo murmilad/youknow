@@ -3,13 +3,12 @@ import { connect, useDispatch } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import tw from './tailwind'
-import WelcomeNavigation from './WelcomeNavigation'
-import LoginNavigation from './LoginNavigation'
+import LoginScreen from '../screens/LoginScreen'
 
 const Navigator  = createStackNavigator()
 
 
-const Entry = ({ user, status }) => {
+const Auth = ({ user, status }) => {
 
     return (
         <Navigator.Navigator screenOptions={{
@@ -18,8 +17,14 @@ const Entry = ({ user, status }) => {
                 <Navigator.Screen options={{
                     headerShown: false
                 }}
-                    name="LoginAuthScreen"
-                    component={LoginAuthScreen}
+                    name="LoginScreen"
+                    component={LoginScreen}
+                />
+                <Navigator.Screen options={{
+                    headerShown: false
+                }}
+                    name="SignUpScreen"
+                    component={SignUpScreen}
                 />
         </Navigator.Navigator>
     )
@@ -30,4 +35,4 @@ const mapStateToProps = state => ({
     user: state.user,
 })
 
-export default NavigationEntry = connect(mapStateToProps)(Entry)
+export default AuthNavigation = connect(mapStateToProps)(Auth)
