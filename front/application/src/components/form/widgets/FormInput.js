@@ -5,7 +5,6 @@ import { useFormikContext } from 'formik'
 
 
 export default FormTextInput = ({name, children }) => {
-  const {handleSubmit} = useFormikContext();
 
   return (
     <Field name={name} > 

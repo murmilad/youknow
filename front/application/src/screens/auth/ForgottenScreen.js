@@ -7,7 +7,7 @@ import AbstractText from '../../components/widgets/AbstractText';
 
 const { t, i18n } = useTranslation();
 
-function Forgotten(props) {
+function Forgotten({status}) {
     const dispatch = useDispatch();
 
 

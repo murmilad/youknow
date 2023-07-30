@@ -26,7 +26,7 @@ const validationSchema = yup.object().shape({
   })
 
 
-function SignUp(props) {
+function SignUp({status}) {
     const dispatch = useDispatch();
 
 

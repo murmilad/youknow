@@ -24,7 +24,7 @@ const validationSchema = yup.object().shape({
         )
 })
 
-function ResetPassword({ navigation }) {
+function ResetPassword({ status, navigation }) {
     const dispatch = useDispatch();
 
 

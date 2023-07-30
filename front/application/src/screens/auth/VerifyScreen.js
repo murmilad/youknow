@@ -8,7 +8,7 @@ import AbstractButton from '../../components/widgets/AbstractButton';
 
 const { t, i18n } = useTranslation();
 
-function VerifyScreen(props) {
+function VerifyScreen({status}) {
     const dispatch = useDispatch();
 
     const handleVerify = () => {

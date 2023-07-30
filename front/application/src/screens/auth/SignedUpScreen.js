@@ -7,7 +7,7 @@ import AbstractText from '../../components/widgets/AbstractText';
 
 const { t, i18n } = useTranslation();
 
-function SignedUp(props) {
+function SignedUp({status}) {
     const dispatch = useDispatch();
 
 

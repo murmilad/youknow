@@ -19,7 +19,7 @@ const validationSchema = yup.object().shape({
     password: yup.string().required(),
 })
 
-function Login({ navigation }) {
+function Login({ status, navigation }) {
     const dispatch = useDispatch();
 
 

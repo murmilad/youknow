@@ -13,7 +13,7 @@ const validationSchema = yup.object().shape({
     email: yup.string().email().required(),
 })
 
-function ForgotPassword({ navigation }) {
+function ForgotPassword({ status, navigation }) {
     const dispatch = useDispatch();
 
 
