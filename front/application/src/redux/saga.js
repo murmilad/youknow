@@ -16,7 +16,7 @@ export function* callServerLastest() {
     ({action: actions.PUT_TOKEN_HEADER, payload: {token: response.accessToken}}),
   ])
 
-  yield takeLatest(actions.VERIFY, submitGet, action => '/api/auth/verifyemail/' + action.verifyHash, (action, response) => [
+  yield takeLatest(actions.VERIFY, submitGet, action => '/api/auth/verifyemail/' + action.payload.verifyHash, (action, response) => [
     ({action: actions.SET_VERIFIED, payload: {verified: true}})
   ])
   yield takeLatest(actions.CHECK_CONNECTION, checkConnection, action => '/api/ping/', (action, response) => [
@@ -29,16 +29,16 @@ export function* callServerLastest() {
   yield takeLatest(actions.GET_USER, getUser, action => '/api/users/me', (action, response) => [
     ({action: actions.SET_USER, payload: {user: response.data.data.user}})
   ])
-  yield takeLatest(actions.SIGN_UP, submitForm, '/api/auth/register', request => request.signup, (action, response) => [
+  yield takeLatest(actions.SIGN_UP, submitForm, '/api/auth/register', request => request.payload.signup, (action, response) => [
     ({action: actions.SET_SIGN_UP, payload: {signed_up: true}})
   ])
-  yield takeLatest(actions.FORGOT_PASSWORD, submitForm, '/api/auth/forgotpassword', request => request.forgot, (action, response) => [
+  yield takeLatest(actions.FORGOT_PASSWORD, submitForm, '/api/auth/forgotpassword', request => request.payload.forgot, (action, response) => [
     ({action: actions.SET_FORGOT_PASSWORD, payload: {forgot_password: true}})
   ])
-  yield takeLatest(actions.RESET_PASSWORD, submitForm, '/api/auth/resetpassword', request => request.reset, (action, response) => [
+  yield takeLatest(actions.RESET_PASSWORD, submitForm, '/api/auth/resetpassword', request => request.payload.reset, (action, response) => [
     ({action: actions.SET_RESET, payload: {reseted: true}})
   ])
-  yield takeLatest(actions.LOG_IN, submitForm, '/api/auth/login', request => request.login, (action, response) => [
+  yield takeLatest(actions.LOG_IN, submitForm, '/api/auth/login', request => request.payload.login, (action, response) => [
     ({action: actions.PUT_TOKEN_HEADER, payload: {token: response.data.token}})
   ])
   yield takeLatest(actions.PUT_TOKEN_HEADER, putTokenToHeader, (action, response) => [

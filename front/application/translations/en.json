@@ -14,17 +14,10 @@
         "reseted": "Your password has been successfuly reseted."
     },
     "field": {
-      "user-name":"Name",
-      "user-email":"E-Mail",
-      "user-password":"Password",
-      "user-retype-password":"Retype password",
-      "login-email":"E-Mail",
-      "login-password":"Password",
-      "verify-verify" : "Verify",
-      "forgot-email":"E-Mail",
-      "forgot-retrieve-password": "Retrieve password",
-      "reset-reset-password": "Reset password",
-      "login-forgot": "Forgot password",
+      "name":"Name",
+      "email":"E-Mail",
+      "password":"Password",
+      "retype-password":"Retype password",
       "server": "YouknoW server url", 
       "port": "YouknoW server port" 
     },
@@ -40,8 +33,10 @@
     "action": {
         "connect": "Connect",
         "sign-up":"Sign Up",
-        "login" : "Login"
-    },
+        "login" : "Login",
+        "verify" : "Verify",
+        "reset-password": "Reset password"
+     },
     "message":{
         "loading": "Loading...",
         "wait": "Wait...",

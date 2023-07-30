@@ -2,8 +2,8 @@ import { connect, useDispatch } from 'react-redux'
 import { View } from 'react-native'
 
 import { useTranslation } from 'react-i18next'
-import AuthScreen from '../components/AuthScreen';
-import AbstractText from '../components/widgets/AbstractText';
+import AuthScreen from '../../components/AuthScreen';
+import AbstractText from '../../components/widgets/AbstractText';
 
 const { t, i18n } = useTranslation();
 

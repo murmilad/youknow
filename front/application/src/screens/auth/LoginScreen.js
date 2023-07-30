@@ -5,19 +5,19 @@ import { View, TextInput, Pressable, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup';
 
-import FormTextInput from '../components/form/widgets/input/FormTextInput';
-import FormSubmitButton from '../components/form/widgets/FormSubmitButton';
-import AuthScreen from '../components/AuthScreen';
-import GoogleButton from '../components/widgets/GoogleButton';
-import GithubButton from '../components/widgets/GithubButton';
-import FormTextInputPassword from '../components/form/widgets/input/FormTextInputPassword';
-import AbstractButton from '../components/widgets/AbstractButton';
+import FormTextInput from '../../components/form/widgets/input/FormTextInput';
+import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
+import AuthScreen from '../../components/AuthScreen';
+import GoogleButton from '../../components/widgets/GoogleButton';
+import GithubButton from '../../components/widgets/GithubButton';
+import FormTextInputPassword from '../../components/form/widgets/input/FormTextInputPassword';
+import AbstractButton from '../../components/widgets/AbstractButton';
 
+const { t, i18n } = useTranslation();
 const validationSchema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().required(),
 })
-const { t, i18n } = useTranslation();
 
 function Login({ navigation }) {
     const dispatch = useDispatch();
@@ -33,8 +33,8 @@ function Login({ navigation }) {
                 }}
                 validationSchema={validationSchema}
             >
-                <FormTextInput name="email" header={t('field.login-email')} />
-                <FormTextInputPassword name="password" header={t('field.login-password')} />
+                <FormTextInput name="email" header={t('field.email')} />
+                <FormTextInputPassword name="password" header={t('field.password')} />
                 <FormSubmitButton header={t('action.login')} />
                 <GoogleButton handleSubmit={()=>{
                     dispatch({type: 'AUTH_GOOGLE'})

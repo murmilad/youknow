@@ -3,9 +3,11 @@ import { connect, useDispatch } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import tw from './tailwind'
-import LoginScreen from '../screens/LoginScreen'
-import SignUpScreen from '../screens/SignUpScreen'
-import SignedUpScreen from '../screens/SignedUpScreen'
+import LoginScreen from '../screens/auth/LoginScreen'
+import SignUpScreen from '../screens/auth/SignUpScreen'
+import SignedUpScreen from '../screens/auth/SignedUpScreen'
+import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen'
+import ResettedScreen from '../screens/auth/ResettedScreen'
 
 const Navigator = createStackNavigator()
 
@@ -16,6 +18,14 @@ const Auth = ({ navigation, user, status }) => {
                 navigation.navigate('SignedUpScreen')
             }
         }, [status.signed_up]);
+        useEffect(() => {
+            if (status.reseted) {
+                navigation.navigate('ResettedScreen')
+            }
+        }, [status.reseted]);
+
+        
+
 
         return (
             <Navigator.Navigator screenOptions={{
@@ -39,6 +49,19 @@ const Auth = ({ navigation, user, status }) => {
                     name="SignedUpScreen"
                     component={SignedUpScreen}
                 />
+                <Navigator.Screen options={{
+                    headerShown: false
+                }}
+                    name="ResetPassword"
+                    component={ResetPassword}
+                />
+                <Navigator.Screen options={{
+                    headerShown: false
+                }}
+                    name="ResettedScreen"
+                    component={ResettedScreen}
+                />
+                
             </Navigator.Navigator>
         )
     }
