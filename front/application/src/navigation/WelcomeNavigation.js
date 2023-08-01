@@ -6,7 +6,7 @@ import {ReactComponent as ChatDotsComposite}  from '../assets/chat_dots_composit
 import {ReactComponent as PersistCircle}  from '../assets/person-circle.svg';
 import UserScreen from '../screens/UserScreen';
 import FeedScreen from '../screens/FeedScreen';
-import tw from './tailwind'
+import tw from '../../tailwind'
 
 const Navigator = createStackNavigator()
 const Tab = createBottomTabNavigator();

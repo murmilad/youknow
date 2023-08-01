@@ -6,14 +6,14 @@ import { useTranslation } from 'react-i18next'
 import * as Yup from 'yup';
 
 import FormTextInput from '../components/form/widgets/input/FormTextInput';
-import FormButton from '../components/form/widgets/FormButton';
+import FormSubmitButton from '../components/form/widgets/FormSubmitButton';
 import Screen from '../components/Screen';
+const { t, i18n } = useTranslation();
 
 const validationSchema = Yup.object().shape({
-    server: Yup.string().required().server().label(t('field.server')),
+    server: Yup.string().required().label(t('field.server')),
     port: Yup.number().required().label(t('field.port'))
 })
-const { t, i18n } = useTranslation();
 
 function Settings({status}) {
     const dispatch = useDispatch();
@@ -33,7 +33,7 @@ function Settings({status}) {
             >
                 <FormTextInput name="server" header={t('field.server')}/>
                 <FormTextInput name="port" header={t('field.port')}/>
-                <FormButton  header={t('action.connect')} />
+                <FormSubmitButton  header={t('action.connect')} />
 
             </ApplicationForm>
         </Screen>

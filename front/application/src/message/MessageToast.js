@@ -2,6 +2,7 @@ import React, { useEffect, useState, useLayoutEffect } from 'react'
 import Toast, { BaseToast, ErrorToast, InfoToast } from 'react-native-toast-message';
 import {connect, useDispatch} from 'react-redux'
 import '../redux/actions';
+import tw from '../../tailwind'
 
 
 const toastConfig = {

@@ -1,4 +1,5 @@
 import { Text, Pressable } from "react-native";
+import tw from '../../../tailwind'
 
 export default AbstractButton = ({ children, header, onPress }) => {
   return (

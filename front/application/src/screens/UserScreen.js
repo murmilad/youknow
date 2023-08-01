@@ -6,15 +6,17 @@ import { useTranslation } from 'react-i18next'
 import * as Yup from 'yup';
 
 import FormTextInput from '../components/form/widgets/input/FormTextInput';
-import FormButton from '../components/form/widgets/FormButton';
+import FormSubmitButton from '../components/form/widgets/FormSubmitButton';
 import Screen from '../components/Screen';
+import tw from '../../tailwind'
+
 import AbstractText from '../components/widgets/AbstractText';
+const { t, i18n } = useTranslation();
 
 const validationSchema = Yup.object().shape({
-    server: Yup.string().required().server().label(t('field.server')),
+    server: Yup.string().required().label(t('field.server')),
     port: Yup.number().required().label(t('field.port'))
 })
-const { t, i18n } = useTranslation();
 
 function Settings({user, status}) {
     const dispatch = useDispatch();
@@ -35,7 +37,7 @@ function Settings({user, status}) {
                 <View style={tw`mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}>{user.name}</View>
                 <FormTextInput name="server" header={t('field.server')} />
                 <FormTextInput name="port" header={t('field.port')} />
-                <FormButton  header={t('action.connect')} />
+                <FormSubmitButton  header={t('action.connect')} />
 
             </ApplicationForm>
         </Screen>

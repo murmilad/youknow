@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, View } from 'react-native';
+import tw from '../../tailwind'
 
 import Screen from './Screen';
 
@@ -8,7 +9,7 @@ function AuthScreen({ children, is_loading }) {
     <Screen >
       <View>
         <Image
-          source={require("../assets/logo-big.png")}
+          source={require("../assets/logo_big.png")}
         />
         {is_loading &&
           <View style={tw`fixed inset-x-0 top-0 z-50`}>

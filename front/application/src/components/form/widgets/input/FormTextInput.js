@@ -3,6 +3,7 @@ import { View, TextInput, StyleSheet } from "react-native";
 import FormError from "../FormError";
 import { useFormikContext } from 'formik'
 import FormInput from "../FormInput";
+import tw from '../../../../../tailwind'
 
 export default FormTextInput = ({ name, header, secureTextEntry }) => {
   const {touched, errors, getFieldProps} = useFormikContext();

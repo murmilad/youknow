@@ -1,4 +1,5 @@
 import { Text } from 'react-native';
+import tw from '../../../tailwind'
 
 export default AbstractText = ({ children }) => {
   return (

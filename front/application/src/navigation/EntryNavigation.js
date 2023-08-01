@@ -2,7 +2,7 @@ import React, { useEffect, useState, useLayoutEffect } from 'react'
 import { connect, useDispatch } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import tw from './tailwind'
+import tw from '../../tailwind'
 import WelcomeNavigation from './WelcomeNavigation'
 import AuthNavigation from './AuthNavigation'
 

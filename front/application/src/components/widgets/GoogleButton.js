@@ -1,6 +1,8 @@
 import {ReactComponent as GoogleIcon}  from '../../assets/google.svg';
 import AbstractButton from "./AbstractButton";
-export default FormButton = ({ handleSubmit }) => {
+import tw from '../../../tailwind'
+
+export default GoogleButton = ({ handleSubmit }) => {
   return (
     <AbstractButton onPress={handleSubmit}>
         <GoogleIcon style={tw`text-white`}/>

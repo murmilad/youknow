@@ -8,7 +8,7 @@ import * as Linking from 'expo-linking';
 import EntryNavigation from './src/navigation/EntryNavigation'
 import MessageToast from './src/message/MessageToast'
 import './i18n';
-import { store, persistor } from './redux/store'
+import { store, persistor } from './src/redux/store'
 
 
 const { t, i18n } = useTranslation();
