@@ -8,13 +8,13 @@ import UserScreen from '../screens/UserScreen';
 import FeedScreen from '../screens/FeedScreen';
 import tw from '../../tailwind'
 
-const Navigator = createStackNavigator()
-const Tab = createBottomTabNavigator();
 
 
 
 const Welcome = ({ navigation, user, status }) => {
-        return (
+  const Navigator = createStackNavigator()
+  const Tab = createBottomTabNavigator();
+          return (
             <Tab.Navigator>
             <Tab.Screen
               name="Feed"

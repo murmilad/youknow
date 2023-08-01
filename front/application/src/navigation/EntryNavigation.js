@@ -6,10 +6,10 @@ import tw from '../../tailwind'
 import WelcomeNavigation from './WelcomeNavigation'
 import AuthNavigation from './AuthNavigation'
 
-const Navigator  = createStackNavigator()
 
 
 const Entry = ({ user, status }) => {
+    const Navigator  = createStackNavigator()
 
     return (
         <Navigator.Navigator screenOptions={{

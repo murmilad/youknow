@@ -13,16 +13,16 @@ import GithubButton from '../../components/widgets/GithubButton';
 import FormTextInputPassword from '../../components/form/widgets/input/FormTextInputPassword';
 import AbstractButton from '../../components/widgets/AbstractButton';
 
-const { t, i18n } = useTranslation();
-const validationSchema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-})
-
 function Login({ status, navigation }) {
     const dispatch = useDispatch();
 
-
+    const { t, i18n } = useTranslation();
+    const validationSchema = yup.object().shape({
+        email: yup.string().email().required(),
+        password: yup.string().required(),
+    })
+    
+    
     return (
         <AuthScreen >
             <ApplicationForm

@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import AuthScreen from '../components/AuthScreen';
 import AbstractText from '../components/widgets/AbstractText';
 import Screen from '../components/Screen';
-const { t, i18n } = useTranslation();
 
 function Feed({status}) {
+    const { t, i18n } = useTranslation();
     const dispatch = useDispatch();
 
 

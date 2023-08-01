@@ -8,14 +8,14 @@ import FormTextInput from '../../components/form/widgets/input/FormTextInput';
 import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
 import AuthScreen from '../../components/AuthScreen';
 
-const { t, i18n } = useTranslation();
-const validationSchema = yup.object().shape({
-    email: yup.string().email().required(),
-})
-
 function ForgotPassword({ status, navigation }) {
     const dispatch = useDispatch();
-
+    const { t, i18n } = useTranslation();
+    const validationSchema = yup.object().shape({
+        email: yup.string().email().required(),
+    })
+    
+    
 
     return (
         <AuthScreen >

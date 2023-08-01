@@ -11,11 +11,11 @@ import './i18n';
 import { store, persistor } from './src/redux/store'
 
 
-const { t, i18n } = useTranslation();
 const prefix = Linking.createURL('/');
 
 
 export default function App() {
+  const { t, i18n } = useTranslation();
   const linking = {
     prefixes: [Linking.createURL('/'), 'https://youknow.app'],
     config: {

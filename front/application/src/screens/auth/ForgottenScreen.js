@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next'
 import AuthScreen from '../../components/AuthScreen';
 import AbstractText from '../../components/widgets/AbstractText';
 
-const { t, i18n } = useTranslation();
 
 function Forgotten({status}) {
     const dispatch = useDispatch();
+    const { t, i18n } = useTranslation();
 
 
     return (

@@ -11,16 +11,16 @@ import Screen from '../components/Screen';
 import tw from '../../tailwind'
 
 import AbstractText from '../components/widgets/AbstractText';
-const { t, i18n } = useTranslation();
-
-const validationSchema = Yup.object().shape({
-    server: Yup.string().required().label(t('field.server')),
-    port: Yup.number().required().label(t('field.port'))
-})
 
 function Settings({user, status}) {
     const dispatch = useDispatch();
+    const { t, i18n } = useTranslation();
 
+    const validationSchema = Yup.object().shape({
+        server: Yup.string().required().label(t('field.server')),
+        port: Yup.number().required().label(t('field.port'))
+    })
+    
 
     return (
         <Screen >

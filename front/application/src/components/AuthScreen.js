@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
+import Constants from 'expo-constants';
 import tw from '../../tailwind'
 
 import Screen from './Screen';

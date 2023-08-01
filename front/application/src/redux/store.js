@@ -18,7 +18,7 @@ const persistedReducer  = persistReducer(persistConfig, reducer)
 const sagaMiddleware = createSagaMiddleware()
 
 const store = configureStore({
-    persistedReducer,
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });
 

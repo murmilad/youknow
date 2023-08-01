@@ -6,10 +6,11 @@ import AuthScreen from '../../components/AuthScreen';
 import AbstractText from '../../components/widgets/AbstractText';
 import AbstractButton from '../../components/widgets/AbstractButton';
 
-const { t, i18n } = useTranslation();
-
-function VerifyScreen({status}) {
+function Verify({status}) {
     const dispatch = useDispatch();
+
+    const { t, i18n } = useTranslation();
+
 
     const handleVerify = () => {
         dispatch({

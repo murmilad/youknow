@@ -12,11 +12,12 @@ import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 import ForgottenScreen from '../screens/auth/ForgottenScreen'
 import VerifyScreen from '../screens/auth/VerifyScreen'
 
-const Navigator = createStackNavigator()
 
 
 const Auth = ({ navigation, user, status }) => {
-        useEffect(() => {
+    const Navigator = createStackNavigator()
+
+    useEffect(() => {
             if (status.signed_up) {
                 navigation.navigate('SignedUpScreen')
             }
