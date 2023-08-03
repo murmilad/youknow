@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import FormTextInput from '../../components/form/widgets/input/FormTextInput';
 import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
 import AuthScreen from '../../components/AuthScreen';
+import ApplicationForm from '../../components/form/ApplicationForm';
 
 function ForgotPassword({ status, navigation }) {
     const dispatch = useDispatch();

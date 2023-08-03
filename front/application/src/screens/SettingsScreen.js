@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import FormTextInput from '../components/form/widgets/input/FormTextInput';
 import FormSubmitButton from '../components/form/widgets/FormSubmitButton';
 import Screen from '../components/Screen';
+import ApplicationForm from '../components/form/ApplicationForm';
 
 function Settings({status}) {
     const { t, i18n } = useTranslation();

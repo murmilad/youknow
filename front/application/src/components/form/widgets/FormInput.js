@@ -4,12 +4,18 @@ import FormError from "./FormError";
 import { useFormikContext } from 'formik'
 
 
-export default FormTextInput = ({name, children }) => {
+export default FormTextInput = ({ name, children }) => {
 
   return (
-    <Field name={name} > 
-            {children}
-          <FormError error={errors[name]} visible={touched[name]} />
-     </Field>
+    <Field name={name} >
+      {({
+        field,
+        meta,
+      }) => (<>
+        {children}
+        <FormError error={meta.error} visible={meta.touched} />
+        </>
+      )}
+    </Field>
   )
 }

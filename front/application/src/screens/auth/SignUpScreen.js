@@ -9,6 +9,7 @@ import FormTextInput from '../../components/form/widgets/input/FormTextInput';
 import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
 import AuthScreen from '../../components/AuthScreen';
 import FormTextInputPassword from '../../components/form/widgets/input/FormTextInputPassword';
+import ApplicationForm from '../../components/form/ApplicationForm';
 
 
 function SignUp({status}) {

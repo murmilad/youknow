@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import tw from '../../tailwind'
 import WelcomeNavigation from './WelcomeNavigation'
 import AuthNavigation from './AuthNavigation'
-
+import SettingsScreen from '../screens/SettingsScreen'
 
 
 const Entry = ({ user, status }) => {
@@ -25,8 +25,8 @@ const Entry = ({ user, status }) => {
                 <Navigator.Screen options={{
                     headerShown: false
                 }}
-                    name="ScreenSettings"
-                    component={ScreenSettings}
+                    name="SettingsScreen"
+                    component={SettingsScreen}
                 />
             ))}
         </Navigator.Navigator>

@@ -4,6 +4,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { useTranslation } from 'react-i18next'
 import { NavigationContainer } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
+import { Text } from 'react-native';
 
 import EntryNavigation from './src/navigation/EntryNavigation'
 import MessageToast from './src/message/MessageToast'

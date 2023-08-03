@@ -5,6 +5,7 @@ export const SET_FORGOT_PASSWORD = 'SET_FORGOT_PASSWORD'
 export const SET_RESET = 'SET_RESET'
 export const SET_LOADING = 'SET_LOADING'
 export const SET_TOKEN = 'SET_TOKEN'
+export const PUT_TOKEN_HEADER = 'PUT_TOKEN_HEADER'
 
 export const AUTH_GOOGLE = 'AUTH_GOOGLE'
 export const AUTH_GITHUB = 'AUTH_GITHUB'

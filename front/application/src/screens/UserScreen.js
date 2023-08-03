@@ -9,6 +9,7 @@ import FormTextInput from '../components/form/widgets/input/FormTextInput';
 import FormSubmitButton from '../components/form/widgets/FormSubmitButton';
 import Screen from '../components/Screen';
 import tw from '../../tailwind'
+import ApplicationForm from '../components/form/ApplicationForm';
 
 import AbstractText from '../components/widgets/AbstractText';
 

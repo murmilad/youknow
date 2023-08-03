@@ -10,6 +10,7 @@ import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
 import AuthScreen from '../../components/AuthScreen';
 import FormTextInputPassword from '../../components/form/widgets/input/FormTextInputPassword';
 import AbstractButton from '../../components/widgets/AbstractButton';
+import ApplicationForm from '../../components/form/ApplicationForm';
 
 function ResetPassword({ status, navigation }) {
     const dispatch = useDispatch();

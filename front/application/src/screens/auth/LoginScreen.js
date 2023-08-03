@@ -12,6 +12,7 @@ import GoogleButton from '../../components/widgets/GoogleButton';
 import GithubButton from '../../components/widgets/GithubButton';
 import FormTextInputPassword from '../../components/form/widgets/input/FormTextInputPassword';
 import AbstractButton from '../../components/widgets/AbstractButton';
+import ApplicationForm from '../../components/form/ApplicationForm';
 
 function Login({ status, navigation }) {
     const dispatch = useDispatch();
