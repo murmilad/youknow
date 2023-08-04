@@ -9,7 +9,7 @@ module.exports = {
       },
       animation: {
         progress: 'progress-indeterminate 2s linear infinite'
-      }
+      },
     },
   },
 }

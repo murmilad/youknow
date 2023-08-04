@@ -11,8 +11,8 @@ export default FormTextInput = ({ name, header, secureTextEntry }) => {
   return (
     <FormInput name={name} > 
           <TextInput secureTextEntry={secureTextEntry} style={touched[name] && errors[name]
-            ? tw`bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500`
-            : tw`block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+            ? tw`ml-5 mr-5 mt-2 mb-2 bg-red-50 border border-red-500 p-2 text-red-900 placeholder-red-700 text-lg rounded-lg block p-2.5`
+            : tw`ml-5 mr-5 mt-2 mb-2 block p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-lg  `}
                 placeholder={header}
                 placeholderTextColor={tw.color('text-gray-300')}
                 {...getFieldProps(name)} />

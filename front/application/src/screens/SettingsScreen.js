@@ -9,7 +9,7 @@ import FormTextInput from '../components/form/widgets/input/FormTextInput';
 import FormSubmitButton from '../components/form/widgets/FormSubmitButton';
 import Screen from '../components/Screen';
 import ApplicationForm from '../components/form/ApplicationForm';
-
+import AuthScreen from '../components/AuthScreen';
 function Settings({status}) {
     const { t, i18n } = useTranslation();
 
@@ -22,7 +22,7 @@ function Settings({status}) {
 
 
     return (
-        <Screen >
+        <AuthScreen >
             <ApplicationForm
                 initialValues={{ server: status.server ? status.server : "https://youknow.app", port: status.port ? status.port : "443" }}
                 onSubmit={(values) => {
@@ -38,7 +38,7 @@ function Settings({status}) {
                 <FormSubmitButton  header={t('action.connect')} />
 
             </ApplicationForm>
-        </Screen>
+        </AuthScreen>
     )
 }
 
