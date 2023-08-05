@@ -292,7 +292,6 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 	}
 
 	var users []models.User
-	ac.DB.Order("email").Find(&users)
 	ac.DB.Find(&users, "email = ?  AND provider = 'google'", googleUser.Email)
 
 	var userID uuid.UUID
@@ -371,7 +370,6 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 	}
 
 	var users []models.User
-	ac.DB.Order("email").Find(&users)
 	ac.DB.Find(&users, "email = ? AND provider = 'github'", githubUser.Email)
 
 	var userID uuid.UUID

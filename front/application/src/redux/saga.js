@@ -29,10 +29,10 @@ export function* callServerLastest() {
   yield takeLatest(actions.VERIFY, submitGet, action => '/api/auth/verifyemail/' + action.payload.verifyHash, (action, response) => [
     ({action: actions.SET_VERIFIED, payload: {verified: true}})
   ])
-  yield takeLatest(actions.CHECK_CONNECTION, checkConnection, action => '/api/ping/', (action, response) => [
+  yield takeLatest(actions.CHECK_CONNECTION, checkConnection, action => '/api/healthchecker', (action, response) => [
     ({action: actions.GET_USER})
   ])
-  yield takeLatest(actions.CONNECT_AND_SET_PARAMS, checkConnection, action => '/api/ping/', (action, response) => [
+  yield takeLatest(actions.CONNECT_AND_SET_PARAMS, checkConnection, action => '/api/healthchecker', (action, response) => [
     ({action: actions.SET_CONNECTION_PARAMS, payload: {server: action.payload.server, port: action.payload.port}}),
     ({action: actions.GET_USER})
   ])
