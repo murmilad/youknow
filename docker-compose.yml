@@ -12,9 +12,10 @@ services:
       - ${POSTGRES_PORT}:5432
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
-      interval: 5s
-      timeout: 3s
+      interval: 30s
+      timeout: 10s
       retries: 3
+      start_period: 10s
     restart: unless-stopped
   # Backend application
   backend:
@@ -60,9 +61,10 @@ services:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'wget --no-verbose --tries=1 --spider localhost:${BACKEND_PORT}/api/healthchecker || exit 1'"]
-      interval: 5s
-      timeout: 3s
+      interval: 30s
+      timeout: 10s
       retries: 5
+      start_period: 10s
     restart: unless-stopped
   # Frontend web application
   frontend:
