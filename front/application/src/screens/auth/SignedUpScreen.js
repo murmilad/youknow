@@ -1,26 +1,21 @@
-import { connect, useDispatch } from 'react-redux'
-import { View } from 'react-native'
+import { connect, useDispatch } from 'react-redux';
 
-import { useTranslation } from 'react-i18next'
-import AuthScreen from '../../components/AuthScreen';
-import AbstractText from '../../components/widgets/AbstractText';
+import { useTranslation } from 'react-i18next';
 
-function SignedUp({status}) {
-    const dispatch = useDispatch();
+function SignedUp({ status }) {
+  const dispatch = useDispatch();
 
-    const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-
-    return (
-        <AuthScreen >
-            <AbstractText>{t('header.signed-up')}</AbstractText>
-        </AuthScreen>
-    )
+  return (
+    <AuthScreen>
+      <AbstractText>{t('header.signed-up')}</AbstractText>
+    </AuthScreen>
+  );
 }
 
-const mapStateToProps = state => ({
-    status: state.status,
-})
+const mapStateToProps = (state) => ({
+  status: state.status,
+});
 
-export default SignedUpScreen = connect(mapStateToProps)(SignedUp)
-
+export default SignedUpScreen = connect(mapStateToProps)(SignedUp);

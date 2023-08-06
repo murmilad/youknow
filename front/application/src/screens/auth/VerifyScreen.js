@@ -3,8 +3,8 @@ import { View } from 'react-native'
 
 import { useTranslation } from 'react-i18next'
 import AuthScreen from '../../components/AuthScreen';
-import AbstractText from '../../components/widgets/AbstractText';
-import AbstractButton from '../../components/widgets/AbstractButton';
+import AbstractText from '../../components/widget/AbstractText';
+import AbstractButton from '../../components/widget/AbstractButton';
 
 function Verify({status}) {
     const dispatch = useDispatch();

@@ -4,10 +4,10 @@ import { connect, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup';
 
-import FormTextInput from '../../components/form/widgets/input/FormTextInput';
-import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
 import AuthScreen from '../../components/AuthScreen';
-import ApplicationForm from '../../components/form/ApplicationForm';
+import FormFieldText from '../../components/formik/field/FormFieldText'
+import FormFieldSubmitButton from '../../components/formik/field/FormFieldSubmitButton';
+import FormBody from '../../components/formik/FormBody';
 
 function ForgotPassword({ status, navigation }) {
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ function ForgotPassword({ status, navigation }) {
 
     return (
         <AuthScreen >
-            <ApplicationForm
+            <FormBody
                 onSubmit={(values) => {
                     dispatch({
                         type: 'FORGOT_PASSWORD', payload: {login: values}
@@ -28,9 +28,9 @@ function ForgotPassword({ status, navigation }) {
                 }}
                 validationSchema={validationSchema}
             >
-                <FormTextInput name="email" header={t('field.email')} />
-                <FormSubmitButton header={t('action.retrieve-password')} />
-            </ApplicationForm>
+                <FormFieldText name="email" header={t('field.email')} />
+                <FormFieldSubmitButton header={t('action.retrieve-password')} />
+            </FormBody>
         </AuthScreen>
     )
 }

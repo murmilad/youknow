@@ -3,7 +3,7 @@ import { View } from 'react-native'
 
 import { useTranslation } from 'react-i18next'
 import AuthScreen from '../../components/AuthScreen';
-import AbstractText from '../../components/widgets/AbstractText';
+import AbstractText from '../../components/widget/AbstractText';
 
 
 function Forgotten({status}) {

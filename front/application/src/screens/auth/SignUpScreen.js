@@ -1,57 +1,59 @@
-import React, { useState, useLayoutEffect } from 'react'
-import { connect, useDispatch } from 'react-redux'
-import { View, TextInput, Pressable, Text } from 'react-native'
+import React from 'react';
+import { connect, useDispatch } from 'react-redux';
 
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import FormTextInput from '../../components/form/widgets/input/FormTextInput';
-import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
 import AuthScreen from '../../components/AuthScreen';
-import FormTextInputPassword from '../../components/form/widgets/input/FormTextInputPassword';
-import ApplicationForm from '../../components/form/ApplicationForm';
 
+import FormFieldText from '../../components/formik/field/FormFieldText';
+import FormFieldTextPassword from '../../components/formik/field/FormFieldTextPassword';
+import FormFieldSubmitButton from '../../components/formik/field/FormFieldSubmitButton';
+import FormBody from '../../components/formik/FormBody';
 
-function SignUp({status}) {
-    const dispatch = useDispatch();
+function SignUp({ status }) {
+  const dispatch = useDispatch();
 
-    const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-    const validationSchema = yup.object().shape({
-        name: yup.string().required(),
-        email: yup.string().email().required(),
-        password: yup.string().required().min(8, t('error.password-short'))
-        .matches(/[a-zA-Z]/, t('error.password-letters')),
-        passwordConfirm: yup.string().required().min(8, t('error.password-short'))
-        .matches(/[a-zA-Z]/, t('error.password-letters')).test(
-          'passwords-match', 
-          t('error.password-match'), 
-          function (value) { return this.parent.password === value}
-        )
-      })
-    
-    
-    return (
-        <AuthScreen >
-            <ApplicationForm
-                onSubmit={(values) => {
-                    dispatch({type: 'SIGN_UP', payload: {signup: values}})
-                }}
-                validationSchema={validationSchema}
-            >
-                <FormTextInput name="name" header={t('field.name')} />
-                <FormTextInput name="email" header={t('field.email')} />
-                <FormTextInputPassword name="password" header={t('field.password')} />
-                <FormTextInputPassword name="passwordConfirm" header={t('field.retype-password')} />
-                <FormSubmitButton header={t('action.sign-up')} />
-            </ApplicationForm>
-        </AuthScreen>
-    )
+  const validationSchema = yup.object().shape({
+    name: yup.string().required(),
+    email: yup.string().email().required(),
+    password: yup
+      .string()
+      .required()
+      .min(8, t('error.password-short'))
+      .matches(/[a-zA-Z]/, t('error.password-letters')),
+    passwordConfirm: yup
+      .string()
+      .required()
+      .min(8, t('error.password-short'))
+      .matches(/[a-zA-Z]/, t('error.password-letters'))
+      .test('passwords-match', t('error.password-match'), function (value) {
+        return this.parent.password === value;
+      }),
+  });
+
+  return (
+    <AuthScreen>
+      <FormBody
+        onSubmit={(values) => {
+          dispatch({ type: 'SIGN_UP', payload: { signup: values } });
+        }}
+        validationSchema={validationSchema}
+      >
+        <FormFieldText name="name" header={t('field.name')} />
+        <FormFieldText name="email" header={t('field.email')} />
+        <FormFieldTextPassword name="password" header={t('field.password')} />
+        <FormFieldTextPassword name="passwordConfirm" header={t('field.retype-password')} />
+        <FormFieldSubmitButton header={t('action.sign-up')} />
+      </FormBody>
+    </AuthScreen>
+  );
 }
 
-const mapStateToProps = state => ({
-    status: state.status,
-})
+const mapStateToProps = (state) => ({
+  status: state.status,
+});
 
-export default SignUpScreen = connect(mapStateToProps)(SignUp)
-
+export default SignUpScreen = connect(mapStateToProps)(SignUp);

@@ -5,12 +5,11 @@ import { View, TextInput, Pressable, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup';
 
-import FormTextInput from '../../components/form/widgets/input/FormTextInput';
-import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
 import AuthScreen from '../../components/AuthScreen';
-import FormTextInputPassword from '../../components/form/widgets/input/FormTextInputPassword';
-import AbstractButton from '../../components/widgets/AbstractButton';
-import ApplicationForm from '../../components/form/ApplicationForm';
+
+import FormFieldTextPassword from '../../components/formik/field/FormFieldTextPassword';
+import FormFieldSubmitButton from '../../components/formik/field/FormFieldSubmitButton';
+import FormBody from '../../components/formik/FormBody';
 
 function ResetPassword({ status, navigation }) {
     const dispatch = useDispatch();
@@ -31,7 +30,7 @@ function ResetPassword({ status, navigation }) {
     
     return (
         <AuthScreen >
-            <ApplicationForm
+            <FormBody
                 onSubmit={(values) => {
                     dispatch({
                         type: 'RESET_PASSWORD', payload: { reset: {
@@ -44,10 +43,10 @@ function ResetPassword({ status, navigation }) {
                 }}
                 validationSchema={validationSchema}
             >
-                <FormTextInputPassword name="password" header={t('field.password')} />
-                <FormTextInputPassword name="passwordConfirm" header={t('field.retype-password')} />
-                <FormSubmitButton header={t('action.reset-password')} />
-            </ApplicationForm>
+                <FormFieldTextPassword name="password" header={t('field.password')} />
+                <FormFieldTextPassword name="passwordConfirm" header={t('field.retype-password')} />
+                <FormFieldSubmitButton header={t('action.reset-password')} />
+            </FormBody>
         </AuthScreen>
     )
 }

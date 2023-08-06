@@ -5,11 +5,13 @@ import { View, TextInput, Pressable, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Yup from 'yup';
 
-import FormTextInput from '../components/form/widgets/input/FormTextInput';
-import FormSubmitButton from '../components/form/widgets/FormSubmitButton';
-import Screen from '../components/Screen';
-import ApplicationForm from '../components/form/ApplicationForm';
 import AuthScreen from '../components/AuthScreen';
+
+import FormFieldText from '../components/formik/field/FormFieldText'
+import FormFieldTextPassword from '../components/formik/field/FormFieldTextPassword';
+import FormFieldSubmitButton from '../components/formik/field/FormFieldSubmitButton';
+import FormBody from '../components/formik/FormBody';
+
 function Settings({status}) {
     const { t, i18n } = useTranslation();
 
@@ -23,7 +25,7 @@ function Settings({status}) {
 
     return (
         <AuthScreen >
-            <ApplicationForm
+            <FormBody
                 initialValues={{ server: status.server ? status.server : "https://youknow.app", port: status.port ? status.port : "443" }}
                 onSubmit={(values) => {
                     dispatch({type: 'CONNECT_AND_SET_PARAMS', payload: {
@@ -33,11 +35,11 @@ function Settings({status}) {
                 }}
                 validationSchema={validationSchema}
             >
-                <FormTextInput name="server" header={t('field.server')}/>
-                <FormTextInput name="port" header={t('field.port')}/>
-                <FormSubmitButton  header={t('action.connect')} />
+                <FormFieldText name="server" header={t('field.server')}/>
+                <FormFieldText name="port" header={t('field.port')}/>
+                <FormFieldSubmitButton  header={t('action.connect')} />
 
-            </ApplicationForm>
+            </FormBody>
         </AuthScreen>
     )
 }

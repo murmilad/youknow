@@ -5,14 +5,15 @@ import { View, TextInput, Pressable, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup';
 
-import FormTextInput from '../../components/form/widgets/input/FormTextInput';
-import FormSubmitButton from '../../components/form/widgets/FormSubmitButton';
 import AuthScreen from '../../components/AuthScreen';
-import GoogleButton from '../../components/widgets/GoogleButton';
-import GithubButton from '../../components/widgets/GithubButton';
-import FormTextInputPassword from '../../components/form/widgets/input/FormTextInputPassword';
-import AbstractButton from '../../components/widgets/AbstractButton';
-import ApplicationForm from '../../components/form/ApplicationForm';
+import GoogleButton from '../../components/widget/GoogleButton';
+import GithubButton from '../../components/widget/GithubButton';
+import AbstractButton from '../../components/widget/AbstractButton';
+
+import FormFieldText from '../../components/formik/field/FormFieldText'
+import FormFieldTextPassword from '../../components/formik/field/FormFieldTextPassword';
+import FormFieldSubmitButton from '../../components/formik/field/FormFieldSubmitButton';
+import FormBody from '../../components/formik/FormBody';
 
 function Login({ status, navigation }) {
     const dispatch = useDispatch();
@@ -26,7 +27,7 @@ function Login({ status, navigation }) {
     
     return (
         <AuthScreen >
-            <ApplicationForm
+            <FormBody
                 onSubmit={(values) => {
                     dispatch({
                         type: 'LOG_IN', payload: {login: values}
@@ -34,9 +35,9 @@ function Login({ status, navigation }) {
                 }}
                 validationSchema={validationSchema}
             >
-                <FormTextInput name="email" header={t('field.email')} />
-                <FormTextInputPassword name="password" header={t('field.password')} />
-                <FormSubmitButton header={t('action.login')} />
+                <FormFieldText name="email" header={t('field.email')} />
+                <FormFieldTextPassword name="password" header={t('field.password')} />
+                <FormFieldSubmitButton header={t('action.login')} />
                 <GoogleButton handleSubmit={()=>{
                     dispatch({type: 'AUTH_GOOGLE'})
                 }} />
@@ -46,7 +47,7 @@ function Login({ status, navigation }) {
                 <AbstractButton onPress={() =>
                     navigation.navigate('SignUpScreen') 
                 }/>
-            </ApplicationForm>
+            </FormBody>
         </AuthScreen>
     )
 }
