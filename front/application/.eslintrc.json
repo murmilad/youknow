@@ -36,6 +36,14 @@
       {
         "custom": "ignore"
       }
+    ],
+    "react/forbid-prop-types": [
+      1,
+      { "forbid": ["any"], "checkContextTypes": true, "checkChildContextTypes": true }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": false, "optionalDependencies": false, "peerDependencies": false }
     ]
   }
 }

@@ -1,25 +1,26 @@
-import { connect, useDispatch } from 'react-redux'
-import { View } from 'react-native'
+import React, { ReactPropTypes } from 'react';
+import { connect } from 'react-redux';
 
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import AbstractText from '../components/widget/AbstractText';
 import Screen from '../components/Screen';
 
-function Feed({status}) {
-    const { t, i18n } = useTranslation();
-    const dispatch = useDispatch();
+function FeedScreen({ status }) {
+  const { t, i18n } = useTranslation();
 
-
-    return (
-        <Screen >
-            <AbstractText>{t('header.application')}</AbstractText>
-        </Screen>
-    )
+  return (
+    <Screen>
+      <AbstractText>{t('header.application')}</AbstractText>
+    </Screen>
+  );
 }
 
-const mapStateToProps = state => ({
-    status: state.status,
-})
+FeedScreen.propTypes = {
+  status: ReactPropTypes.object.isRequired,
+};
 
-export default FeedScreen = connect(mapStateToProps)(Feed)
+const mapStateToProps = (state) => ({
+  status: state.status,
+});
 
+export default connect(mapStateToProps)(FeedScreen);

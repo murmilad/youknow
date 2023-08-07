@@ -1,8 +1,7 @@
-import React, { useState, useLayoutEffect } from 'react'
-import { connect, useDispatch } from 'react-redux'
-import { View, TextInput, Pressable, Text } from 'react-native'
+import React, { ReactPropTypes } from 'react';
+import { connect, useDispatch } from 'react-redux';
 
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import AuthScreen from '../../components/AuthScreen';
@@ -10,51 +9,57 @@ import GoogleButton from '../../components/widget/GoogleButton';
 import GithubButton from '../../components/widget/GithubButton';
 import AbstractButton from '../../components/widget/AbstractButton';
 
-import FormFieldText from '../../components/formik/field/FormFieldText'
+import FormFieldText from '../../components/formik/field/FormFieldText';
 import FormFieldTextPassword from '../../components/formik/field/FormFieldTextPassword';
 import FormFieldSubmitButton from '../../components/formik/field/FormFieldSubmitButton';
 import FormBody from '../../components/formik/FormBody';
+import * as actions from '../../redux/actions';
 
-function Login({ status, navigation }) {
-    const dispatch = useDispatch();
+function LoginScreen({ status, navigation }) {
+  const dispatch = useDispatch();
 
-    const { t, i18n } = useTranslation();
-    const validationSchema = yup.object().shape({
-        email: yup.string().email().required(),
-        password: yup.string().required(),
-    })
-    
-    
-    return (
-        <AuthScreen >
-            <FormBody
-                onSubmit={(values) => {
-                    dispatch({
-                        type: 'LOG_IN', payload: {login: values}
-                    })
-                }}
-                validationSchema={validationSchema}
-            >
-                <FormFieldText name="email" header={t('field.email')} />
-                <FormFieldTextPassword name="password" header={t('field.password')} />
-                <FormFieldSubmitButton header={t('action.login')} />
-                <GoogleButton handleSubmit={()=>{
-                    dispatch({type: 'AUTH_GOOGLE'})
-                }} />
-                <GithubButton handleSubmit={()=>{
-                    dispatch({type: 'AUTH_GITHUB'})
-                }} />
-                <AbstractButton onPress={() =>
-                    navigation.navigate('SignUpScreen') 
-                }/>
-            </FormBody>
-        </AuthScreen>
-    )
+  const { t, i18n } = useTranslation();
+  const validationSchema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+  });
+
+  return (
+    <AuthScreen>
+      <FormBody
+        onSubmit={(values) => {
+          dispatch({
+            type: actions.LOG_IN,
+            payload: { login: values },
+          });
+        }}
+        validationSchema={validationSchema}
+      >
+        <FormFieldText name="email" header={t('field.email')} />
+        <FormFieldTextPassword name="password" header={t('field.password')} />
+        <FormFieldSubmitButton header={t('action.login')} />
+        <GoogleButton
+          handleSubmit={() => {
+            dispatch({ type: 'AUTH_GOOGLE' });
+          }}
+        />
+        <GithubButton
+          handleSubmit={() => {
+            dispatch({ type: 'AUTH_GITHUB' });
+          }}
+        />
+        <AbstractButton onPress={() => navigation.navigate('SignUpScreen')} />
+      </FormBody>
+    </AuthScreen>
+  );
 }
 
-const mapStateToProps = state => ({
-    status: state.status,
-})
+LoginScreen.propTypes = {
+  status: ReactPropTypes.object.isRequired,
+};
 
-export default LoginScreen = connect(mapStateToProps)(Login)
+const mapStateToProps = (state) => ({
+  status: state.status,
+});
 
+export default connect(mapStateToProps)(LoginScreen);

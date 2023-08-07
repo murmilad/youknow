@@ -6,7 +6,7 @@ import FormWidgetText from '../widget/FormWidgetText';
 function FormFieldText({ name, header, secureTextEntry }) {
   return (
     <FormField name={name}>
-      <FormWidgetText header={header} />
+      <FormWidgetText header={header} secureTextEntry={secureTextEntry} />
     </FormField>
   );
 }

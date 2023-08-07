@@ -1,26 +1,26 @@
-import { connect, useDispatch } from 'react-redux'
-import { View } from 'react-native'
+import React, { ReactPropTypes } from 'react';
+import { connect } from 'react-redux';
 
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import AuthScreen from '../../components/AuthScreen';
 import AbstractText from '../../components/widget/AbstractText';
 
-function Resetted({status}) {
-    const dispatch = useDispatch();
+function ResettedScreen({ status }) {
+  const { t, i18n } = useTranslation();
 
-    const { t, i18n } = useTranslation();
-
-
-    return (
-        <AuthScreen >
-            <AbstractText>{t('header.reseted')}</AbstractText>
-        </AuthScreen>
-    )
+  return (
+    <AuthScreen>
+      <AbstractText>{t('header.reseted')}</AbstractText>
+    </AuthScreen>
+  );
 }
 
-const mapStateToProps = state => ({
-    status: state.status,
-})
+ResettedScreen.propTypes = {
+  status: ReactPropTypes.object.isRequired,
+};
 
-export default ResettedScreen = connect(mapStateToProps)(Resetted)
+const mapStateToProps = (state) => ({
+  status: state.status,
+});
 
+export default connect(mapStateToProps)(ResettedScreen);

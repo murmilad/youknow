@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactPropTypes } from 'react';
 import { connect, useDispatch } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
@@ -10,8 +10,9 @@ import FormFieldText from '../../components/formik/field/FormFieldText';
 import FormFieldTextPassword from '../../components/formik/field/FormFieldTextPassword';
 import FormFieldSubmitButton from '../../components/formik/field/FormFieldSubmitButton';
 import FormBody from '../../components/formik/FormBody';
+import * as actions from '../../redux/actions';
 
-function SignUp({ status }) {
+function SignUpScreen({ status }) {
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
@@ -38,7 +39,7 @@ function SignUp({ status }) {
     <AuthScreen>
       <FormBody
         onSubmit={(values) => {
-          dispatch({ type: 'SIGN_UP', payload: { signup: values } });
+          dispatch({ type: actions.SIGN_UP, payload: { signup: values } });
         }}
         validationSchema={validationSchema}
       >
@@ -52,8 +53,12 @@ function SignUp({ status }) {
   );
 }
 
+SignUpScreen.propTypes = {
+  status: ReactPropTypes.object.isRequired,
+};
+
 const mapStateToProps = (state) => ({
   status: state.status,
 });
 
-export default SignUpScreen = connect(mapStateToProps)(SignUp);
+export default connect(mapStateToProps)(SignUpScreen);

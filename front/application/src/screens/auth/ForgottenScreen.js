@@ -1,26 +1,27 @@
-import { connect, useDispatch } from 'react-redux'
-import { View } from 'react-native'
+import React, { ReactPropTypes } from 'react';
+import { connect, useDispatch } from 'react-redux';
 
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import AuthScreen from '../../components/AuthScreen';
 import AbstractText from '../../components/widget/AbstractText';
 
+function ForgottenScreen({ status }) {
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
 
-function Forgotten({status}) {
-    const dispatch = useDispatch();
-    const { t, i18n } = useTranslation();
-
-
-    return (
-        <AuthScreen >
-            <AbstractText>{t('header.email-sent')}</AbstractText>
-        </AuthScreen>
-    )
+  return (
+    <AuthScreen>
+      <AbstractText>{t('header.email-sent')}</AbstractText>
+    </AuthScreen>
+  );
 }
 
-const mapStateToProps = state => ({
-    status: state.status,
-})
+ForgottenScreen.propTypes = {
+  status: ReactPropTypes.object.isRequired,
+};
 
-export default ForgottenScreen = connect(mapStateToProps)(Forgotten)
+const mapStateToProps = (state) => ({
+  status: state.status,
+});
 
+export default connect(mapStateToProps)(ForgottenScreen);
