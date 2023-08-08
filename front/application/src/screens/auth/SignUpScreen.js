@@ -30,9 +30,12 @@ function SignUpScreen({ status }) {
       .required()
       .min(8, t('error.password-short'))
       .matches(/[a-zA-Z]/, t('error.password-letters'))
-      .test('passwords-match', t('error.password-match'), function (value) {
-        return this.parent.password === value;
-      }),
+      .test(
+        'passwords-match',
+        t('error.password-match'),
+        // eslint-disable-next-line react/no-this-in-sfc
+        (value) => this.parent.password === value
+      ),
   });
 
   return (

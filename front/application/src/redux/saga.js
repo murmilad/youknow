@@ -1,8 +1,16 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects';
-
-import SERVER, { setCredentails, dropCredentails } from '../api/server';
+import { all, takeLatest } from 'redux-saga/effects';
 
 import * as actions from './actions';
+import {
+  oauth,
+  submitGet,
+  checkConnection,
+  getUser,
+  submitForm,
+  putTokenToHeader,
+  logOut,
+} from './saga/functions';
+
 import googleAuthorize from '../api/google';
 import githubAuthorize from '../api/github';
 
@@ -81,175 +89,6 @@ export function* callServerLastest() {
     { action: actions.SET_TOKEN, payload: { token: action.payload.token } },
   ]);
   yield takeLatest(actions.LOG_OUT, logOut);
-}
-
-function* putTokenToHeader(successActions, action) {
-  setCredentails(action.payload.token);
-  for (const successAction of successActions(action, result)) {
-    yield put(successAction);
-  }
-}
-
-function* logOut(action) {
-  yield put({ type: actions.REMOVE_TOKEN });
-  yield put({ type: actions.SET_USER, payload: { user: null } });
-  dropCredentails();
-}
-
-function* deleteResource(linkCallback, successActions, action) {
-  try {
-    const result = yield call(SERVER.delete, linkCallback(action));
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    const [errorMessage, errorCallback] = getErrorMessage(error);
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
-    if (errorCallback) {
-      yield put(errorCallback);
-    }
-  }
-}
-
-function* getUser(linkCallback, successActions, action) {
-  try {
-    const result = yield call(SERVER.get, linkCallback(action));
-    yield put({ type: successAction, payload: resultCallback(result) });
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    yield put({ type: actions.LOG_OUT });
-  }
-}
-
-function* checkConnection(linkCallback, successActions, action) {
-  try {
-    yield put({ type: actions.SET_LOADING, payload: { loading: true } });
-    const result = yield call(SERVER.get, linkCallback(action));
-    yield put({ type: actions.SET_CONNECTED });
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
-    yield put({ type: actions.SET_DISCONNECTED });
-  }
-  yield put({ type: actions.SET_LOADING, payload: { loading: false } });
-}
-
-function* oauth(handler, successActions, action) {
-  try {
-    yield put({ type: actions.SET_LOADING, payload: { loading: true } });
-    handler();
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    const [errorMessage, errorCallback] = getErrorMessage(error);
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
-    if (errorCallback) {
-      yield put(errorCallback);
-    }
-  }
-  yield put({ type: actions.SET_LOADING, payload: { loading: false } });
-}
-
-function* submitGet(linkCallback, successActions, action) {
-  try {
-    yield put({ type: actions.SET_LOADING, payload: { loading: true } });
-    const result = yield call(SERVER.get, linkCallback(action));
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    const [errorMessage, errorCallback] = getErrorMessage(error);
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
-    if (errorCallback) {
-      yield put(errorCallback);
-    }
-  }
-  yield put({ type: actions.SET_LOADING, payload: { loading: false } });
-}
-
-function* submitForm(link, requestCallback, successActions, action) {
-  try {
-    yield put({ type: actions.SET_LOADING, payload: { loading: true } });
-    const result = yield call(SERVER.post, link, requestCallback(action));
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    const [errorMessage, errorCallback] = getErrorMessage(error);
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
-    if (errorCallback) {
-      yield put(errorCallback);
-    }
-  }
-  yield put({ type: actions.SET_LOADING, payload: { loading: false } });
-}
-
-function* uploadResource(linkCallback, requestCallback, successActions, action) {
-  const formData = new FormData();
-  yield fetch(requestCallback(action))
-    .then((res) => res.blob())
-    .then((blob) => {
-      formData.append('file', blob);
-    });
-  try {
-    const result = yield call(SERVER.post, linkCallback(action), formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    const [errorMessage, errorCallback] = getErrorMessage(error);
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
-    if (errorCallback) {
-      yield put(errorCallback);
-    }
-  }
-}
-
-function* postResource(link, requestCallback, successActions, action) {
-  try {
-    const result = yield call(SERVER.post, link, requestCallback(action));
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    const [errorMessage, errorCallback] = getErrorMessage(error);
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
-    if (errorCallback) {
-      yield put(errorCallback);
-    }
-  }
-}
-
-function* fetchResource(linkCallback, resultCallback, successActions, action) {
-  try {
-    const result = yield call(SERVER.get, linkCallback(action));
-    for (const successAction of successActions(action, result)) {
-      yield put(successAction);
-    }
-  } catch (error) {
-    const [errorMessage, errorCallback] = getErrorMessage(error);
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
-    if (errorCallback) {
-      yield put(errorCallback);
-    }
-  }
-}
-
-function getErrorMessage(error) {
-  const errorMessage = error.response?.data.message || error.response?.data || error.message;
-  if (errorMessage === 'invalidate token: Token is expired') {
-    return [errorMessage, { type: actions.LOG_OUT }];
-  }
-  return [errorMessage];
 }
 
 export default function* rootSaga() {

@@ -27,9 +27,12 @@ function ResetPasswordScreen({ status, navigation }) {
       .required()
       .min(8, t('error.password-short'))
       .matches(/[a-zA-Z]/, t('error.password-letters'))
-      .test('passwords-match', t('error.password-match'), function (value) {
-        return this.parent.resetPassword === value;
-      }),
+      .test(
+        'passwords-match',
+        t('error.password-match'),
+        // eslint-disable-next-line react/no-this-in-sfc
+        (value) => this.parent.resetPassword === value
+      ),
   });
 
   return (

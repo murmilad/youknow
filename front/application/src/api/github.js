@@ -1,26 +1,26 @@
 import { authorize } from 'react-native-app-auth';
 
-  const config = {
-    clientId: process.env.REACT_APP_GITHUB_OAUTH_CLIENT_ID,
-    redirectUrl: process.env.REACT_APP_GITHUB_OAUTH_REDIRECT,
-    clientSecret: process.env.REACT_APP_GITHUB_OAUTH_CLIENT_SECRET,
-    scopes: ['user:email'],
-    additionalHeaders: { 'Accept': 'application/json' },
-    serviceConfiguration: {
-      authorizationEndpoint: 'https://github.com/login/oauth/authorize',
-      tokenEndpoint: 'https://github.com/login/oauth/access_token',
-      revocationEndpoint:
-        'https://github.com/settings/connections/applications/' + process.env.REACT_APP_GITHUB_OAUTH_CLIENT_ID
-    }
-  };
+const config = {
+  clientId: process.env.REACT_APP_GITHUB_OAUTH_CLIENT_ID,
+  redirectUrl: process.env.REACT_APP_GITHUB_OAUTH_REDIRECT,
+  clientSecret: process.env.REACT_APP_GITHUB_OAUTH_CLIENT_SECRET,
+  scopes: ['user:email'],
+  additionalHeaders: { Accept: 'application/json' },
+  serviceConfiguration: {
+    authorizationEndpoint: 'https://github.com/login/oauth/authorize',
+    tokenEndpoint: 'https://github.com/login/oauth/access_token',
+    revocationEndpoint: `https://github.com/settings/connections/applications/${process.env.REACT_APP_GITHUB_OAUTH_CLIENT_ID}`,
+  },
+};
 
-  export default  githubAuthorize = async () => {
-    // Log in to get an authentication token
-    const authState = await authorize(config);
+async function githubAuthorize() {
+  // Log in to get an authentication token
+  const authState = await authorize(config);
 
-    return authState;
-  };
+  return authState;
+}
 
+export default githubAuthorize;
 /*
    // Log in to get an authentication token
   const authState = await authorize(config);

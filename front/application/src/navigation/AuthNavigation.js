@@ -19,22 +19,22 @@ function AuthNavigation({ navigation, user, status }) {
     if (status.signed_up) {
       navigation.navigate('SignedUpScreen');
     }
-  }, [status.signed_up]);
+  }, [navigation, status.signed_up]);
   useEffect(() => {
     if (status.reseted) {
       navigation.navigate('ResettedScreen');
     }
-  }, [status.reseted]);
+  }, [navigation, status.reseted]);
   useEffect(() => {
     if (status.forgot_password) {
       navigation.navigate('ForgottenScreen');
     }
-  }, [status.forgot_password]);
+  }, [navigation, status.forgot_password]);
   useEffect(() => {
     if (status.verified) {
       navigation.navigate('LoginScreen');
     }
-  }, [status.verified]);
+  }, [navigation, status.verified]);
 
   return (
     <Navigator.Navigator

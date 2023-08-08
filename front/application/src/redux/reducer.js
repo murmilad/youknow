@@ -3,7 +3,7 @@ import * as actions from './actions';
 
 const merge = (prev, next) => ({ ...prev, ...next });
 
-const userReducer = (state = {}, action) => {
+const userReducer = (action, state = {}) => {
   switch (action.type) {
     case actions.SET_SIGN_UP:
       return merge(state, { signed_up: action.payload });
@@ -29,7 +29,7 @@ const userReducer = (state = {}, action) => {
   }
 };
 
-const messageReducer = (state = {}, action) => {
+const messageReducer = (action, state = {}) => {
   switch (action.type) {
     case actions.MESSAGE_START:
       return { ...state, loading: true };
@@ -44,7 +44,7 @@ const messageReducer = (state = {}, action) => {
   }
 };
 
-const statusReducer = (state = {}, action) => {
+const statusReducer = (action, state = {}) => {
   switch (action.type) {
     case actions.SET_CONNECTED:
       return merge(state, { connected: action.payload });

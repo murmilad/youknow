@@ -17,14 +17,14 @@ function WelcomeNavigation({ navigation, user, status }) {
         name="Feed"
         component={FeedScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <ChatDotsComposite style={tw`text-white`} size={size} />,
+          tabBarIcon: <ChatDotsComposite style={tw`text-white`} />,
         }}
       />
       <Tab.Screen
         name="Account"
         component={UserScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <PersistCircle style={tw`text-white`} size={size} />,
+          tabBarIcon: <PersistCircle style={tw`text-white`} />,
         }}
       />
     </Tab.Navigator>

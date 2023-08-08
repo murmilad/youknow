@@ -7,7 +7,7 @@ import AbstractText from '../../components/widget/AbstractText';
 import AbstractButton from '../../components/widget/AbstractButton';
 import * as actions from '../../redux/actions';
 
-function VerifyScreen({ status }) {
+function VerifyScreen({ status, navigation }) {
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();

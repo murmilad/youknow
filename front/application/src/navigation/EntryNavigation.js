@@ -16,13 +16,8 @@ function EntryNavigation({ user, status }) {
         headerTintColor: tw.color('bg-slate-100'),
       }}
     >
-      {status.connected ? (
-        user.token ? (
-          <WelcomeNavigation />
-        ) : (
-          <AuthNavigation />
-        )
-      ) : (
+      {status.connected && ((user.token && <WelcomeNavigation />) || <AuthNavigation />)}
+      {!status.connected && (
         <Navigator.Screen
           options={{
             headerShown: false,

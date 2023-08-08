@@ -1,24 +1,22 @@
-import axios from "axios"
-
+import axios from 'axios';
 
 const SERVER = axios.create({
-    baseURL: process.env.REACT_APP_BACKEND_ADDRESS + ":" + process.env.REACT_APP_BACKEND_PORT
-  })
+  baseURL: `${process.env.REACT_APP_BACKEND_ADDRESS}:${process.env.REACT_APP_BACKEND_PORT}`,
+});
 
-let store = null
+let store = null;
 
-export const injectStoreToServer = _store => {
-    store = _store
-}
+export const injectStoreToServer = (_store) => {
+  store = _store;
+};
 
 export const setCredentails = (token) => {
-    SERVER.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-}
+  SERVER.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
 
 export const dropCredentails = () => {
-    delete SERVER.defaults.headers.common["Authorization"];
-}
+  delete SERVER.defaults.headers.common.Authorization;
+};
 
 /* 
 SERVER.interceptors.response.use(
@@ -37,4 +35,4 @@ SERVER.interceptors.response.use(
 );
  */
 
-export default SERVER
+export default SERVER;
