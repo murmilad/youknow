@@ -1,8 +1,11 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Constants from 'expo-constants';
 import { StyleSheet, View } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function Screen({ children, style }) {
   return (
@@ -13,8 +16,8 @@ function Screen({ children, style }) {
 }
 
 Screen.propTypes = {
-  style: ReactPropTypes.object.isRequired,
-  children: ReactPropTypes.object.isRequired,
+  style: PropTypes.object.isRequired,
+  children: PropTypes.any.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -1,9 +1,11 @@
-import { combineReducers } from 'react-redux';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { combineReducers } from 'redux';
 import * as actions from './actions';
 
 const merge = (prev, next) => ({ ...prev, ...next });
 
-const userReducer = (action, state = {}) => {
+// eslint-disable-next-line default-param-last
+const userReducer = (state = {}, action) => {
   switch (action.type) {
     case actions.SET_SIGN_UP:
       return merge(state, { signed_up: action.payload });
@@ -29,7 +31,8 @@ const userReducer = (action, state = {}) => {
   }
 };
 
-const messageReducer = (action, state = {}) => {
+// eslint-disable-next-line default-param-last
+const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case actions.MESSAGE_START:
       return { ...state, loading: true };
@@ -44,7 +47,8 @@ const messageReducer = (action, state = {}) => {
   }
 };
 
-const statusReducer = (action, state = {}) => {
+// eslint-disable-next-line default-param-last
+const statusReducer = (state = {}, action) => {
   switch (action.type) {
     case actions.SET_CONNECTED:
       return merge(state, { connected: action.payload });

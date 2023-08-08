@@ -1,19 +1,22 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+import { View } from 'react-native';
 import { Formik } from 'formik';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function FormBody({ initialValues, onSubmit, validationSchema, children }) {
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-      {children}
+      <View>{children}</View>
     </Formik>
   );
 }
 
 FormBody.propTypes = {
-  initialValues: ReactPropTypes.object,
-  onSubmit: ReactPropTypes.func.isRequired,
-  validationSchema: ReactPropTypes.object.isRequired,
-  children: ReactPropTypes.object.isRequired,
+  initialValues: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  validationSchema: PropTypes.object.isRequired,
+  children: PropTypes.any.isRequired,
 };
 FormBody.defaultProps = {
   initialValues: undefined,

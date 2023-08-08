@@ -1,7 +1,9 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
 
 import { Field } from 'formik';
 import FormError from './FormError';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function FormField({ name, children }) {
   return (
@@ -16,8 +18,8 @@ function FormField({ name, children }) {
   );
 }
 FormField.propTypes = {
-  name: ReactPropTypes.string.isRequired,
-  children: ReactPropTypes.object.isRequired,
+  name: PropTypes.string.isRequired,
+  children: PropTypes.any.isRequired,
 };
 
 export default FormField;

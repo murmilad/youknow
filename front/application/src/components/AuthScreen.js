@@ -1,4 +1,5 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { Image, View } from 'react-native';
 
 import tw from '../../tailwind';
@@ -6,6 +7,8 @@ import tw from '../../tailwind';
 import { ReactComponent as LogoBigIcon } from '../assets/logo_big.png';
 
 import Screen from './Screen';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function AuthScreen({ children, isLoading }) {
   return (
@@ -29,8 +32,8 @@ function AuthScreen({ children, isLoading }) {
 }
 
 AuthScreen.propTypes = {
-  isLoading: ReactPropTypes.bool.isRequired,
-  children: ReactPropTypes.object.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  children: PropTypes.any.isRequired,
 };
 
 export default AuthScreen;

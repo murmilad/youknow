@@ -1,9 +1,12 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { connect } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
 import AuthScreen from '../../components/AuthScreen';
 import AbstractText from '../../components/widget/AbstractText';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function ResettedScreen({ status }) {
   const { t, i18n } = useTranslation();
@@ -16,7 +19,7 @@ function ResettedScreen({ status }) {
 }
 
 ResettedScreen.propTypes = {
-  status: ReactPropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

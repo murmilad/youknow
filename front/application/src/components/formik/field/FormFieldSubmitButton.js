@@ -1,7 +1,10 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { useFormikContext } from 'formik';
 
 import AbstractButton from '../../widget/AbstractButton';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 // eslint-disable-next-line react/display-name
 function FormFieldSubmitButton({ header }) {
@@ -10,7 +13,7 @@ function FormFieldSubmitButton({ header }) {
 }
 
 FormFieldSubmitButton.propTypes = {
-  header: ReactPropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
 };
 
 export default FormFieldSubmitButton;

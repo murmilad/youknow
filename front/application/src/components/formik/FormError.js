@@ -1,7 +1,10 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { Text } from 'react-native';
 
 import tw from '../../../tailwind';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function FormError({ error, visible }) {
   if (!visible || !error) return null;
@@ -10,8 +13,8 @@ function FormError({ error, visible }) {
 }
 
 FormError.propTypes = {
-  error: ReactPropTypes.string,
-  visible: ReactPropTypes.bool,
+  error: PropTypes.string,
+  visible: PropTypes.bool,
 };
 FormError.defaultProps = {
   error: undefined,

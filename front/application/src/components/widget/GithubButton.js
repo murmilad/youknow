@@ -1,7 +1,10 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { ReactComponent as GithubIcon } from '../../assets/github.svg';
 import AbstractButton from './AbstractButton';
 import tw from '../../../tailwind';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function GithubButton({ handleSubmit }) {
   return (
@@ -12,7 +15,7 @@ function GithubButton({ handleSubmit }) {
 }
 
 GithubButton.propTypes = {
-  handleSubmit: ReactPropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 };
 
 export default GithubButton;

@@ -1,4 +1,5 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -6,6 +7,8 @@ import tw from '../../tailwind';
 import WelcomeNavigation from './WelcomeNavigation';
 import AuthNavigation from './AuthNavigation';
 import SettingsScreen from '../screens/SettingsScreen';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function EntryNavigation({ user, status }) {
   const Navigator = createStackNavigator();
@@ -31,8 +34,8 @@ function EntryNavigation({ user, status }) {
 }
 
 EntryNavigation.propTypes = {
-  user: ReactPropTypes.object.isRequired,
-  status: ReactPropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

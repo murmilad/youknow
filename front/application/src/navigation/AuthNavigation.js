@@ -1,4 +1,4 @@
-import React, { useEffect, ReactPropTypes } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -11,6 +11,9 @@ import ResettedScreen from '../screens/auth/ResettedScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ForgottenScreen from '../screens/auth/ForgottenScreen';
 import VerifyScreen from '../screens/auth/VerifyScreen';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function AuthNavigation({ navigation, user, status }) {
   const Navigator = createStackNavigator();
@@ -103,8 +106,8 @@ function AuthNavigation({ navigation, user, status }) {
 }
 
 AuthNavigation.propTypes = {
-  user: ReactPropTypes.object.isRequired,
-  status: ReactPropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

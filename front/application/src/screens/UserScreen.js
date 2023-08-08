@@ -1,4 +1,5 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { connect, useDispatch } from 'react-redux';
 import { View } from 'react-native';
 
@@ -12,6 +13,8 @@ import FormFieldText from '../components/formik/field/FormFieldText';
 import FormFieldSubmitButton from '../components/formik/field/FormFieldSubmitButton';
 import FormBody from '../components/formik/FormBody';
 import * as actions from '../redux/actions';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function UserScreen({ user, status }) {
   const dispatch = useDispatch();
@@ -53,8 +56,8 @@ function UserScreen({ user, status }) {
   );
 }
 UserScreen.propTypes = {
-  user: ReactPropTypes.object.isRequired,
-  status: ReactPropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

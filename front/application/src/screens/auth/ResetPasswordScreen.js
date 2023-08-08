@@ -1,4 +1,5 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { connect, useDispatch } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
@@ -10,6 +11,8 @@ import FormFieldTextPassword from '../../components/formik/field/FormFieldTextPa
 import FormFieldSubmitButton from '../../components/formik/field/FormFieldSubmitButton';
 import FormBody from '../../components/formik/FormBody';
 import * as actions from '../../redux/actions';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function ResetPasswordScreen({ status, navigation }) {
   const dispatch = useDispatch();
@@ -61,7 +64,7 @@ function ResetPasswordScreen({ status, navigation }) {
 }
 
 ResetPasswordScreen.propTypes = {
-  status: ReactPropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

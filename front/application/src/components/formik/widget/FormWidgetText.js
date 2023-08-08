@@ -1,8 +1,10 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
 
 import { TextInput } from 'react-native';
 import { useField } from 'formik';
 import tw from '../../../../tailwind';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function FormWidgetText({ header, secureTextEntry, ...props }) {
   const [field, meta, helpers] = useField(props);
@@ -23,9 +25,9 @@ function FormWidgetText({ header, secureTextEntry, ...props }) {
 }
 
 FormWidgetText.propTypes = {
-  name: ReactPropTypes.string.isRequired,
-  header: ReactPropTypes.string.isRequired,
-  secureTextEntry: ReactPropTypes.bool,
+  name: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
+  secureTextEntry: PropTypes.bool,
 };
 FormWidgetText.defaultProps = {
   secureTextEntry: false,

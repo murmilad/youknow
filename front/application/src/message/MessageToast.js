@@ -1,10 +1,14 @@
-import React, { useEffect, ReactPropTypes } from 'react';
+import React, { useEffect } from 'react';
+
 import Toast from 'react-native-toast-message';
 import { connect, useDispatch } from 'react-redux';
 import { View, Text } from 'react-native';
 
 import * as actions from '../redux/actions';
 import tw from '../../tailwind';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 const toastConfig = {
   infoToast: ({ text1, props }) => (
@@ -45,7 +49,7 @@ function MessageToast({ message }) {
 }
 
 MessageToast.propTypes = {
-  message: ReactPropTypes.object.isRequired,
+  message: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

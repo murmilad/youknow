@@ -1,4 +1,5 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { connect, useDispatch } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
@@ -6,6 +7,8 @@ import AuthScreen from '../../components/AuthScreen';
 import AbstractText from '../../components/widget/AbstractText';
 import AbstractButton from '../../components/widget/AbstractButton';
 import * as actions from '../../redux/actions';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function VerifyScreen({ status, navigation }) {
   const dispatch = useDispatch();
@@ -32,7 +35,7 @@ function VerifyScreen({ status, navigation }) {
 }
 
 VerifyScreen.propTypes = {
-  status: ReactPropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

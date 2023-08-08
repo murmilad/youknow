@@ -1,7 +1,10 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
+
 import { ReactComponent as GoogleIcon } from '../../assets/google.svg';
 import AbstractButton from './AbstractButton';
 import tw from '../../../tailwind';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function GoogleButton({ handleSubmit }) {
   return (
@@ -12,7 +15,7 @@ function GoogleButton({ handleSubmit }) {
 }
 
 GoogleButton.propTypes = {
-  handleSubmit: ReactPropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 };
 
 export default GoogleButton;

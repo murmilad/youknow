@@ -1,7 +1,9 @@
-import React, { ReactPropTypes } from 'react';
+import React from 'react';
 
 import { Text, Pressable } from 'react-native';
 import tw from '../../../tailwind';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const PropTypes = require('prop-types');
 
 function AbstractButton({ children, header, onPress }) {
   return (
@@ -16,9 +18,9 @@ function AbstractButton({ children, header, onPress }) {
 }
 
 AbstractButton.propTypes = {
-  header: ReactPropTypes.string,
-  children: ReactPropTypes.object,
-  onPress: ReactPropTypes.func.isRequired,
+  header: PropTypes.string,
+  children: PropTypes.any,
+  onPress: PropTypes.func.isRequired,
 };
 
 AbstractButton.defaultProps = {
