@@ -4,11 +4,10 @@ import { Image, View } from 'react-native';
 
 import tw from '../../tailwind';
 
-import { ReactComponent as LogoBigIcon } from '../assets/logo_big.png';
-
 import Screen from './Screen';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
+const logoBigIcon = require('../assets/logo_big.png');
 
 function AuthScreen({ children, isLoading }) {
   return (
@@ -16,7 +15,7 @@ function AuthScreen({ children, isLoading }) {
       <View style={tw`mt-3 h-15 w-full`}>
         <Image
           style={{ resizeMode: 'contain', flex: 1, width: undefined, height: undefined }}
-          source={LogoBigIcon}
+          source={logoBigIcon}
         />
       </View>
       <View>

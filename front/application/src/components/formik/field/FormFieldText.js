@@ -8,7 +8,7 @@ const PropTypes = require('prop-types');
 function FormFieldText({ name, header, secureTextEntry }) {
   return (
     <FormField name={name}>
-      <FormWidgetText header={header} secureTextEntry={secureTextEntry} />
+      <FormWidgetText name={name} header={header} secureTextEntry={secureTextEntry} />
     </FormField>
   );
 }
