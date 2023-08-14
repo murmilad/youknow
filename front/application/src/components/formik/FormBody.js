@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
-function FormBody({ initialValues, onSubmit, validationSchema, children }) {
+function FormBody({ children, initialValues, onSubmit, validationSchema }) {
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
       <View>{children}</View>

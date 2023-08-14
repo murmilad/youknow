@@ -1,25 +1,26 @@
 import React from 'react';
 
-import { Field } from 'formik';
 import FormError from './FormError';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
-function FormField({ name, children }) {
+function FormField({ children, name, errors, touched }) {
   return (
-    <Field name={name}>
-      {({ field, meta }) => (
-        <>
-          {children}
-          <FormError error={meta.error} visible={meta.touched} />
-        </>
-      )}
-    </Field>
+    <>
+      {children}
+      <FormError error={errors} visible={touched} />
+    </>
   );
 }
 FormField.propTypes = {
   name: PropTypes.string.isRequired,
   children: PropTypes.any.isRequired,
+  errors: PropTypes.string,
+  touched: PropTypes.bool,
 };
 
+FormField.defaultProps = {
+  errors: null,
+  touched: false,
+};
 export default FormField;

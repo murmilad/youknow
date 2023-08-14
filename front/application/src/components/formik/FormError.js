@@ -9,7 +9,7 @@ const PropTypes = require('prop-types');
 function FormError({ error, visible }) {
   if (!visible || !error) return null;
 
-  return <Text style={tw`mt-2 text-sm text-red-600 dark:text-red-500 font-medium`}>{error}</Text>;
+  return <Text style={tw`ml-7 mr-5 mt-1 mb-2 text-sm text-red-600 font-medium`}>{error}</Text>;
 }
 
 FormError.propTypes = {

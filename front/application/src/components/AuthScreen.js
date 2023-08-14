@@ -31,8 +31,11 @@ function AuthScreen({ children, isLoading }) {
 }
 
 AuthScreen.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   children: PropTypes.any.isRequired,
 };
 
+AuthScreen.defaultProps = {
+  isLoading: false,
+};
 export default AuthScreen;
