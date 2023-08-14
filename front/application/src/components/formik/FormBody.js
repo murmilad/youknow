@@ -13,13 +13,10 @@ function FormBody({ children, initialValues, onSubmit, validationSchema }) {
 }
 
 FormBody.propTypes = {
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   validationSchema: PropTypes.object.isRequired,
   children: PropTypes.any.isRequired,
-};
-FormBody.defaultProps = {
-  initialValues: undefined,
 };
 
 export default FormBody;

@@ -61,7 +61,11 @@ export function* checkConnection(linkCallback, successActions, action) {
       yield put(successAction);
     }
   } catch (error) {
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: error } });
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
     yield put({ type: actions.SET_DISCONNECTED });
   }
   yield put({ type: actions.SET_LOADING, payload: { loading: false } });

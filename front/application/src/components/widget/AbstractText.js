@@ -6,7 +6,7 @@ import tw from '../../../tailwind';
 const PropTypes = require('prop-types');
 
 function AbstractText({ children }) {
-  return <Text style={tw`text-gray-500 dark:text-gray-400`}>{children}</Text>;
+  return <Text style={tw`text-gray-500`}>{children}</Text>;
 }
 
 AbstractText.propTypes = {

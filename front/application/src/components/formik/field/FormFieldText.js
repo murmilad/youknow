@@ -9,7 +9,7 @@ import FormField from '../FormField';
 const PropTypes = require('prop-types');
 
 function FormFieldText({ name, header, secureTextEntry }) {
-  const { setFieldTouched, handleChange, errors, touched } = useFormikContext();
+  const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
 
   return (
     <FormField name={name} errors={errors[name]} touched={touched[name]}>
@@ -25,6 +25,7 @@ function FormFieldText({ name, header, secureTextEntry }) {
         placeholderTextColor={tw.color('text-gray-300')}
         onBlur={() => setFieldTouched(name)}
         onChangeText={handleChange(name)}
+        value={values[name]}
       />
     </FormField>
   );
