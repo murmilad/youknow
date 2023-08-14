@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Image, View } from 'react-native';
+import { Image, View, Animated } from 'react-native';
 
 import tw from '../../tailwind';
 
@@ -10,6 +10,25 @@ const PropTypes = require('prop-types');
 const logoBigIcon = require('../assets/logo_big.png');
 
 function AuthScreen({ children, isLoading }) {
+  const ball = new Animated.Value(0);
+  const xVal = ball.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 250],
+  });
+
+  const animStyle = {
+    transform: [
+      {
+        translateX: xVal,
+      },
+    ],
+  };
+  Animated.timing(ball, {
+    toValue: 1,
+    duration: 1000,
+    useNativeDriver: true,
+  }).start();
+
   return (
     <Screen>
       <View style={tw`mt-3 h-15 w-full`}>
@@ -20,8 +39,8 @@ function AuthScreen({ children, isLoading }) {
       </View>
       <View>
         {isLoading && (
-          <View style={tw`fixed inset-x-0 top-0 z-50`}>
-            <View style={tw`h-1 bg-blue-500 w-9/12 animation-progress`} />
+          <View style={tw`inset-x-0 top-0 z-50`}>
+            <Animated.View style={[tw`h-1 bg-blue-500 w-9/12`, animStyle]} />
           </View>
         )}
         {children}
@@ -31,11 +50,8 @@ function AuthScreen({ children, isLoading }) {
 }
 
 AuthScreen.propTypes = {
-  isLoading: PropTypes.bool,
+  isLoading: PropTypes.bool.isRequired,
   children: PropTypes.any.isRequired,
 };
 
-AuthScreen.defaultProps = {
-  isLoading: false,
-};
 export default AuthScreen;

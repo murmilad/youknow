@@ -16,24 +16,24 @@ import githubAuthorize from '../api/github';
 
 export function* callServerLastest() {
   yield takeLatest(actions.AUTH_GITHUB, oauth(githubAuthorize), (action, response) => [
-    { action: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
+    { type: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
   ]);
 
   yield takeLatest(actions.AUTH_GOOGLE, oauth(googleAuthorize), (action, response) => [
-    { action: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
+    { type: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
   ]);
 
   yield takeLatest(
     actions.VERIFY,
     submitGet,
     (action) => `/api/auth/verifyemail/${action.payload.verifyHash}`,
-    (action, response) => [{ action: actions.SET_VERIFIED, payload: { verified: true } }]
+    (action, response) => [{ type: actions.SET_VERIFIED, payload: { verified: true } }]
   );
   yield takeLatest(
     actions.CHECK_CONNECTION,
     checkConnection,
     (action) => '/api/healthchecker',
-    (action, response) => [{ action: actions.GET_USER }]
+    (action, response) => [{ type: actions.GET_USER }]
   );
   yield takeLatest(
     actions.CONNECT_AND_SET_PARAMS,
@@ -41,24 +41,24 @@ export function* callServerLastest() {
     (action) => '/api/healthchecker',
     (action, response) => [
       {
-        action: actions.SET_CONNECTION_PARAMS,
+        type: actions.SET_CONNECTION_PARAMS,
         payload: { server: action.payload.server, port: action.payload.port },
       },
-      { action: actions.GET_USER },
+      { type: actions.GET_USER },
     ]
   );
   yield takeLatest(
     actions.GET_USER,
     getUser,
     (action) => '/api/users/me',
-    (action, response) => [{ action: actions.SET_USER, payload: { user: response.data.data.user } }]
+    (action, response) => [{ type: actions.SET_USER, payload: { user: response.data.data.user } }]
   );
   yield takeLatest(
     actions.SIGN_UP,
     submitForm,
     '/api/auth/register',
     (request) => request.payload.signup,
-    (action, response) => [{ action: actions.SET_SIGN_UP, payload: { signed_up: true } }]
+    (action, response) => [{ type: actions.SET_SIGN_UP, payload: { signed_up: true } }]
   );
   yield takeLatest(
     actions.FORGOT_PASSWORD,
@@ -66,7 +66,7 @@ export function* callServerLastest() {
     '/api/auth/forgotpasswordapp',
     (request) => request.payload.forgot,
     (action, response) => [
-      { action: actions.SET_FORGOT_PASSWORD, payload: { forgot_password: true } },
+      { type: actions.SET_FORGOT_PASSWORD, payload: { forgot_password: true } },
     ]
   );
   yield takeLatest(
@@ -74,7 +74,7 @@ export function* callServerLastest() {
     submitForm,
     '/api/auth/resetpasswordapp',
     (request) => request.payload.reset,
-    (action, response) => [{ action: actions.SET_RESET, payload: { reseted: true } }]
+    (action, response) => [{ type: actions.SET_RESET, payload: { reseted: true } }]
   );
   yield takeLatest(
     actions.LOG_IN,
@@ -82,11 +82,11 @@ export function* callServerLastest() {
     '/api/auth/login',
     (request) => request.payload.login,
     (action, response) => [
-      { action: actions.PUT_TOKEN_HEADER, payload: { token: response.data.token } },
+      { type: actions.PUT_TOKEN_HEADER, payload: { token: response.data.token } },
     ]
   );
   yield takeLatest(actions.PUT_TOKEN_HEADER, putTokenToHeader, (action, response) => [
-    { action: actions.SET_TOKEN, payload: { token: action.payload.token } },
+    { type: actions.SET_TOKEN, payload: { token: action.payload.token } },
   ]);
   yield takeLatest(actions.LOG_OUT, logOut);
 }

@@ -27,7 +27,7 @@ function VerifyScreen({ status, navigation }) {
   };
 
   return (
-    <AuthScreen>
+    <AuthScreen isLoading={status.is_loading}>
       <AbstractText>{t('header.verify')}</AbstractText>
       <AbstractButton header={t('action.verify')} onPress={handleVerify} />
     </AuthScreen>

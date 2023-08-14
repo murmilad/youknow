@@ -12,7 +12,7 @@ function ResettedScreen({ status }) {
   const { t, i18n } = useTranslation();
 
   return (
-    <AuthScreen>
+    <AuthScreen isLoading={false}>
       <AbstractText>{t('header.reseted')}</AbstractText>
     </AuthScreen>
   );

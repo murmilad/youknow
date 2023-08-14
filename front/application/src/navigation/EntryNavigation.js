@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import tw from '../../tailwind';
 import WelcomeNavigation from './WelcomeNavigation';
 import AuthNavigation from './AuthNavigation';
 import SettingsScreen from '../screens/SettingsScreen';
+import * as actions from '../redux/actions';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
 function EntryNavigation({ user, status }) {
   const Navigator = createStackNavigator();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (status.server) {
+      dispatch({
+        type: actions.CONNECT_AND_SET_PARAMS,
+        payload: {
+          server: status.server,
+          port: status.port,
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Navigator.Navigator

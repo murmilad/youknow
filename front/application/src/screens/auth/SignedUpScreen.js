@@ -12,7 +12,7 @@ function SignedUpScreen({ status }) {
   const { t, i18n } = useTranslation();
 
   return (
-    <AuthScreen>
+    <AuthScreen isLoading={false}>
       <AbstractText>{t('header.signed-up')}</AbstractText>
     </AuthScreen>
   );

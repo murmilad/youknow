@@ -25,7 +25,7 @@ function SettingsScreen({ status }) {
   const dispatch = useDispatch();
 
   return (
-    <AuthScreen>
+    <AuthScreen isLoading={status.is_loading}>
       <FormBody
         initialValues={{
           server: status.server ? status.server : 'https://youknow.app',

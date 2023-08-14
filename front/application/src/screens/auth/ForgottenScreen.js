@@ -13,7 +13,7 @@ function ForgottenScreen({ status }) {
   const { t, i18n } = useTranslation();
 
   return (
-    <AuthScreen>
+    <AuthScreen isLoading={false}>
       <AbstractText>{t('header.email-sent')}</AbstractText>
     </AuthScreen>
   );

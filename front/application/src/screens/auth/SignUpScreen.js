@@ -42,7 +42,7 @@ function SignUpScreen({ status }) {
   });
 
   return (
-    <AuthScreen>
+    <AuthScreen isLoading={status.is_loading}>
       <FormBody
         onSubmit={(values) => {
           dispatch({ type: actions.SIGN_UP, payload: { signup: values } });

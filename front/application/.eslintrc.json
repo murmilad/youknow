@@ -43,7 +43,11 @@
     ],
     "import/no-extraneous-dependencies": [
       "error",
-      { "devDependencies": false, "optionalDependencies": false, "peerDependencies": false }
+      {
+        "devDependencies": ["**/index.d.ts", "**/*.test.js", "**/*.spec.js"],
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
     ]
   }
 }

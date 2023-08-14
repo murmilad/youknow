@@ -28,7 +28,7 @@ function LoginScreen({ status, navigation }) {
   });
 
   return (
-    <AuthScreen>
+    <AuthScreen isLoading={status.is_loading}>
       <FormBody
         onSubmit={(values) => {
           dispatch({

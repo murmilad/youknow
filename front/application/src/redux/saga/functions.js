@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { call, put } from 'redux-saga/effects';
-
-import SERVER, { setCredentails, dropCredentails } from '../../api/server';
+import SERVER, { setCredentails, dropCredentails, setBaseUrl } from '../../api/server';
 
 import * as actions from '../actions';
 
@@ -54,6 +53,7 @@ export function* getUser(linkCallback, successActions, action) {
 
 export function* checkConnection(linkCallback, successActions, action) {
   try {
+    setBaseUrl(action.payload.server, action.payload.port);
     yield put({ type: actions.SET_LOADING, payload: { loading: true } });
     const result = yield call(SERVER.get, linkCallback(action));
     yield put({ type: actions.SET_CONNECTED });

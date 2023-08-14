@@ -1,13 +1,10 @@
 import axios from 'axios';
+// eslint-disable-next-line import/no-extraneous-dependencies
 
-const SERVER = axios.create({
-  baseURL: `${process.env.REACT_APP_BACKEND_ADDRESS}:${process.env.REACT_APP_BACKEND_PORT}`,
-});
+const SERVER = axios.create();
 
-let store = null;
-
-export const injectStoreToServer = (_store) => {
-  store = _store;
+export const setBaseUrl = (server, port) => {
+  SERVER.defaults.baseURL = `${server}:${port}`;
 };
 
 export const setCredentails = (token) => {

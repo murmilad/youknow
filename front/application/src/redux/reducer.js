@@ -17,8 +17,6 @@ const userReducer = (state = {}, action) => {
       return merge(state, { forgot_password: action.payload });
     case actions.SET_RESET:
       return merge(state, { reseted: action.payload });
-    case actions.SET_LOADING:
-      return merge(state, { is_loading: action.payload });
     case actions.SET_TOKEN:
       return merge(state, { token: action.payload });
     case actions.REMOVE_TOKEN:
@@ -50,6 +48,8 @@ const messageReducer = (state = {}, action) => {
 // eslint-disable-next-line default-param-last
 const statusReducer = (state = {}, action) => {
   switch (action.type) {
+    case actions.SET_LOADING:
+      return merge(state, { is_loading: action.payload.loading });
     case actions.SET_CONNECTED:
       return merge(state, { connected: action.payload });
     case actions.SET_DISCONNECTED:
