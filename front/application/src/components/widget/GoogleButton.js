@@ -10,7 +10,7 @@ function GoogleButton({ handleSubmit }) {
   return (
     <Pressable
       style={({ pressed }) => [
-        tw`ml-0 mr-2.5 mt-2 mb-2 border-2 border-blue-600 rounded-lg justify-center items-center w-1/2 px-5 py-3`,
+        tw`ml-0 mr-2.5 mt-2 mb-2 border border-blue-600 rounded-lg justify-center items-center w-1/2 px-5 py-3`,
         pressed ? tw`bg-blue-600` : null,
       ]}
       onPress={handleSubmit}
