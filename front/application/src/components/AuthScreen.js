@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { Image, View, Animated, Dimensions } from 'react-native';
 
@@ -21,13 +21,23 @@ function AuthScreen({ children, isLoading }) {
     left: -Dimensions.get('window').width,
   };
 
-  Animated.loop(
+  const animation = Animated.loop(
     Animated.timing(translation, {
       toValue: Dimensions.get('window').width * 2,
       duration: Dimensions.get('window').width * 3,
       useNativeDriver: true,
     })
-  ).start();
+  );
+
+  useEffect(() => {
+    if (isLoading) {
+      translation.setValue(0);
+      animation.start();
+    } else {
+      animation.stop();
+      translation.setValue(0);
+    }
+  }, [animation, isLoading]);
 
   return (
     <Screen>
