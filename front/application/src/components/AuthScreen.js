@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
-import { Image, View, Animated } from 'react-native';
+import { Image, View, Animated, Dimensions } from 'react-native';
 
 import tw from '../../tailwind';
 
@@ -10,24 +10,24 @@ const PropTypes = require('prop-types');
 const logoBigIcon = require('../assets/logo_big.png');
 
 function AuthScreen({ children, isLoading }) {
-  const ball = new Animated.Value(0);
-  const xVal = ball.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 250],
-  });
+  const translation = useRef(new Animated.Value(0)).current;
 
   const animStyle = {
     transform: [
       {
-        translateX: xVal,
+        translateX: translation,
       },
     ],
+    left: -Dimensions.get('window').width,
   };
-  Animated.timing(ball, {
-    toValue: 1,
-    duration: 1000,
-    useNativeDriver: true,
-  }).start();
+
+  Animated.loop(
+    Animated.timing(translation, {
+      toValue: Dimensions.get('window').width * 2,
+      duration: Dimensions.get('window').width * 3,
+      useNativeDriver: true,
+    })
+  ).start();
 
   return (
     <Screen>
