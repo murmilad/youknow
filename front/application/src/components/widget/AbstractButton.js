@@ -8,11 +8,27 @@ const PropTypes = require('prop-types');
 function AbstractButton({ children, header, onPress }) {
   return (
     <Pressable
-      style={tw`ml-5 mr-5 mt-2 mb-2 bg-blue-700 rounded-lg w-full w-auto px-5 py-2.5 `}
+      style={({ pressed }) => [
+        tw`ml-5 mr-5 mt-2 mb-2 border-2 border-blue-600 rounded-lg justify-center items-center w-auto px-5 py-2.5`,
+        pressed ? tw`bg-blue-600` : null,
+      ]}
       onPress={onPress}
     >
-      {header && <Text style={tw`text-white text-lg font-medium text-center`}>{header}</Text>}
-      {children}
+      {({ pressed }) => (
+        <>
+          {header && (
+            <Text
+              style={[
+                tw`text-blue-600 text-lg font-medium text-center`,
+                pressed ? tw`text-white text-lg font-medium text-center` : null,
+              ]}
+            >
+              {header}
+            </Text>
+          )}
+          {children}
+        </>
+      )}
     </Pressable>
   );
 }

@@ -44,6 +44,12 @@ function SignUpScreen({ status }) {
   return (
     <AuthScreen isLoading={status.is_loading}>
       <FormBody
+        initialValues={{
+          name: '',
+          email: '',
+          password: '',
+          empasswordConfirmail: '',
+        }}
         onSubmit={(values) => {
           dispatch({ type: actions.SIGN_UP, payload: { signup: values } });
         }}

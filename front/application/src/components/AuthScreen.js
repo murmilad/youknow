@@ -37,7 +37,7 @@ function AuthScreen({ children, isLoading }) {
       animation.stop();
       translation.setValue(0);
     }
-  }, [animation, isLoading]);
+  }, [translation, animation, isLoading]);
 
   return (
     <Screen>

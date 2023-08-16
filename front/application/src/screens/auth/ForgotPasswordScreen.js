@@ -23,6 +23,9 @@ function ForgotPasswordScreen({ status, navigation }) {
   return (
     <AuthScreen isLoading={status.is_loading}>
       <FormBody
+        initialValues={{
+          email: '',
+        }}
         onSubmit={(values) => {
           dispatch({
             type: actions.FORGOT_PASSWORD,

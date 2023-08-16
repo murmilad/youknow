@@ -3,8 +3,10 @@ import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import * as yup from 'yup';
 
+import tw from '../../../tailwind';
 import AuthScreen from '../../components/AuthScreen';
 import GoogleButton from '../../components/widget/GoogleButton';
 import GithubButton from '../../components/widget/GithubButton';
@@ -30,6 +32,10 @@ function LoginScreen({ status, navigation }) {
   return (
     <AuthScreen isLoading={status.is_loading}>
       <FormBody
+        initialValues={{
+          email: '',
+          password: '',
+        }}
         onSubmit={(values) => {
           dispatch({
             type: actions.LOG_IN,
@@ -41,17 +47,22 @@ function LoginScreen({ status, navigation }) {
         <FormFieldText name="email" header={t('field.email')} />
         <FormFieldTextPassword name="password" header={t('field.password')} />
         <FormFieldSubmitButton header={t('action.login')} />
-        <GoogleButton
-          handleSubmit={() => {
-            dispatch({ type: 'AUTH_GOOGLE' });
-          }}
+        <AbstractButton
+          header={t('action.sign-up')}
+          onPress={() => navigation.navigate('SignUpScreen')}
         />
-        <GithubButton
-          handleSubmit={() => {
-            dispatch({ type: 'AUTH_GITHUB' });
-          }}
-        />
-        <AbstractButton onPress={() => navigation.navigate('SignUpScreen')} />
+        <View style={tw`flex-row mx-5 mr-10 w-auto`}>
+          <GoogleButton
+            handleSubmit={() => {
+              dispatch({ type: 'AUTH_GOOGLE' });
+            }}
+          />
+          <GithubButton
+            handleSubmit={() => {
+              dispatch({ type: 'AUTH_GITHUB' });
+            }}
+          />
+        </View>
       </FormBody>
     </AuthScreen>
   );

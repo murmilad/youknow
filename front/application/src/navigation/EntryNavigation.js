@@ -33,7 +33,24 @@ function EntryNavigation({ user, status }) {
         headerTintColor: tw.color('bg-slate-100'),
       }}
     >
-      {status.connected && ((user.token && <WelcomeNavigation />) || <AuthNavigation />)}
+      {status.connected &&
+        ((user.token && (
+          <Navigator.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="WelcomeNavigation"
+            component={WelcomeNavigation}
+          />
+        )) || (
+          <Navigator.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="AuthNavigation"
+            component={AuthNavigation}
+          />
+        ))}
       {!status.connected && (
         <Navigator.Screen
           options={{

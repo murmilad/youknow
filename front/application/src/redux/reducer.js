@@ -51,9 +51,9 @@ const statusReducer = (state = {}, action) => {
     case actions.SET_LOADING:
       return merge(state, { is_loading: action.payload.loading });
     case actions.SET_CONNECTED:
-      return merge(state, { connected: action.payload });
+      return merge(state, { connected: true });
     case actions.SET_DISCONNECTED:
-      return merge(state, { connected: action.payload });
+      return merge(state, { connected: false });
     case actions.SET_CONNECTION_PARAMS:
       return merge(state, { server: action.payload.server, port: action.payload.port });
     default:

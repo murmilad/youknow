@@ -41,6 +41,10 @@ function ResetPasswordScreen({ status, navigation }) {
   return (
     <AuthScreen isLoading={status.is_loading}>
       <FormBody
+        initialValues={{
+          password: '',
+          empasswordConfirmail: '',
+        }}
         onSubmit={(values) => {
           dispatch({
             type: actions.RESET_PASSWORD,
