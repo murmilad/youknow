@@ -21,12 +21,17 @@ export default function App() {
     prefixes: [Linking.createURL('/'), 'https://youknow.app'],
     config: {
       screens: {
-        ResetPasswordScreen: {
-          path: 'resetpassword/:verifyHash',
+        AuthNavigation: {
+          screens: {
+            ResetPasswordScreen: {
+              path: 'resetpassword/:verifyHash',
+            },
+            VerifyScreen: {
+              path: 'verifyemail/:verifyHash',
+            },
+          },
         },
-        VerifyScreen: {
-          path: 'verifyemail/:verifyHash',
-        },
+        NotFound: '*',
       },
     },
   };

@@ -85,12 +85,8 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		firstName = strings.Split(firstName, " ")[1]
 	}
 
-	var serverName = config.ClientOrigin
-	if config.ExpoDebugMode == "true" {
-		serverName = "exp://youknow.app"
-	}
 	emailData := utils.EmailData{
-		URL:       template.URL(serverName + "/verifyemail/" + code),
+		URL:       template.URL(config.ClientOrigin + "/verifyemail/" + code),
 		FirstName: firstName,
 		Subject:   "YouknoW account verification code",
 		Header:    "Please verify your account to be able to login",

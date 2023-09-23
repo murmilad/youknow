@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'app.youknow'
+    namespace 'youknow.app'
     defaultConfig {
-        applicationId 'app.youknow'
+        applicationId 'youknow.app'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -114,7 +114,6 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    
 }
 
 // Apply static values from `gradle.properties` to the `android.packagingOptions`

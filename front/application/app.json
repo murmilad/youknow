@@ -28,14 +28,13 @@
           "data": [
             {
               "scheme": "https",
-              "host": "youknow.app",
-              "pathPrefix": "/"
+              "host": "youknow.app"
             }
           ],
           "category": ["BROWSABLE", "DEFAULT"]
         }
       ],
-      "package": "app.youknow"
+      "package": "youknow.app"
     },
     "web": {
       "favicon": "./src/assets/thing.png"

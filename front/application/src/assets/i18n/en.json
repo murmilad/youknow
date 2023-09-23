@@ -1,47 +1,46 @@
-
 {
-    "header": {
-        "error":"Error",
-        "info":"Message",
-        "login":"Log In",
-        "sign-up":"Sign up",
-        "signed-up" : "Please check and confirm your E-Mail",
-        "verify" : "Verify E-Mail address",
-        "application" : "You know",
-        "forgot-password" : "Enter your email address and we’ll send you a link to reset your password.",
-        "email-sent": "We have sent you a password recovery email.",
-        "reset-password": "Reset password",
-        "reseted": "Your password has been successfuly reseted."
-    },
-    "field": {
-      "name":"Name",
-      "email":"E-Mail",
-      "password":"Password",
-      "retype-password":"Retype password",
-      "server": "YouknoW server url", 
-      "port": "YouknoW server port" 
-    },
-    "error": {
-        "required": "The field is required!",
-        "email" : "Please enter correct email",
-        "name" : "Please enter name",
-        "password" : "Please enter password",
-        "password-match": "Passwords must match",
-        "password-letters": "Password can only contain Latin letters",
-        "password-short": "Password is too short - should be 8 chars minimum"
-    },
-    "action": {
-        "connect": "Connect",
-        "sign-up":"Sign Up",
-        "login" : "Login",
-        "verify" : "Verify",
-        "reset-password": "Reset password",
-        "retrieve-password": "Retrieve password"
-    },
-    "message":{
-        "loading": "Loading...",
-        "wait": "Wait...",
-        "login_incorrect": "User or Password incorrect"
-    }
- 
+  "header": {
+    "error": "Error",
+    "info": "Message",
+    "login": "Log In",
+    "sign-up": "Sign up",
+    "signed-up": "Please check and confirm your E-Mail",
+    "verify": "Verify E-Mail address",
+    "application": "You know",
+    "forgot-password": "Enter your email address and we’ll send you a link to reset your password.",
+    "email-sent": "We have sent you a password recovery email.",
+    "reset-password": "Reset password",
+    "reseted": "Your password has been successfuly reseted.",
+    "not-found": "This action is not found."
+  },
+  "field": {
+    "name": "Name",
+    "email": "E-Mail",
+    "password": "Password",
+    "retype-password": "Retype password",
+    "server": "YouknoW server url",
+    "port": "YouknoW server port"
+  },
+  "error": {
+    "required": "The field is required!",
+    "email": "Please enter correct email",
+    "name": "Please enter name",
+    "password": "Please enter password",
+    "password-match": "Passwords must match",
+    "password-letters": "Password can only contain Latin letters",
+    "password-short": "Password is too short - should be 8 chars minimum"
+  },
+  "action": {
+    "connect": "Connect",
+    "sign-up": "Sign Up",
+    "login": "Login",
+    "verify": "Verify",
+    "reset-password": "Reset password",
+    "retrieve-password": "Retrieve password"
+  },
+  "message": {
+    "loading": "Loading...",
+    "wait": "Wait...",
+    "login_incorrect": "User or Password incorrect"
+  }
 }

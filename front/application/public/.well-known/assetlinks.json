@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "youknow.app",
+      "sha256_cert_fingerprints": [
+        "3D:85:D4:E1:5F:78:D7:17:82:3F:B9:9C:A9:62:7E:2A:30:AD:98:42:E7:D0:96:BB:D1:D9:25:6B:7D:B5:77:15"
+      ]
+    }
+  }
+]

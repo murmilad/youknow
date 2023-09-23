@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-default */
 import React from 'react';
 
 import { connect } from 'react-redux';
@@ -20,14 +21,16 @@ function WelcomeNavigation({ navigation, user, status }) {
         name="Feed"
         component={FeedScreen}
         options={{
-          tabBarIcon: <ChatDotsComposite style={tw`text-white`} />,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: () => <ChatDotsComposite width={20} height={20} style={tw`text-blue-600`} />,
         }}
       />
       <Tab.Screen
         name="Account"
         component={UserScreen}
         options={{
-          tabBarIcon: <PersistCircle style={tw`text-white`} />,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: () => <PersistCircle width={20} height={20} style={tw`text-blue-600`} />,
         }}
       />
     </Tab.Navigator>

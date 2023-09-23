@@ -8,6 +8,7 @@ import WelcomeNavigation from './WelcomeNavigation';
 import AuthNavigation from './AuthNavigation';
 import SettingsScreen from '../screens/SettingsScreen';
 import * as actions from '../redux/actions';
+import NotFound from '../screens/NotFound';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
@@ -60,6 +61,13 @@ function EntryNavigation({ user, status }) {
           component={SettingsScreen}
         />
       )}
+      <Navigator.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="NotFound"
+        component={NotFound}
+      />
     </Navigator.Navigator>
   );
 }

@@ -14,7 +14,7 @@ import * as actions from '../../redux/actions';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
-function ResetPasswordScreen({ status, navigation }) {
+function ResetPasswordScreen({ status, route }) {
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
@@ -50,7 +50,7 @@ function ResetPasswordScreen({ status, navigation }) {
             type: actions.RESET_PASSWORD,
             payload: {
               reset: {
-                verifyHash: navigation.getParam('verifyHash'),
+                verifyHash: route.params.verifyHash,
                 password: values.password,
                 passwordConfirm: values.passwordConfirm,
               },
@@ -69,6 +69,7 @@ function ResetPasswordScreen({ status, navigation }) {
 
 ResetPasswordScreen.propTypes = {
   status: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
