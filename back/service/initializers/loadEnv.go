@@ -17,6 +17,7 @@ type Config struct {
 	ClientOrigin           string `mapstructure:"CLIENT_ORIGIN"`
 	ExternalBackendAddress string `mapstructure:"EXTERNAL_BACKEND_ADDRESS"`
 	ExternalBackendPort    string `mapstructure:"EXTERNAL_BACKEND_PORT"`
+	ExpoDebugMode    string `mapstructure:"EXPO_DEBUG_MODE"`
 
 	TokenSecret    string        `mapstructure:"TOKEN_SECRET"`
 	TokenExpiresIn time.Duration `mapstructure:"TOKEN_EXPIRED_IN"`

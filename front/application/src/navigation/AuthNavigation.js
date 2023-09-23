@@ -19,25 +19,25 @@ function AuthNavigation({ navigation, user, status }) {
   const Navigator = createStackNavigator();
 
   useEffect(() => {
-    if (status.signed_up) {
+    if (user.signed_up) {
       navigation.navigate('SignedUpScreen');
     }
-  }, [navigation, status.signed_up]);
+  }, [navigation, user.signed_up]);
   useEffect(() => {
-    if (status.reseted) {
+    if (user.reseted) {
       navigation.navigate('ResettedScreen');
     }
-  }, [navigation, status.reseted]);
+  }, [navigation, user.reseted]);
   useEffect(() => {
-    if (status.forgot_password) {
+    if (user.forgot_password) {
       navigation.navigate('ForgottenScreen');
     }
-  }, [navigation, status.forgot_password]);
+  }, [navigation, user.forgot_password]);
   useEffect(() => {
-    if (status.verified) {
+    if (user.verified) {
       navigation.navigate('LoginScreen');
     }
-  }, [navigation, status.verified]);
+  }, [navigation, user.verified]);
 
   return (
     <Navigator.Navigator

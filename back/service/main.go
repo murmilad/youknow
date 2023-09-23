@@ -71,12 +71,17 @@ func main() {
 	corsConfig.AllowHeaders = []string{"*"}
 
 	server.Use(cors.New(corsConfig))
-
+/* 	server.Use(gin.LoggerWithConfig(gin.LoggerConfig{
+		SkipPaths: []string{"/api/healthchecker"},
+	}))
+	server.Use(gin.Recovery())
+ */
 	router := server.Group("/api")
 	router.GET("/healthchecker", func(ctx *gin.Context) {
 		message := "Welcome to YouKnow"
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": message})
 	})
+
 
 	AuthRouteController.AuthRoute(router)
 	UserRouteController.UserRoute(router)

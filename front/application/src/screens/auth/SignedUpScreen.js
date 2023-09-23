@@ -3,6 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
+import tw from '../../../tailwind';
 import AuthScreen from '../../components/AuthScreen';
 import AbstractText from '../../components/widget/AbstractText';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -13,7 +15,9 @@ function SignedUpScreen({ status }) {
 
   return (
     <AuthScreen isLoading={false}>
-      <AbstractText>{t('header.signed-up')}</AbstractText>
+      <View style={tw`w-full h-30 justify-center`}>
+        <AbstractText style={tw`text-center`}>{t('header.signed-up')}</AbstractText>
+      </View>
     </AuthScreen>
   );
 }

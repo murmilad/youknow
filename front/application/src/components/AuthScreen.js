@@ -47,7 +47,7 @@ function AuthScreen({ children, isLoading }) {
           source={logoBigIcon}
         />
       </View>
-      <View>
+      <View style={tw`w-full`}>
         {isLoading && (
           <View style={tw`inset-x-0 top-0 z-50`}>
             <Animated.View style={[tw`h-1 bg-blue-500 w-9/12`, animStyle]} />
@@ -60,8 +60,12 @@ function AuthScreen({ children, isLoading }) {
 }
 
 AuthScreen.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   children: PropTypes.any.isRequired,
+};
+
+AuthScreen.defaultProps = {
+  isLoading: false,
 };
 
 export default AuthScreen;

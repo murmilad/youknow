@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 	"strings"
 	"time"
@@ -84,9 +85,12 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		firstName = strings.Split(firstName, " ")[1]
 	}
 
-	// ? Send Email
+	var serverName = config.ClientOrigin
+	if config.ExpoDebugMode == "true" {
+		serverName = "exp://youknow.app"
+	}
 	emailData := utils.EmailData{
-		URL:       config.ClientOrigin + "/verifyemail/" + code,
+		URL:       template.URL(serverName + "/verifyemail/" + code),
 		FirstName: firstName,
 		Subject:   "YouknoW account verification code",
 		Header:    "Please verify your account to be able to login",
@@ -135,7 +139,7 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 
 	// ? Send Email
 	emailData := utils.EmailData{
-		URL:       config.ClientOrigin + "/resetpassword/" + verification_code,
+		URL:       template.URL(config.ClientOrigin + "/resetpassword/" + verification_code),
 		FirstName: firstName,
 		Subject:   "YouknoW changing password",
 		Header:    "Please press button to change password",
