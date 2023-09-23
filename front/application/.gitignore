@@ -1,12 +1,13 @@
 public_/
 
 android/
-!android/app/build.gradle
+!*/android/app/build.gradle
 
 node_modules/
 .expo/
 dist/
 npm-debug.*
+build-*.*
 *.jks
 *.p8
 *.p12
