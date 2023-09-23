@@ -9,11 +9,11 @@ front/library/.pnp
 front/library/.pnp.js
 
 #front application
-front/application/android
+front/application/android/*
+!front/application/android/app/
+front/application/android/app/*
 !front/application/android/app/build.gradle
 front/application/public_/
-
-front/application/android/
 
 front/application/node_modules/
 front/application/.expo/
@@ -27,6 +27,7 @@ front/application/build-*.*
 *.mobileprovision
 *.orig.*
 front/application/web-build/
+front/application/build-*.aab
 
 # macOS
 .DS_Store
@@ -57,7 +58,6 @@ front/library/yarn-error.log*
 #proxy Fail2Ban
 
 proxy/fail2ban/*
-!proxy/fail2ban/.gitignore
 !proxy/fail2ban/action.d/
 !proxy/fail2ban/jail.local
 !proxy/fail2ban/README.md
