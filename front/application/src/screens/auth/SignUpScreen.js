@@ -11,7 +11,7 @@ import FormFieldText from '../../components/formik/field/FormFieldText';
 import FormFieldTextPassword from '../../components/formik/field/FormFieldTextPassword';
 import FormFieldSubmitButton from '../../components/formik/field/FormFieldSubmitButton';
 import FormBody from '../../components/formik/FormBody';
-import * as actions from '../../redux/actions';
+import * as actions from '../../redux/constants/action';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 

@@ -5,6 +5,8 @@ export const SET_FORGOT_PASSWORD = 'SET_FORGOT_PASSWORD';
 export const SET_RESET = 'SET_RESET';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_TOKEN = 'SET_TOKEN';
+export const CLEAN_LOGIN_STATUS = 'CLEAN_LOGIN_STATUS';
+
 export const REMOVE_TOKEN = 'REMOVE_TOKEN';
 export const PUT_TOKEN_HEADER = 'PUT_TOKEN_HEADER';
 

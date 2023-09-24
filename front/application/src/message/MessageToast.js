@@ -4,7 +4,7 @@ import Toast from 'react-native-toast-message';
 import { connect, useDispatch } from 'react-redux';
 import { View, Text } from 'react-native';
 
-import * as actions from '../redux/actions';
+import * as actions from '../redux/constants/action';
 import tw from '../../tailwind';
 
 // eslint-disable-next-line import/no-extraneous-dependencies

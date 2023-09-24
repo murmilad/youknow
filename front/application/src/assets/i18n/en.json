@@ -6,6 +6,7 @@
     "sign-up": "Sign up",
     "signed-up": "Please check and confirm your E-Mail",
     "verify": "Verify E-Mail address",
+    "verified": "Your E-Mail has been verified",
     "application": "You know",
     "forgot-password": "Enter your email address and we’ll send you a link to reset your password.",
     "email-sent": "We have sent you a password recovery email.",
@@ -34,6 +35,8 @@
     "connect": "Connect",
     "sign-up": "Sign Up",
     "login": "Login",
+    "logout": "Logout",
+    "goto-login": "Login",
     "verify": "Verify",
     "reset-password": "Reset password",
     "retrieve-password": "Retrieve password"

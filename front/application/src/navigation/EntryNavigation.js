@@ -7,7 +7,7 @@ import tw from '../../tailwind';
 import WelcomeNavigation from './WelcomeNavigation';
 import AuthNavigation from './AuthNavigation';
 import SettingsScreen from '../screens/SettingsScreen';
-import * as actions from '../redux/actions';
+import * as actions from '../redux/constants/action';
 import NotFound from '../screens/NotFound';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');

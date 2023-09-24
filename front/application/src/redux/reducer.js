@@ -1,24 +1,30 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { combineReducers } from 'redux';
-import * as actions from './actions';
+import * as actions from './constants/action';
+import * as loginStatus from './constants/loginStatus';
 
 const merge = (prev, next) => ({ ...prev, ...next });
 
 // eslint-disable-next-line default-param-last
 const userReducer = (state = {}, action) => {
   switch (action.type) {
+    case actions.CLEAN_LOGIN_STATUS:
+      return merge(state, { login_status: null });
     case actions.SET_SIGN_UP:
-      return merge(state, { signed_up: action.payload });
+      return merge(state, { login_status: loginStatus.LOGIN_STATUS_SIGNED_UP });
     case actions.SET_VERIFIED:
-      return merge(state, { verified: action.payload });
+      return merge(state, { login_status: loginStatus.LOGIN_STATUS_VERIFIED });
     case actions.SET_USER:
-      return merge(state, { user: action.payload });
+      return merge(state, { user: action.payload.user });
     case actions.SET_FORGOT_PASSWORD:
-      return merge(state, { forgot_password: action.payload });
+      return merge(state, { login_status: loginStatus.LOGIN_STATUS_PASSWORD_FORGOT });
     case actions.SET_RESET:
-      return merge(state, { reseted: action.payload });
+      return merge(state, { login_status: loginStatus.LOGIN_STATUS_PASSWORD_RESET });
     case actions.SET_TOKEN:
-      return merge(state, { token: action.payload });
+      return merge(state, {
+        login_status: loginStatus.LOGIN_STATUS_LOGGED_IN,
+        token: { token: action.payload.token },
+      });
     case actions.REMOVE_TOKEN:
       return {
         ...state,

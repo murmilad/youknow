@@ -2,11 +2,14 @@
 import { call, put } from 'redux-saga/effects';
 import SERVER, { setCredentails, dropCredentails, setBaseUrl } from '../../api/server';
 
-import * as actions from '../actions';
+import * as actions from '../constants/action';
 
 export function getErrorMessage(error) {
   const errorMessage = error.response?.data.message || error.response?.data || error.message;
-  if (errorMessage === 'invalidate token: Token is expired') {
+  if (
+    errorMessage === 'invalidate token: Token is expired' ||
+    errorMessage === 'You are not logged in'
+  ) {
     return [errorMessage, { type: actions.LOG_OUT }];
   }
   return [errorMessage];
@@ -42,13 +45,19 @@ export function* deleteResource(linkCallback, successActions, action) {
 
 export function* getUser(linkCallback, successActions, action) {
   try {
+    yield put({ type: actions.SET_LOADING, payload: { loading: true } });
     const result = yield call(SERVER.get, linkCallback(action));
     for (const successAction of successActions(action, result)) {
       yield put(successAction);
     }
   } catch (error) {
-    yield put({ type: actions.LOG_OUT });
+    const [errorMessage, errorCallback] = getErrorMessage(error);
+    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
+    if (errorCallback) {
+      yield put(errorCallback);
+    }
   }
+  yield put({ type: actions.SET_LOADING, payload: { loading: false } });
 }
 
 export function* checkConnection(linkCallback, successActions, action) {

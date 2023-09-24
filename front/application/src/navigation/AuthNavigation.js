@@ -11,6 +11,9 @@ import ResettedScreen from '../screens/auth/ResettedScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ForgottenScreen from '../screens/auth/ForgottenScreen';
 import VerifyScreen from '../screens/auth/VerifyScreen';
+import VerifiedScreen from '../screens/auth/VerifiedScreen';
+
+import * as loginStatus from '../redux/constants/loginStatus';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
@@ -19,25 +22,18 @@ function AuthNavigation({ navigation, user, status }) {
   const Navigator = createStackNavigator();
 
   useEffect(() => {
-    if (user.signed_up) {
+    if (user.login_status === loginStatus.LOGIN_STATUS_SIGNED_UP) {
       navigation.navigate('SignedUpScreen');
-    }
-  }, [navigation, user.signed_up]);
-  useEffect(() => {
-    if (user.reseted) {
+    } else if (user.login_status === loginStatus.LOGIN_STATUS_PASSWORD_RESET) {
       navigation.navigate('ResettedScreen');
-    }
-  }, [navigation, user.reseted]);
-  useEffect(() => {
-    if (user.forgot_password) {
+    } else if (user.login_status === loginStatus.LOGIN_STATUS_PASSWORD_FORGOT) {
       navigation.navigate('ForgottenScreen');
-    }
-  }, [navigation, user.forgot_password]);
-  useEffect(() => {
-    if (user.verified) {
+    } else if (user.login_status === loginStatus.LOGIN_STATUS_VERIFIED) {
+      navigation.navigate('VerifiedScreen');
+    } else {
       navigation.navigate('LoginScreen');
     }
-  }, [navigation, user.verified]);
+  }, [navigation, user.login_status]);
 
   return (
     <Navigator.Navigator
@@ -100,6 +96,13 @@ function AuthNavigation({ navigation, user, status }) {
         }}
         name="VerifyScreen"
         component={VerifyScreen}
+      />
+      <Navigator.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="VerifiedScreen"
+        component={VerifiedScreen}
       />
     </Navigator.Navigator>
   );

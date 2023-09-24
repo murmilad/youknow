@@ -1,6 +1,6 @@
 import { all, takeLatest } from 'redux-saga/effects';
 
-import * as actions from './actions';
+import * as actions from './constants/action';
 import {
   oauth,
   submitGet,
@@ -15,26 +15,15 @@ import googleAuthorize from '../api/google';
 import githubAuthorize from '../api/github';
 
 export function* callServerLastest() {
-  yield takeLatest(actions.AUTH_GITHUB, oauth(githubAuthorize), (action, response) => [
-    { type: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
-  ]);
+  // User check
 
-  yield takeLatest(actions.AUTH_GOOGLE, oauth(googleAuthorize), (action, response) => [
-    { type: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
-  ]);
-
-  yield takeLatest(
-    actions.VERIFY,
-    submitGet,
-    (action) => `/api/auth/verifyemail/${action.payload.verifyHash}`,
-    (action, response) => [{ type: actions.SET_VERIFIED, payload: { verified: true } }]
-  );
   yield takeLatest(
     actions.CHECK_CONNECTION,
     checkConnection,
     (action) => '/api/healthchecker',
     (action, response) => [{ type: actions.GET_USER }]
   );
+
   yield takeLatest(
     actions.CONNECT_AND_SET_PARAMS,
     checkConnection,
@@ -47,35 +36,18 @@ export function* callServerLastest() {
       { type: actions.GET_USER },
     ]
   );
+
+  // User get
+
   yield takeLatest(
     actions.GET_USER,
     getUser,
     (action) => '/api/users/me',
     (action, response) => [{ type: actions.SET_USER, payload: { user: response.data.data.user } }]
   );
-  yield takeLatest(
-    actions.SIGN_UP,
-    submitForm,
-    '/api/auth/register',
-    (request) => request.payload.signup,
-    (action, response) => [{ type: actions.SET_SIGN_UP, payload: { signed_up: true } }]
-  );
-  yield takeLatest(
-    actions.FORGOT_PASSWORD,
-    submitForm,
-    '/api/auth/forgotpasswordapp',
-    (request) => request.payload.forgot,
-    (action, response) => [
-      { type: actions.SET_FORGOT_PASSWORD, payload: { forgot_password: true } },
-    ]
-  );
-  yield takeLatest(
-    actions.RESET_PASSWORD,
-    submitForm,
-    '/api/auth/resetpasswordapp',
-    (request) => request.payload.reset,
-    (action, response) => [{ type: actions.SET_RESET, payload: { reseted: true } }]
-  );
+
+  // User login
+
   yield takeLatest(
     actions.LOG_IN,
     submitForm,
@@ -83,12 +55,61 @@ export function* callServerLastest() {
     (request) => request.payload.login,
     (action, response) => [
       { type: actions.PUT_TOKEN_HEADER, payload: { token: response.data.token } },
+      { type: actions.GET_USER },
     ]
   );
   yield takeLatest(actions.PUT_TOKEN_HEADER, putTokenToHeader, (action, response) => [
     { type: actions.SET_TOKEN, payload: { token: action.payload.token } },
   ]);
+
+  // User logout
+
   yield takeLatest(actions.LOG_OUT, logOut);
+
+  // User signUp/login OAuth
+
+  yield takeLatest(actions.AUTH_GITHUB, oauth(githubAuthorize), (action, response) => [
+    { type: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
+    { type: actions.GET_USER },
+  ]);
+
+  yield takeLatest(actions.AUTH_GOOGLE, oauth(googleAuthorize), (action, response) => [
+    { type: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
+    { type: actions.GET_USER },
+  ]);
+
+  // User signUp E-Mail
+
+  yield takeLatest(
+    actions.VERIFY,
+    submitGet,
+    (action) => `/api/auth/verifyemail/${action.payload.verifyHash}`,
+    (action, response) => [{ type: actions.SET_VERIFIED }]
+  );
+  yield takeLatest(
+    actions.SIGN_UP,
+    submitForm,
+    '/api/auth/register',
+    (request) => request.payload.signup,
+    (action, response) => [{ type: actions.SET_SIGN_UP }]
+  );
+
+  // User Forgot password E-Mail
+
+  yield takeLatest(
+    actions.FORGOT_PASSWORD,
+    submitForm,
+    '/api/auth/forgotpassword',
+    (request) => request.payload.forgot,
+    (action, response) => [{ type: actions.SET_FORGOT_PASSWORD }]
+  );
+  yield takeLatest(
+    actions.RESET_PASSWORD,
+    submitForm,
+    '/api/auth/resetpassword',
+    (request) => request.payload.reset,
+    (action, response) => [{ type: actions.SET_RESET }]
+  );
 }
 
 export default function* rootSaga() {

@@ -9,40 +9,37 @@ import AuthScreen from '../../components/AuthScreen';
 import AbstractText from '../../components/widget/AbstractText';
 import AbstractButton from '../../components/widget/AbstractButton';
 import * as actions from '../../redux/constants/action';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
-function VerifyScreen({ status, route }) {
+function VerifiedScreen({ status, navigation }) {
   const dispatch = useDispatch();
 
-  const { t, i18n } = useTranslation();
-
-  const handleVerify = () => {
+  const handleVerified = () => {
     dispatch({
-      type: actions.VERIFY,
-      payload: {
-        verifyHash: route.params.verifyHash,
-      },
+      type: actions.CLEAN_LOGIN_STATUS,
     });
   };
+  const { t, i18n } = useTranslation();
 
   return (
     <AuthScreen isLoading={status.is_loading}>
       <View style={tw`w-full h-30 justify-center`}>
-        <AbstractText style={tw`text-center`}>{t('header.verify')}</AbstractText>
+        <AbstractText style={tw`text-center`}>{t('header.verified')}</AbstractText>
       </View>
-      <AbstractButton header={t('action.verify')} onPress={handleVerify} />
+      <AbstractButton header={t('action.goto-login')} onPress={handleVerified} />
     </AuthScreen>
   );
 }
 
-VerifyScreen.propTypes = {
+VerifiedScreen.propTypes = {
   status: PropTypes.object.isRequired,
-  route: PropTypes.object.isRequired,
+  navigation: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   status: state.status,
 });
 
-export default connect(mapStateToProps)(VerifyScreen);
+export default connect(mapStateToProps)(VerifiedScreen);
