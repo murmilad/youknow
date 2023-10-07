@@ -1,6 +1,7 @@
 export const SET_SIGN_UP = 'SET_SIGN_UP';
 export const SET_VERIFIED = 'SET_VERIFIED';
 export const SET_USER = 'SET_USER';
+export const SET_MAY_FORGET_PASSWORD = 'SET_MAY_FORGET_PASSWORD';
 export const SET_FORGOT_PASSWORD = 'SET_FORGOT_PASSWORD';
 export const SET_RESET = 'SET_RESET';
 export const SET_LOADING = 'SET_LOADING';

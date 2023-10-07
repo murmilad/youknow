@@ -56,6 +56,7 @@ export function* callServerLastest() {
     (action, response) => [
       { type: actions.PUT_TOKEN_HEADER, payload: { token: response.data.token } },
       { type: actions.GET_USER },
+      { type: actions.SET_MAY_FORGET_PASSWORD, payload: { may_forget: false } },
     ]
   );
   yield takeLatest(actions.PUT_TOKEN_HEADER, putTokenToHeader, (action, response) => [
@@ -101,7 +102,10 @@ export function* callServerLastest() {
     submitForm,
     '/api/auth/forgotpassword',
     (request) => request.payload.forgot,
-    (action, response) => [{ type: actions.SET_FORGOT_PASSWORD }]
+    (action, response) => [
+      { type: actions.SET_FORGOT_PASSWORD },
+      { type: actions.SET_MAY_FORGET_PASSWORD, payload: { may_forget: false } },
+    ]
   );
   yield takeLatest(
     actions.RESET_PASSWORD,

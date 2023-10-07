@@ -20,7 +20,7 @@ import * as actions from '../../redux/constants/action';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
-function LoginScreen({ status, navigation }) {
+function LoginScreen({ status, user, navigation }) {
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
@@ -47,6 +47,12 @@ function LoginScreen({ status, navigation }) {
         <FormFieldText name="email" header={t('field.email')} />
         <FormFieldTextPassword name="password" header={t('field.password')} />
         <FormFieldSubmitButton header={t('action.login')} />
+        {user.may_forget && (
+          <AbstractButton
+            header={t('action.reset-password')}
+            onPress={() => navigation.navigate('ForgotPasswordScreen')}
+          />
+        )}
         <AbstractButton
           header={t('action.sign-up')}
           onPress={() => navigation.navigate('SignUpScreen')}
@@ -70,10 +76,12 @@ function LoginScreen({ status, navigation }) {
 
 LoginScreen.propTypes = {
   status: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   status: state.status,
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(LoginScreen);

@@ -12,6 +12,9 @@ export function getErrorMessage(error) {
   ) {
     return [errorMessage, { type: actions.LOG_OUT }];
   }
+  if (errorMessage === 'Invalid email or Password') {
+    return [errorMessage, { type: actions.SET_MAY_FORGET_PASSWORD, payload: { may_forget: true } }];
+  }
   return [errorMessage];
 }
 

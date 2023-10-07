@@ -30,12 +30,7 @@ function ResetPasswordScreen({ status, route }) {
       .required()
       .min(8, t('error.password-short'))
       .matches(/[a-zA-Z]/, t('error.password-letters'))
-      .test(
-        'passwords-match',
-        t('error.password-match'),
-        // eslint-disable-next-line react/no-this-in-sfc
-        (value) => this.parent.resetPassword === value
-      ),
+      .oneOf([yup.ref('password')], t('error.password-match')),
   });
 
   return (

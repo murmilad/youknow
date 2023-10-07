@@ -29,7 +29,7 @@ function ForgotPasswordScreen({ status, navigation }) {
         onSubmit={(values) => {
           dispatch({
             type: actions.FORGOT_PASSWORD,
-            payload: { login: values },
+            payload: { forgot: values },
           });
         }}
         validationSchema={validationSchema}
