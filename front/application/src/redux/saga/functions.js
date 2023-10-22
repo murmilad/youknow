@@ -67,7 +67,7 @@ export function* checkConnection(linkCallback, successActions, action) {
   try {
     setBaseUrl(action.payload.server, action.payload.port);
     yield put({ type: actions.SET_LOADING, payload: { loading: true } });
-    const result = yield call(SERVER.get, linkCallback(action));
+    const result = yield call((link) => SERVER.get(link), linkCallback(action));
     yield put({ type: actions.SET_CONNECTED });
     for (const successAction of successActions(action, result)) {
       yield put(successAction);

@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import { Text } from 'react-native';
 
+import { createStackNavigator } from '@react-navigation/stack';
 import EntryNavigation from './src/navigation/EntryNavigation';
 import MessageToast from './src/message/MessageToast';
 import './i18n';
@@ -23,6 +24,9 @@ export default function App() {
       screens: {
         AuthNavigation: {
           screens: {
+            EntryScreen: {
+              path: '/:token',
+            },
             ResetPasswordScreen: {
               path: 'resetpassword/:verifyHash',
             },
@@ -36,12 +40,20 @@ export default function App() {
     },
   };
 
+  const Navigator = createStackNavigator();
+
   return (
     <Provider store={store}>
       <StatusBar />
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer linking={linking} fallback={<Text>{t('message.loading')}</Text>}>
-          <EntryNavigation />
+          <Navigator.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="EntryNavigation"
+            component={EntryNavigation}
+          />
         </NavigationContainer>
       </PersistGate>
       <MessageToast />

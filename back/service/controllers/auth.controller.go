@@ -265,10 +265,6 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 	code := ctx.Query("code")
 	var pathUrl string = "/"
 
-	if ctx.Query("state") != "" {
-		pathUrl = ctx.Query("state")
-	}
-
 	if code == "" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": "Authorization code not provided!"})
 		return
@@ -330,7 +326,7 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 
 	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
-	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
+	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl + "?token=" + access_token))
 }
 
 func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
@@ -342,10 +338,6 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 
 	code := ctx.Query("code")
 	var pathUrl string = "/"
-
-	if ctx.Query("state") != "" {
-		pathUrl = ctx.Query("state")
-	}
 
 	if code == "" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": "Authorization code not provided!"})
@@ -408,5 +400,5 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 
 	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
-	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
+	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl + "?token=" + access_token))
 }

@@ -10,6 +10,8 @@ front/library/.pnp
 front/library/.pnp.js
 
 #front application
+front/application/ios/
+
 front/application/android/*
 !front/application/android/app/
 front/application/android/app/*

@@ -69,15 +69,9 @@ export function* callServerLastest() {
 
   // User signUp/login OAuth
 
-  yield takeLatest(actions.AUTH_GITHUB, oauth(githubAuthorize), (action, response) => [
-    { type: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
-    { type: actions.GET_USER },
-  ]);
+  yield takeLatest(actions.AUTH_GITHUB, oauth, githubAuthorize, () => []);
 
-  yield takeLatest(actions.AUTH_GOOGLE, oauth(googleAuthorize), (action, response) => [
-    { type: actions.PUT_TOKEN_HEADER, payload: { token: response.accessToken } },
-    { type: actions.GET_USER },
-  ]);
+  yield takeLatest(actions.AUTH_GOOGLE, oauth, googleAuthorize, () => []);
 
   // User signUp E-Mail
 

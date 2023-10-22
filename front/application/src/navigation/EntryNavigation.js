@@ -12,10 +12,18 @@ import NotFound from '../screens/NotFound';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
-function EntryNavigation({ user, status }) {
+function EntryNavigation({ user, status, route }) {
   const Navigator = createStackNavigator();
   const dispatch = useDispatch();
   useEffect(() => {
+    if (route.params?.token) {
+      dispatch({
+        type: actions.PUT_TOKEN_HEADER,
+        payload: {
+          token: route.params.token,
+        },
+      });
+    }
     if (status.server) {
       dispatch({
         type: actions.CONNECT_AND_SET_PARAMS,
@@ -26,7 +34,7 @@ function EntryNavigation({ user, status }) {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [route]);
 
   return (
     <Navigator.Navigator
@@ -75,8 +83,12 @@ function EntryNavigation({ user, status }) {
 EntryNavigation.propTypes = {
   user: PropTypes.object.isRequired,
   status: PropTypes.object.isRequired,
+  route: PropTypes.object,
 };
 
+EntryNavigation.defaultProps = {
+  route: undefined,
+};
 const mapStateToProps = (state) => ({
   status: state.status,
   user: state.user,

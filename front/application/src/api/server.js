@@ -1,5 +1,4 @@
 import axios from 'axios';
-// eslint-disable-next-line import/no-extraneous-dependencies
 
 const SERVER = axios.create();
 
@@ -16,6 +15,8 @@ export const dropCredentails = () => {
 };
 
 /* 
+
+
 SERVER.interceptors.response.use(
     res => {
         if (res.data.err) {

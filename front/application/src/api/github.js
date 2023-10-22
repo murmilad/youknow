@@ -29,6 +29,8 @@ async function githubAuthorize() {
 
 export default githubAuthorize;
 /*
+
+
    // Log in to get an authentication token
   const authState = await authorize(config);
   
