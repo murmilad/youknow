@@ -2,6 +2,7 @@
 
 .env
 .vscode/
+docker-compose-prod.yml
 
 #front library
 
