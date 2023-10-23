@@ -21,6 +21,7 @@ export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const LOG_IN = 'LOG_IN';
 export const CHECK_LOG_IN = 'CHECK_LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
+export const OAUTH = 'OAUTH';
 
 export const MESSAGE_START = 'MESSAGE_START';
 export const MESSAGE_SUCCESS = 'MESSAGE_SUCCESS';

@@ -326,7 +326,11 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 
 	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
-	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl + "?token=" + access_token))
+	if ctx.Query("mobile") == "1" {
+		ctx.JSON(http.StatusOK, gin.H{"token": access_token})
+	} else {
+		ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
+	}
 }
 
 func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
@@ -400,5 +404,9 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 
 	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
-	ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl + "?token=" + access_token))
+	if ctx.Query("mobile") == "1" {
+		ctx.JSON(http.StatusOK, gin.H{"token": access_token})
+	} else {
+		ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
+	}
 }

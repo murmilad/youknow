@@ -14,6 +14,7 @@ import VerifyScreen from '../screens/auth/VerifyScreen';
 import VerifiedScreen from '../screens/auth/VerifiedScreen';
 
 import * as loginStatus from '../redux/constants/loginStatus';
+import OAuthScreen from '../screens/auth/OAuthScreen';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
@@ -103,6 +104,13 @@ function AuthNavigation({ navigation, user, status }) {
         }}
         name="VerifiedScreen"
         component={VerifiedScreen}
+      />
+      <Navigator.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="OAuthScreen"
+        component={OAuthScreen}
       />
     </Navigator.Navigator>
   );

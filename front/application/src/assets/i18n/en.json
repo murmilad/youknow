@@ -12,7 +12,8 @@
     "email-sent": "We have sent you a password recovery email.",
     "reset-password": "Reset password",
     "reseted": "Your password has been successfuly reseted.",
-    "not-found": "This action is not found."
+    "not-found": "This action is not found.",
+    "logging-in": "Logging in"
   },
   "field": {
     "name": "Name",

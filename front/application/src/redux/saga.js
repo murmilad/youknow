@@ -108,6 +108,18 @@ export function* callServerLastest() {
     (request) => request.payload.reset,
     (action, response) => [{ type: actions.SET_RESET }]
   );
+  // User OAuth login
+  yield takeLatest(
+    actions.OAUTH,
+    submitGet,
+    (action) =>
+      `/api/sessions/oauth/${action.payload.params.oauthType}?mobile=1&${Object.keys(
+        action.payload.params
+      )
+        .map((key) => `${key}=${action.payload.params[key]}`)
+        .join('&')}`,
+    (action, response) => [{ type: actions.PUT_TOKEN_HEADER, payload: { token: response.token } }]
+  );
 }
 
 export default function* rootSaga() {

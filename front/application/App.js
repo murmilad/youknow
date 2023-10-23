@@ -1,4 +1,5 @@
 import React from 'react';
+//            https://youknow.app/api/sessions/oauth/github?code=05acb1065f4c22e46fe0&state=_TCJImjQ2EqqevZb9yPOJg
 
 import { StatusBar } from 'expo-status-bar';
 import { Provider } from 'react-redux';
@@ -18,13 +19,21 @@ const prefix = Linking.createURL('/');
 
 export default function App() {
   const { t, i18n } = useTranslation();
+
+  Linking.addEventListener('url', ({ url }) => {
+    console.log(`link to url + ${url}`);
+  });
+
   const linking = {
     prefixes: [Linking.createURL('/'), 'https://youknow.app'],
     config: {
       screens: {
         AuthNavigation: {
           screens: {
-            EntryScreen: {
+            OAuthScreen: {
+              path: '/api/sessions/oauth/:oauthType',
+            },
+            SignedUpScreen: {
               path: '/:token',
             },
             ResetPasswordScreen: {
@@ -47,13 +56,7 @@ export default function App() {
       <StatusBar />
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer linking={linking} fallback={<Text>{t('message.loading')}</Text>}>
-          <Navigator.Screen
-            options={{
-              headerShown: false,
-            }}
-            name="EntryNavigation"
-            component={EntryNavigation}
-          />
+          <EntryNavigation />
         </NavigationContainer>
       </PersistGate>
       <MessageToast />

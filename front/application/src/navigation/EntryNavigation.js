@@ -12,18 +12,11 @@ import NotFound from '../screens/NotFound';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
-function EntryNavigation({ user, status, route }) {
+function EntryNavigation({ user, status }) {
   const Navigator = createStackNavigator();
   const dispatch = useDispatch();
+
   useEffect(() => {
-    if (route.params?.token) {
-      dispatch({
-        type: actions.PUT_TOKEN_HEADER,
-        payload: {
-          token: route.params.token,
-        },
-      });
-    }
     if (status.server) {
       dispatch({
         type: actions.CONNECT_AND_SET_PARAMS,
@@ -34,10 +27,11 @@ function EntryNavigation({ user, status, route }) {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [route]);
+  });
 
   return (
     <Navigator.Navigator
+      name="EntryNavigation"
       screenOptions={{
         headerTintColor: tw.color('bg-slate-100'),
       }}
