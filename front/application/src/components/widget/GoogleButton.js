@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 // eslint-disable-next-line import/no-named-default
 import { default as GoogleIcon } from '../../assets/google.svg';
+
 import tw from '../../../tailwind';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "youknow",
-    "slug": "youknow",
-    "scheme": "youknow",
+    "name": "app.youknow",
+    "slug": "app.youknow",
+    "scheme": "app.youknow",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/thing.png",
@@ -15,7 +15,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "youknow.app"
+      "bundleIdentifier": "app.youknow"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,21 +28,20 @@
           "autoVerify": true,
           "data": [
             {
-              "scheme": "https",
-              "host": "youknow.app"
+              "scheme": "app.youknow"
             }
           ],
           "category": ["BROWSABLE", "DEFAULT"]
         }
       ],
-      "package": "youknow.app"
+      "package": "app.youknow"
     },
     "web": {
       "favicon": "./src/assets/thing.png"
     },
     "extra": {
       "eas": {
-        "projectId": "540cb903-c25c-4a6b-8aaf-11cb4296e542"
+        "projectId": "345506889260-562hc7qtd48vjomjnqsi9eue7lqfjf1q.apps.googleusercontent.com"
       }
     },
     "plugins": [

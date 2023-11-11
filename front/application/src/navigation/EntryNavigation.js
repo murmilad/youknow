@@ -27,7 +27,7 @@ function EntryNavigation({ user, status }) {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
+  }, []);
 
   return (
     <Navigator.Navigator

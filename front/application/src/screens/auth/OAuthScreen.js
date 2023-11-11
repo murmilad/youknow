@@ -23,16 +23,14 @@ function OAuthScreen({ status, route }) {
         params: route.params,
       },
     });
-  }, [dispatch, route]);
+  }, [route]);
 
   //https://youknow.app/api/sessions/oauth/github?code=0f6f6903eb2121765a9c&state=6Ef4Ee8XHHerbktBAMkZ6g
   //https://youknow.app/api/sessions/oauth/google?state=y2AkWebTnv2Ft_uRWaAO9g&code=4%2F0AfJohXkbUqYYoO5y0vVrFnjO0v1oOelYwEyrBT0IyspTjRwjmI78t_ok7hpygNUlxn4x8w&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none
   return (
     <AuthScreen isLoading={status.is_loading}>
       <View style={tw`w-full h-30 justify-center`}>
-        <AbstractText style={tw`text-center`}>
-          {t('header.logging-in') + ' ' + Object.keys(route.params)}{' '}
-        </AbstractText>
+        <AbstractText style={tw`text-center`}>{t('header.logging-in')}</AbstractText>
       </View>
     </AuthScreen>
   );

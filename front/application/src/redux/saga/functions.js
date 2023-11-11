@@ -87,6 +87,7 @@ export function* oauth(handler, successActions, action) {
   try {
     yield put({ type: actions.SET_LOADING, payload: { loading: true } });
     const result = handler();
+    console.log(`[OAUTH] ${JSON.stringify(result)}`);
     for (const successAction of successActions(action, result)) {
       yield put(successAction);
     }
@@ -104,10 +105,12 @@ export function* submitGet(linkCallback, successActions, action) {
   try {
     yield put({ type: actions.SET_LOADING, payload: { loading: true } });
     const result = yield call(SERVER.get, linkCallback(action));
+    console.log(`[SUCCESS] LINK ${linkCallback(action)} RESULT ${JSON.stringify(result)}`);
     for (const successAction of successActions(action, result)) {
       yield put(successAction);
     }
   } catch (error) {
+    console.log(`[ERROR] LINK ${linkCallback(action)} ERROR ${JSON.stringify(error)}`);
     const [errorMessage, errorCallback] = getErrorMessage(error);
     yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
     if (errorCallback) {

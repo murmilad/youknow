@@ -20,11 +20,10 @@ const config = {
   },
 };
 
-async function githubAuthorize() {
+function githubAuthorize() {
   // Log in to get an authentication token
-  const authState = await authorize(config);
 
-  return authState;
+  return authorize(config);
 }
 
 export default githubAuthorize;

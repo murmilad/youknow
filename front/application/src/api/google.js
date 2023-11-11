@@ -1,26 +1,19 @@
 import { authorize } from 'react-native-app-auth';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import {
-  GOOGLE_OAUTH_CLIENT_ID,
-  GOOGLE_OAUTH_CLIENT_SECRET,
-  GOOGLE_OAUTH_REDIRECT,
-} from 'react-native-dotenv';
+import { GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_REDIRECT } from 'react-native-dotenv';
 
 const config = {
   issuer: 'https://accounts.google.com',
   clientId: GOOGLE_OAUTH_CLIENT_ID,
-  clientSecret: GOOGLE_OAUTH_CLIENT_SECRET,
   redirectUrl: GOOGLE_OAUTH_REDIRECT,
-  skipCodeExchange: true,
-  usePKCE: false,
   scopes: ['profile', 'email'],
 };
 
-async function googleAuthorize() {
+function googleAuthorize() {
   // Log in to get an authentication token
-  const authState = await authorize(config);
-
-  return authState;
+  console.log(`GOOGLE_OAUTH_CLIENT_ID = ${GOOGLE_OAUTH_CLIENT_ID}`);
+  console.log(`GOOGLE_OAUTH_REDIRECT = ${GOOGLE_OAUTH_REDIRECT}`);
+  return authorize(config);
 }
 
 export default googleAuthorize;

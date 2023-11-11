@@ -234,6 +234,43 @@ docker compose exec netdata chmod -R a+r /etc/netdata/go.d
 docker compose exec netdata chmod -R a+r /etc/netdata/python.d
 ```
 
+## Using OAuth
+
+### for Android
+
+#### Name your project in app.json for example:
+
+```conf
+expo->scheme: "app.youknow"
+expo->android->package: "app.youknow"
+expo->android->intentFilters->data->scheme: "app.youknow"
+```
+
+#### Create OAuth for Android
+
+[How to register Google OAuth](https://developers.google.com/identity/protocols/oauth2/native-app?hl=ru)
+? Set your project id
+
+```conf
+? expo->extra->eas->projectId: "<projectId from google>"
+```
+
+#### Configure react-native-app-auth
+
+[How to configure your app](https://github.com/FormidableLabs/react-native-app-auth/tree/main#android-setup)
+
+Set scheme in android/app/build.gradle:
+
+```conf
+android {
+  defaultConfig {
+    manifestPlaceholders = [
+      appAuthRedirectScheme: 'app.youknow.auth'
+    ]
+  }
+}
+```
+
 # Trouble shooting
 
 ## fail2ban

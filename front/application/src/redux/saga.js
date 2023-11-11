@@ -116,9 +116,13 @@ export function* callServerLastest() {
       `/api/sessions/oauth/${action.payload.params.oauthType}?mobile=1&${Object.keys(
         action.payload.params
       )
-        .map((key) => `${key}=${action.payload.params[key]}`)
+        .map((key) => `${key}=${encodeURIComponent(action.payload.params[key])}`)
         .join('&')}`,
-    (action, response) => [{ type: actions.PUT_TOKEN_HEADER, payload: { token: response.token } }]
+    (action, response) => [
+      { type: actions.CLEAN_LOGIN_STATUS },
+      { type: actions.PUT_TOKEN_HEADER, payload: { token: response.token } },
+      { type: actions.GET_USER },
+    ]
   );
 }
 
