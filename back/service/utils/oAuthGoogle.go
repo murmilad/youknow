@@ -9,8 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-
-	"akosarev.info/youknow/initializers"
 )
 
 type GoogleOauthToken struct {
@@ -29,20 +27,19 @@ type GoogleUserResult struct {
 	Locale         string
 }
 
-func GetGoogleOauthToken(code string) (*GoogleOauthToken, error) {
+func GetGoogleOauthToken(code string, clientId string, clientSecret string, redirectUri string) (*GoogleOauthToken, error) {
 	const rootURl = "https://www.googleapis.com/oauth2/v4/token"
-	config, _ := initializers.LoadConfig(".")
 	values := url.Values{}
 	values.Add("grant_type", "authorization_code")
 	values.Add("code", code)
-	values.Add("client_id", config.GoogleClientID)
-	values.Add("client_secret", config.GoogleClientSecret)
-	values.Add("redirect_uri", config.GoogleOAuthRedirectUrl)
+	values.Add("client_id", clientId)
+	values.Add("client_secret", clientSecret)
+	values.Add("redirect_uri", redirectUri)
 
 	fmt.Println("code", code)
-	fmt.Println("client_id", config.GoogleClientID)
-	fmt.Println("client_secret", config.GoogleClientSecret)
-	fmt.Println("redirect_uri", config.GoogleOAuthRedirectUrl)
+	fmt.Println("client_id", clientId)
+	fmt.Println("client_secret", clientSecret)
+	fmt.Println("redirect_uri", redirectUri)
 
 	query := values.Encode()
 

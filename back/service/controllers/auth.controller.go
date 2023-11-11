@@ -27,6 +27,8 @@ func NewAuthController(DB *gorm.DB) AuthController {
 
 // [...] SignUp User
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
+	initiator := ctx.Query("initiator")
+
 	var payload *models.SignUpInput
 
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
@@ -85,8 +87,15 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		firstName = strings.Split(firstName, " ")[1]
 	}
 
+	var clientOrigin string
+	if (initiator == "mobile"){
+		clientOrigin = config.ClientOriginApp
+	} else {
+		clientOrigin = config.ClientOrigin
+	}
+
 	emailData := utils.EmailData{
-		URL:       template.URL(config.ClientOrigin + "/verifyemail/" + code),
+		URL:       template.URL(clientOrigin + "/verifyemail/" + code),
 		FirstName: firstName,
 		Subject:   "YouknoW account verification code",
 		Header:    "Please verify your account to be able to login",
@@ -101,6 +110,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 
 // [...] ForgotPassword
 func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
+	initiator := ctx.Query("initiator")
 
 	var payload *models.ForgotInput
 
@@ -133,9 +143,16 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 		firstName = strings.Split(firstName, " ")[1]
 	}
 
+	var clientOrigin string
+	if (initiator == "mobile"){
+		clientOrigin = config.ClientOriginApp
+	} else {
+		clientOrigin = config.ClientOrigin
+	}
+
 	// ? Send Email
 	emailData := utils.EmailData{
-		URL:       template.URL(config.ClientOrigin + "/resetpassword/" + verification_code),
+		URL:       template.URL(clientOrigin + "/resetpassword/" + verification_code),
 		FirstName: firstName,
 		Subject:   "YouknoW changing password",
 		Header:    "Please press button to change password",
@@ -260,9 +277,28 @@ func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 	ctx.SetCookie("token", "", -1, "/", config.ServerName, false, true)
 	ctx.JSON(http.StatusOK, gin.H{"status": "success"})
 }
+//mobile
+///api/sessions/oauth/google?
+//mobile=1
+//oauthType=google
+//authuser=0
+//code=4%2F0AfJohXnU56q-XJbqZmJ8BtC5TPt1mQ71HeTx_A2dM6lIw7OJ9DA8_uOcAt1hmEYKeke5NQ
+//prompt=consent
+//scope=email
+//20profile%20https%3A%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20openid
+//state=eeQTRmvJufZLFpB63RVznA
 
+//web
+///api/sessions/oauth/google?
+//state=%2F
+//code=4%2F0AfJohXltk2tR6wKlTDwrAjxdhICfGa5YUGBqpcAJ8oJLKK7PYsAxxPdR_q2XYlSQMmQLTA
+//scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid
+//authuser=0
+//prompt=consent
 func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 	code := ctx.Query("code")
+	initiator := ctx.Query("initiator")
+
 	var pathUrl string = "/"
 
 	if code == "" {
@@ -270,8 +306,17 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 		return
 	}
 
+	config, _ := initializers.LoadConfig(".")
+
 	// Use the code to get the id and access tokens
-	tokenRes, err := utils.GetGoogleOauthToken(code)
+	var tokenRes *utils.GoogleOauthToken
+	var err error
+
+	if (initiator == "mobile"){
+		tokenRes, err = utils.GetGoogleOauthToken(code, config.GoogleAppClientID, "", config.GoogleOAuthAppRedirectUrl)
+	} else {
+		tokenRes, err = utils.GetGoogleOauthToken(code, config.GoogleClientID, config.GoogleClientSecret, config.GoogleOAuthRedirectUrl)
+	}
 
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
@@ -315,8 +360,6 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 		return
 	}
 
-	config, _ := initializers.LoadConfig(".")
-
 	// Generate Tokens
 	access_token, err := utils.GenerateToken(config.TokenExpiresIn, user.ID, config.TokenSecret)
 	if err != nil {
@@ -326,7 +369,7 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 
 	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
-	if ctx.Query("mobile") == "1" {
+	if initiator == "mobile" {
 		ctx.JSON(http.StatusOK, gin.H{"token": access_token})
 	} else {
 		ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
@@ -341,6 +384,7 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 	}
 
 	code := ctx.Query("code")
+	initiator := ctx.Query("initiator")
 	var pathUrl string = "/"
 
 	if code == "" {
@@ -348,8 +392,18 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 		return
 	}
 
+	config, _ := initializers.LoadConfig(".")
+
 	// Use the code to get the id and access tokens
-	tokenRes, err := utils.GetGithubOauthToken(code)
+	var tokenRes *utils.GithubOauthToken
+	var err error
+
+	if (initiator == "mobile"){
+		tokenRes, err = utils.GetGithubOauthToken(code, config.GithubAppClientID, "", config.GithubOAuthAppRedirectUrl)
+	} else {
+		tokenRes, err = utils.GetGithubOauthToken(code, config.GithubClientID, config.GithubClientSecret, config.GithubOAuthRedirectUrl)
+	}
+
 
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
@@ -393,8 +447,6 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 		return
 	}
 
-	config, _ := initializers.LoadConfig(".")
-
 	// Generate Tokens
 	access_token, err := utils.GenerateToken(config.TokenExpiresIn, user.ID, config.TokenSecret)
 	if err != nil {
@@ -404,7 +456,7 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 
 	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
-	if ctx.Query("mobile") == "1" {
+	if initiator == "mobile" {
 		ctx.JSON(http.StatusOK, gin.H{"token": access_token})
 	} else {
 		ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))

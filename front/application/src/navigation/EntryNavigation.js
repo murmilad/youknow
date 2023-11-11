@@ -77,12 +77,8 @@ function EntryNavigation({ user, status }) {
 EntryNavigation.propTypes = {
   user: PropTypes.object.isRequired,
   status: PropTypes.object.isRequired,
-  route: PropTypes.object,
 };
 
-EntryNavigation.defaultProps = {
-  route: undefined,
-};
 const mapStateToProps = (state) => ({
   status: state.status,
   user: state.user,

@@ -9,8 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-
-	"akosarev.info/youknow/initializers"
 )
 
 type GithubOauthToken struct {
@@ -25,14 +23,13 @@ type GithubUserResult struct {
 	Avatar_url string
 }
 
-func GetGithubOauthToken(code string) (*GithubOauthToken, error) {
+func GetGithubOauthToken(code string, clientId string, clientSecret string, redirectUri string) (*GithubOauthToken, error) {
 	const rootURl = "https://github.com/login/oauth/access_token"
-	config, _ := initializers.LoadConfig(".")
 	values := url.Values{}
-	values.Add("client_id", config.GithubClientID)
-	values.Add("client_secret", config.GithubClientSecret)
+	values.Add("client_id", clientId)
+	values.Add("client_secret", clientSecret)
 	values.Add("code", code)
-	values.Add("redirect_uri", config.GithubOAuthRedirectUrl)
+	values.Add("redirect_uri", redirectUri)
 
 	query := values.Encode()
 

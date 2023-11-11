@@ -113,7 +113,7 @@ export function* callServerLastest() {
     actions.OAUTH,
     submitGet,
     (action) =>
-      `/api/sessions/oauth/${action.payload.params.oauthType}?mobile=1&${Object.keys(
+      `/api/sessions/oauth/${action.payload.params.oauthType}?initiator=mobile&${Object.keys(
         action.payload.params
       )
         .map((key) => `${key}=${encodeURIComponent(action.payload.params[key])}`)

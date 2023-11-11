@@ -15,6 +15,8 @@ type Config struct {
 	ServerPort     string `mapstructure:"BACKEND_PORT"`
 
 	ClientOrigin           string `mapstructure:"CLIENT_ORIGIN"`
+	ClientOriginApp        string `mapstructure:"CLIENT_ORIGIN_APP"`
+	
 	ExternalBackendAddress string `mapstructure:"EXTERNAL_BACKEND_ADDRESS"`
 	ExternalBackendPort    string `mapstructure:"EXTERNAL_BACKEND_PORT"`
 	ExpoDebugMode    string `mapstructure:"EXPO_DEBUG_MODE"`
@@ -33,9 +35,15 @@ type Config struct {
 	GoogleClientSecret     string `mapstructure:"GOOGLE_OAUTH_CLIENT_SECRET"`
 	GoogleOAuthRedirectUrl string `mapstructure:"GOOGLE_OAUTH_REDIRECT_URL"`
 
+	GoogleAppClientID         string `mapstructure:"GOOGLE_OAUTH_APP_CLIENT_ID"`
+	GoogleOAuthAppRedirectUrl string `mapstructure:"GOOGLE_OAUTH_APP_REDIRECT_URL"`
+
 	GithubClientID         string `mapstructure:"GITHUB_OAUTH_CLIENT_ID"`
 	GithubClientSecret     string `mapstructure:"GITHUB_OAUTH_CLIENT_SECRET"`
 	GithubOAuthRedirectUrl string `mapstructure:"GITHUB_OAUTH_REDIRECT_URL"`
+
+	GithubAppClientID         string `mapstructure:"GITHUB_OAUTH_APP_CLIENT_ID"`
+	GithubOAuthAppRedirectUrl string `mapstructure:"GITHUB_OAUTH_APP_REDIRECT_URL"`
 
 	GinNginxLogPath string `mapstructure:"GIN_NGINX_LOG_PATH"`
 	LogPath         string `mapstructure:"LOG_PATH"`
