@@ -120,7 +120,7 @@ export function* callServerLastest() {
         .join('&')}`,
     (action, response) => [
       { type: actions.CLEAN_LOGIN_STATUS },
-      { type: actions.PUT_TOKEN_HEADER, payload: { token: response.token } },
+      { type: actions.PUT_TOKEN_HEADER, payload: { token: response.data.token } },
       { type: actions.GET_USER },
     ]
   );

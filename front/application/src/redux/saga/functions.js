@@ -19,8 +19,10 @@ export function getErrorMessage(error) {
 }
 
 export function* putTokenToHeader(successActions, action) {
+  console.log(`token action ${JSON.stringify(action)}`);
+  console.log(`token action.payload.token ${action.payload.token}`);
   setCredentails(action.payload.token);
-  for (const successAction of successActions(action)) {
+  for (const successAction of successActions(action, null)) {
     yield put(successAction);
   }
 }
