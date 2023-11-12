@@ -6,6 +6,7 @@ const config = {
   issuer: 'https://accounts.google.com',
   clientId: GOOGLE_OAUTH_APP_CLIENT_ID,
   redirectUrl: GOOGLE_OAUTH_APP_REDIRECT_URL,
+  usePKCE: false,
   scopes: ['profile', 'email'],
 };
 
