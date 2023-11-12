@@ -33,7 +33,6 @@ func GetGoogleOauthToken(code string, clientId string, clientSecret string, redi
 	values.Add("grant_type", "authorization_code")
 	values.Add("code", code)
 	values.Add("client_id", clientId)
-	values.Add("client_secret", clientSecret)
 	values.Add("redirect_uri", redirectUri)
 
 	fmt.Println("code", code)
