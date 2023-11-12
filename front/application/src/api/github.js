@@ -3,13 +3,13 @@ import { authorize } from 'react-native-app-auth';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   GITHUB_OAUTH_APP_CLIENT_ID,
-  GITHUB_APP_OAUTH_REDIRECT_URL,
+  GITHUB_OAUTH_APP_REDIRECT_URL,
   GITHUB_OAUTH_APP_CLIENT_SECRET,
 } from 'react-native-dotenv';
 
 const config = {
   clientId: GITHUB_OAUTH_APP_CLIENT_ID,
-  redirectUrl: GITHUB_APP_OAUTH_REDIRECT_URL,
+  redirectUrl: GITHUB_OAUTH_APP_REDIRECT_URL,
   clientSecret: GITHUB_OAUTH_APP_CLIENT_SECRET,
   scopes: ['user:email'],
   additionalHeaders: { Accept: 'application/json' },
