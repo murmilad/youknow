@@ -33,6 +33,9 @@ export default function App() {
             OAuthScreen: {
               path: '/api/sessions/oauth/:oauthType',
             },
+            SignedUpScreen: {
+              path: '/:token',
+            },
             ResetPasswordScreen: {
               path: 'resetpassword/:verifyHash',
             },

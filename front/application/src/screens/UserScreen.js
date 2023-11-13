@@ -52,7 +52,10 @@ function UserScreen({ user, status }) {
         <FormFieldText name="server" header={t('field.server')} />
         <FormFieldText name="port" header={t('field.port')} />
         <FormFieldSubmitButton header={t('action.connect')} />
-        <FormText>{user.user?.name}</FormText>
+        <FormText>
+          {user.user?.name}
+          {user.user?.provider ? ` (${user.user?.provider})` : ''}
+        </FormText>
         <FormText>{user.user?.email}</FormText>
         <AbstractButton header={t('action.logout')} onPress={handleLogout} />
       </FormBody>

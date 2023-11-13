@@ -36,7 +36,7 @@ function MessageToast({ message }) {
         Toast.show({
           type: 'errorToast',
           text1: message.error,
-          visibilityTime: 30000,
+          visibilityTime: 3000,
         });
         dispatch({ type: actions.MESSAGE_CLEAN });
       } else {
