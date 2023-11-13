@@ -17,16 +17,22 @@ function OAuthScreen({ status, route }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({
-      type: actions.OAUTH,
-      payload: {
-        params: route.params,
-      },
-    });
+    if (route.params.token) {
+      dispatch({ type: actions.CLEAN_LOGIN_STATUS });
+      dispatch({ type: actions.PUT_TOKEN_HEADER, payload: { token: route.params.token } });
+      dispatch({ type: actions.GET_USER });
+    } else {
+      dispatch({
+        type: actions.OAUTH,
+        payload: {
+          params: route.params,
+        },
+      });
+    }
   }, [route]);
 
-  //https://youknow.app/api/sessions/oauth/github?code=0f6f6903eb2121765a9c&state=6Ef4Ee8XHHerbktBAMkZ6g
-  //https://youknow.app/api/sessions/oauth/google?state=y2AkWebTnv2Ft_uRWaAO9g&code=4%2F0AfJohXkbUqYYoO5y0vVrFnjO0v1oOelYwEyrBT0IyspTjRwjmI78t_ok7hpygNUlxn4x8w&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none
+  // https://youknow.app/api/sessions/oauth/github?code=0f6f6903eb2121765a9c&state=6Ef4Ee8XHHerbktBAMkZ6g
+  // https://youknow.app/api/sessions/oauth/google?state=y2AkWebTnv2Ft_uRWaAO9g&code=4%2F0AfJohXkbUqYYoO5y0vVrFnjO0v1oOelYwEyrBT0IyspTjRwjmI78t_ok7hpygNUlxn4x8w&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none
   return (
     <AuthScreen isLoading={status.is_loading}>
       <View style={tw`w-full h-30 justify-center`}>

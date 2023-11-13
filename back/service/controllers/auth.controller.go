@@ -451,8 +451,8 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 	ctx.SetCookie("token", access_token, config.TokenMaxAge*60, "/", config.ServerName, false, false)
 
 	if initiator == "mobile" {
-//		ctx.JSON(http.StatusOK, gin.H{"token": access_token})
-		ctx.Redirect(http.StatusTemporaryRedirect, "app.youknow:/github/" + access_token)
+		//Github supports only one callback, then we redirect from web to deeplink after check
+		ctx.Redirect(http.StatusTemporaryRedirect, "app.youknow:/api/sessions/oauth/github?token=" + access_token)
 	} else {
 		ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
 	}
