@@ -9,7 +9,7 @@ import {
 
 const config = {
   clientId: GITHUB_OAUTH_APP_CLIENT_ID,
-  redirectUrl: GITHUB_OAUTH_APP_REDIRECT_URL,
+  redirectUrl: `${GITHUB_OAUTH_APP_REDIRECT_URL}?initiator=mobile`,
   clientSecret: GITHUB_OAUTH_APP_CLIENT_SECRET,
   scopes: ['user:email'],
   additionalHeaders: { Accept: 'application/json' },
@@ -22,6 +22,8 @@ const config = {
 
 function githubAuthorize() {
   // Log in to get an authentication token
+  console.log(`GITHUB_OAUTH_APP_CLIENT_ID = ${GITHUB_OAUTH_APP_CLIENT_ID}`);
+  console.log(`GITHUB_OAUTH_APP_REDIRECT_URL = ${GITHUB_OAUTH_APP_REDIRECT_URL}`);
 
   return authorize(config);
 }

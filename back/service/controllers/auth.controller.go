@@ -395,14 +395,8 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 	config, _ := initializers.LoadConfig(".")
 
 	// Use the code to get the id and access tokens
-	var tokenRes *utils.GithubOauthToken
-	var err error
 
-	if (initiator == "mobile"){
-		tokenRes, err = utils.GetGithubOauthToken(code, config.GithubAppClientID, "", config.GithubOAuthAppRedirectUrl)
-	} else {
-		tokenRes, err = utils.GetGithubOauthToken(code, config.GithubClientID, config.GithubClientSecret, config.GithubOAuthRedirectUrl)
-	}
+	tokenRes, err := utils.GetGithubOauthToken(code, config.GithubClientID, config.GithubClientSecret, config.GithubOAuthRedirectUrl)
 
 
 	if err != nil {
