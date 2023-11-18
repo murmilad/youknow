@@ -82,8 +82,8 @@ func SendEmail(user *models.User, data *EmailData) {
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Send Email
-	if err := d.DialAndSend(m); err != nil {
+/* 	if err := d.DialAndSend(m); err != nil {
 		log.Fatal("Could not send email: ", err)
 	}
-
+ */
 }

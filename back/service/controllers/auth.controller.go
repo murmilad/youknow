@@ -93,7 +93,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		clientOrigin = config.ClientOrigin
 	}
 
-/* 	emailData := utils.EmailData{
+	emailData := utils.EmailData{
 		URL:       template.URL(clientOrigin + "/verifyemail/" + code),
 		FirstName: firstName,
 		Subject:   "YouknoW account verification code",
@@ -102,7 +102,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 	utils.SendEmail(&newUser, &emailData)
- */
+
 	message := "We sent an email with a verification code to " + newUser.Email
 	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "message": message})
 }
