@@ -44,6 +44,8 @@ func ParseTemplateDir(dir string) (*template.Template, error) {
 }
 
 func SendEmail(user *models.User, data *EmailData) {
+	log.Println("SENDMAIL")
+
 	config, err := initializers.LoadConfig(".")
 
 	if err != nil {
@@ -75,6 +77,7 @@ func SendEmail(user *models.User, data *EmailData) {
 	m.SetBody("text/html", body.String())
 	m.AddAlternative("text/plain", html2text.HTML2Text(body.String()))
 
+	log.Println("gomail ", smtpHost, smtpPort, smtpUser, smtpPass)
 	d := gomail.NewDialer(smtpHost, smtpPort, smtpUser, smtpPass)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
