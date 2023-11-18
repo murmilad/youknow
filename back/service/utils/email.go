@@ -3,8 +3,8 @@ package utils
 import (
 	"bytes"
 	"crypto/tls"
+	"fmt"
 	"html/template"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -44,12 +44,12 @@ func ParseTemplateDir(dir string) (*template.Template, error) {
 }
 
 func SendEmail(user *models.User, data *EmailData) {
-	log.Println("SENDMAIL")
+	fmt.Println("SENDMAIL")
 
 	config, err := initializers.LoadConfig(".")
 
 	if err != nil {
-		log.Fatal("could not load config", err)
+		fmt.Errorf("could not load config", err)
 	}
 
 	// Sender data.
@@ -64,7 +64,7 @@ func SendEmail(user *models.User, data *EmailData) {
 
 	template, err := ParseTemplateDir("templates")
 	if err != nil {
-		log.Fatal("Could not parse template", err)
+		fmt.Errorf("Could not parse template", err)
 	}
 
 	template.ExecuteTemplate(&body, "verificationCode.html", &data)
@@ -77,7 +77,7 @@ func SendEmail(user *models.User, data *EmailData) {
 	m.SetBody("text/html", body.String())
 	m.AddAlternative("text/plain", html2text.HTML2Text(body.String()))
 
-	log.Println("gomail ", smtpHost, smtpPort, smtpUser, smtpPass)
+	fmt.Println("gomail ", smtpHost, smtpPort, smtpUser, smtpPass)
 	d := gomail.NewDialer(smtpHost, smtpPort, smtpUser, smtpPass)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
