@@ -42,6 +42,7 @@ type SignInInput struct {
 
 type ForgotInput struct {
 	Email string `json:"email"  binding:"required"`
+	Initiator       string `json:"initiator,omitempty"`
 }
 type UserResponse struct {
 	ID        uuid.UUID `json:"id,omitempty"`

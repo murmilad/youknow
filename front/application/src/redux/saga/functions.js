@@ -125,6 +125,7 @@ export function* submitGet(linkCallback, successActions, action) {
 export function* submitForm(link, requestCallback, successActions, action) {
   try {
     yield put({ type: actions.SET_LOADING, payload: { loading: true } });
+    console.log(`submitForm: , ${link}, ${JSON.stringify(requestCallback(action))}`);
     const result = yield call(SERVER.post, link, requestCallback(action));
     for (const successAction of successActions(action, result)) {
       yield put(successAction);

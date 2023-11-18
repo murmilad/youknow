@@ -27,7 +27,6 @@ func NewAuthController(DB *gorm.DB) AuthController {
 
 // [...] SignUp User
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
-	initiator := ctx.Query("initiator")
 
 	var payload *models.SignUpInput
 
@@ -88,7 +87,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 	var clientOrigin string
-	if (initiator == "mobile"){
+	if (payload.Initiator == "mobile"){
 		clientOrigin = config.ClientOriginApp
 	} else {
 		clientOrigin = config.ClientOrigin
