@@ -82,7 +82,7 @@ func SendEmail(user *models.User, data *EmailData) {
 
 	// Send Email
  	if err := d.DialAndSend(m); err != nil {
-		fmt.Errorf("Could not send email: ", err)
+		fmt.Println("Could not send email: ", err)
 	}
  
 }
