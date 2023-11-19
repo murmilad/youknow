@@ -10,8 +10,6 @@ const userReducer = (state = {}, action) => {
   switch (action.type) {
     case actions.CLEAN_LOGIN_STATUS:
       return merge(state, { login_status: null });
-    case actions.SET_SIGN_UP:
-      return merge(state, { login_status: loginStatus.LOGIN_STATUS_SIGNED_UP });
     case actions.SET_VERIFIED:
       return merge(state, { login_status: loginStatus.LOGIN_STATUS_VERIFIED });
     case actions.SET_USER:

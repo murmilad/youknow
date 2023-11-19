@@ -1,9 +1,17 @@
 /* eslint-disable no-restricted-syntax */
 import { call, put } from 'redux-saga/effects';
+
 import SERVER, { setCredentails, dropCredentails, setBaseUrl } from '../../api/server';
 
 import * as actions from '../constants/action';
+import * as NavigationService from '../../navigation/service/NavigationService';
 
+export function* navigate(routeName, params, action) {
+  yield call(NavigationService.navigate, routeName, params);
+}
+export function* replace(routeName, params, action) {
+  yield call(NavigationService.replace, routeName, params);
+}
 export function getErrorMessage(error) {
   const errorMessage = error.response?.data.message || error.response?.data || error.message;
   if (

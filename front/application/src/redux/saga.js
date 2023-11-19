@@ -9,12 +9,17 @@ import {
   submitForm,
   putTokenToHeader,
   logOut,
+  replace,
 } from './saga/functions';
 
 import googleAuthorize from '../api/google';
 import githubAuthorize from '../api/github';
 
 export function* callServerLastest() {
+  // Navigate
+
+  yield takeLatest(actions.SET_SIGN_UP, replace, 'SignedUpScreen');
+
   // User check
 
   yield takeLatest(

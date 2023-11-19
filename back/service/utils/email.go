@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"crypto/tls"
 	"fmt"
 	"html/template"
 	"os"
@@ -79,7 +78,7 @@ func SendEmail(user *models.User, data *EmailData) {
 
 	fmt.Println("gomail ", smtpHost, smtpPort, smtpUser, smtpPass)
 	d := gomail.NewDialer(smtpHost, smtpPort, smtpUser, smtpPass)
-	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+	//d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Send Email
  	if err := d.DialAndSend(m); err != nil {

@@ -23,9 +23,7 @@ function AuthNavigation({ navigation, user, status }) {
   const Navigator = createStackNavigator();
 
   useEffect(() => {
-    if (user.login_status === loginStatus.LOGIN_STATUS_SIGNED_UP) {
-      navigation.navigate('SignedUpScreen');
-    } else if (user.login_status === loginStatus.LOGIN_STATUS_PASSWORD_RESET) {
+    if (user.login_status === loginStatus.LOGIN_STATUS_PASSWORD_RESET) {
       navigation.navigate('ResettedScreen');
     } else if (user.login_status === loginStatus.LOGIN_STATUS_PASSWORD_FORGOT) {
       navigation.navigate('ForgottenScreen');
