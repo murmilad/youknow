@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"strings"
 	"time"
@@ -94,7 +93,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 	emailData := utils.EmailData{
-		URL:       template.URL(clientOrigin + "/verifyemail/" + code),
+		Link:      clientOrigin + "/verifyemail/" + code,
 		FirstName: firstName,
 		Subject:   "YouknoW account verification code",
 		Header:    "Please verify your account to be able to login",
@@ -150,7 +149,7 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 
 	// ? Send Email
 	emailData := utils.EmailData{
-		URL:       template.URL(clientOrigin + "/resetpassword/" + verification_code),
+		Link:      clientOrigin + "/resetpassword/" + verification_code,
 		FirstName: firstName,
 		Subject:   "YouknoW changing password",
 		Header:    "Please press button to change password",

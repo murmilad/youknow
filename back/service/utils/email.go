@@ -14,7 +14,7 @@ import (
 )
 
 type EmailData struct {
-	URL       template.URL
+	Link      string
 	FirstName string
 	Subject   string
 	Header    string
