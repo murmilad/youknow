@@ -9,7 +9,6 @@ import (
 
 	"akosarev.info/youknow/initializers"
 	"akosarev.info/youknow/models"
-	"github.com/k3a/html2text"
 	"gopkg.in/gomail.v2"
 )
 
@@ -74,7 +73,7 @@ func SendEmail(user *models.User, data *EmailData) {
 	m.SetHeader("To", to)
 	m.SetHeader("Subject", data.Subject)
 	m.SetBody("text/html", body.String())
-	m.AddAlternative("text/plain", html2text.HTML2Text(body.String()))
+	//m.AddAlternative("text/plain", html2text.HTML2Text(body.String()))
 
 	fmt.Println("gomail ", smtpHost, smtpPort, smtpUser, smtpPass)
 	d := gomail.NewDialer(smtpHost, smtpPort, smtpUser, smtpPass)
