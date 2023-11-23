@@ -69,7 +69,6 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		return
 	}
 
-	config, _ := initializers.LoadConfig(".")
 
 	// Generate Verification Code
 	code := randstr.String(20)
@@ -86,15 +85,9 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		firstName = strings.Split(firstName, " ")[1]
 	}
 
-	var clientOrigin string
-	if (payload.Initiator == "mobile"){
-		clientOrigin = config.ClientOriginApp
-	} else {
-		clientOrigin = config.ClientOrigin
-	}
 
 	emailData := utils.EmailData{
-		URL:       template.URL(template.URLQueryEscaper(clientOrigin) + "/verifyemail/" + code),
+		URL:       template.URL("app.youknow://verifyemail/" + code),
 		FirstName: firstName,
 		Subject:   "YouknoW account verification code",
 		Header:    "Please verify your account to be able to login",
