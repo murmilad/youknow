@@ -93,7 +93,8 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		clientOrigin = config.ClientOrigin
 	}
 
-	fmt.Println("clientOrigin ", config.ClientOriginApp)
+	fmt.Println("config.ClientOriginApp ", config.ClientOriginApp)
+	fmt.Println("clientOrigin ", clientOrigin)
 	emailData := utils.EmailData{
 		URL:       template.URL("app.youknow:/verifyemail/" + code),
 		FirstName: firstName,
