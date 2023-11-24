@@ -11,6 +11,7 @@ import (
 	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/utils"
 
+	mobile "github.com/floresj/go-contrib-mobile"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/thanhpk/randstr"
@@ -23,6 +24,26 @@ type AuthController struct {
 
 func NewAuthController(DB *gorm.DB) AuthController {
 	return AuthController{DB}
+}
+
+// [...] DeepLink resolver
+func (ac *AuthController) DeepLink(ctx *gin.Context) {
+
+	action := ctx.Params.ByName("action")
+	code := ctx.Params.ByName("verificationCode")
+
+	device := mobile.GetDevice(ctx)
+
+	config, _ := initializers.LoadConfig(".")
+
+	switch {
+    case device.Normal():
+		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOrigin + action + "/" + code)
+    case device.Mobile():
+		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOriginApp  + action + "/" + code)
+    case device.Tablet():
+		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOriginApp  + action + "/" + code)
+    }
 }
 
 // [...] SignUp User
@@ -86,21 +107,12 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		firstName = strings.Split(firstName, " ")[1]
 	}
 
-	var clientOrigin string
-	if (payload.Initiator == "mobile"){
-		clientOrigin = config.ClientOriginApp
-	} else {
-		clientOrigin = config.ClientOrigin
-	}
-
-	fmt.Println("config.ClientOriginApp ", config.ClientOriginApp)
-	fmt.Println("clientOrigin ", clientOrigin)
 	emailData := utils.EmailData{
-		URL:       template.URL("app.youknow:/verifyemail/" + code),
+		URL:       template.URL(config.ClientOrigin + "/deeplink/?action=verifyemail&code=" + code),
 		FirstName: firstName,
-		Subject:   "YouknoW account verification code",
-		Header:    "Please verify your account to be able to login",
-		Button:    "Verify your account",
+		Subject:   "Welcome to YouknoW",
+		Header:    "Welcome!",
+		Button:    "Verify e-mail",
 	}
 
 	utils.SendEmail(&newUser, &emailData)
@@ -143,20 +155,13 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 		firstName = strings.Split(firstName, " ")[1]
 	}
 
-	var clientOrigin string
-	if (payload.Initiator == "mobile"){
-		clientOrigin = config.ClientOriginApp
-	} else {
-		clientOrigin = config.ClientOrigin
-	}
 
-	// ? Send Email
 	emailData := utils.EmailData{
-		URL:       template.URL(template.URLQueryEscaper(clientOrigin) + "/resetpassword/" + verification_code),
+		URL:       template.URL(config.ClientOrigin + "/deeplink/?action=resetpassword&code=" + code),
 		FirstName: firstName,
-		Subject:   "YouknoW changing password",
-		Header:    "Please press button to change password",
-		Button:    "Change password",
+		Subject:   "Your new YouknoW password",
+		Header:    "Change password",
+		Button:    "Set new password",
 	}
 
 	utils.SendEmail(&user, &emailData)
