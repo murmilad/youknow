@@ -108,7 +108,9 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 	emailData := utils.EmailData{
-		URL:       template.URL(config.ClientOrigin + "/deeplink/?action=verifyemail&code=" + code),
+//		Backend deep link resolver
+//		URL:       template.URL(config.ClientOrigin + "/api/deeplink/?action=verifyemail&code=" + code),
+		URL:       template.URL(config.ClientOrigin + "/verifyemail/" + code),
 		FirstName: firstName,
 		Subject:   "Welcome to YouknoW",
 		Header:    "Welcome!",
@@ -157,7 +159,9 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 
 
 	emailData := utils.EmailData{
-		URL:       template.URL(config.ClientOrigin + "/deeplink/?action=resetpassword&code=" + code),
+//		Backend deep link resolver
+//		URL:       template.URL(config.ClientOrigin + "/api/deeplink/?action=resetpassword&code=" + code),
+		URL:       template.URL(config.ClientOrigin + "/resetpassword/" + code),
 		FirstName: firstName,
 		Subject:   "Your new YouknoW password",
 		Header:    "Change password",
