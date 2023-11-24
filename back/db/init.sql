@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS users (
     verification_code text,
     verified boolean NOT NULL,
     created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    updated_at timestamp with time zone NOT NULL,
+    UNIQUE (email, provider)
 );
 
 CREATE TABLE IF NOT EXISTS know_types (
