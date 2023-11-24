@@ -2,6 +2,7 @@
   "name": "front-youknow-library",
   "version": "0.0.2",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.14.1",
