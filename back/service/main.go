@@ -8,9 +8,9 @@ import (
 	"akosarev.info/youknow/controllers"
 	"akosarev.info/youknow/initializers"
 	"akosarev.info/youknow/routes"
+	mobile "github.com/floresj/go-contrib-mobile"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/floresj/go-contrib-mobile"
 )
 
 var (
@@ -59,11 +59,6 @@ func init() {
 	server = gin.Default()
 
 	server.Use(mobile.Resolver())
-
-    r.GET("/", func(c *gin.Context){
-      // Get handle to Device
-        d := mobile.GetDevice(c)
-
 }
 
 func main() {
