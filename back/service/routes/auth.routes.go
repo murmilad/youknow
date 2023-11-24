@@ -22,6 +22,6 @@ func (rc *AuthRouteController) AuthRoute(rg *gin.RouterGroup) {
 	router.POST("/login", rc.authController.SignInUser)
 	router.POST("/resetpassword", rc.authController.ResetPassword)
 	router.GET("/logout", middleware.DeserializeUser(), rc.authController.LogoutUser)
-	router.GET("/verifyemail", rc.authController.VerifyEmail)
+	router.GET("/verifyemail/:verificationCode", rc.authController.VerifyEmail)
 	router.GET("/deeplink", rc.authController.DeepLink)
 }

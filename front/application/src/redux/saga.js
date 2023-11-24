@@ -16,10 +16,6 @@ import googleAuthorize from '../api/google';
 import githubAuthorize from '../api/github';
 
 export function* callServerLastest() {
-  // Navigate
-
-  yield takeLatest(actions.SET_SIGN_UP, replace, 'SignedUpScreen');
-
   // User check
 
   yield takeLatest(
@@ -86,6 +82,8 @@ export function* callServerLastest() {
     (action) => `/api/auth/verifyemail/${action.payload.verifyHash}`,
     (action, response) => [{ type: actions.SET_VERIFIED }]
   );
+  yield takeLatest(actions.SET_VERIFIED, replace, 'VerifiedScreen');
+
   yield takeLatest(
     actions.SIGN_UP,
     submitForm,
@@ -93,6 +91,7 @@ export function* callServerLastest() {
     (request) => request.payload.signup,
     (action, response) => [{ type: actions.SET_SIGN_UP }]
   );
+  yield takeLatest(actions.SET_SIGN_UP, replace, 'SignedUpScreen');
 
   // User Forgot password E-Mail
 
