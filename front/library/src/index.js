@@ -1,31 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './App';
-import { applyMiddleware } from 'redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { Provider } from 'react-redux';
-import { reducer } from './reducers/reducer';
-import {injectStoreToServer} from "./actions/server";
-    
-import createSagaMiddleware from 'redux-saga'
-import rootSaga from './sagas'
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.scss";
+import App from "./App";
+import { applyMiddleware } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import { reducer } from "./reducers/reducer";
+import { injectStoreToServer } from "./actions/server";
 
-import './i18n';
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "./sagas";
 
-const sagaMiddleware = createSagaMiddleware()
+import "./i18n";
+
+const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
-    reducer ,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
+  reducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware),
 });
-    
-sagaMiddleware.run(rootSaga)
 
- 
-injectStoreToServer(store)
+sagaMiddleware.run(rootSaga);
+
+injectStoreToServer(store);
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>
-, document.getElementById('root'));
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);

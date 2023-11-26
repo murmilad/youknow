@@ -1,4 +1,4 @@
-FROM node:14.18.1-alpine
+FROM node:14.18.1-alpine as builder
 
 # Set the working directory to /app inside the container
 WORKDIR /app
@@ -26,11 +26,8 @@ RUN npm ci
 # Build the app
 RUN npm run build
 # ==== RUN =======
-# Set the env to "production"
-ENV NODE_ENV production
-# Expose the port on which the app will be running (3000 is the default that `serve` uses)
-EXPOSE 3000
-
-
-# Start the app
-CMD [ "npx", "serve", "build"]
+# production environment
+FROM nginx:1.15.10-alpine
+COPY --from=builder /app/build /var/www
+COPY ./nginx.conf /etc/nginx/conf.d/nginx.conf
+CMD ["nginx", "-g", "daemon off;"]

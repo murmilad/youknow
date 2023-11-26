@@ -19,7 +19,7 @@ server {
     location / {
         access_log /var/log/nginx/${SERVER_NAME}-frontend-access.log proxy;
         error_log /var/log/nginx/${SERVER_NAME}-frontend-error.log warn;
-        proxy_pass http://frontend:${FRONTEND_PORT};
+        proxy_pass ${PROXY_REDIRECT_ADDRESS}:${FRONTEND_PORT};
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         limit_req   zone=one  burst=1 nodelay;
