@@ -17,6 +17,7 @@ import SignUp from "../forms/Login/SignUp";
 import Verify from "../forms/Login/Verify";
 import ResetPasswordPage from "../forms/Login/ResetPassword";
 import ForgotPasswordPage from "../forms/Login/ForgotPassword";
+import NotFound from "../forms/Login/NotFound";
 
 function RoutesPage() {
   let dispatch = useDispatch();
@@ -52,6 +53,7 @@ function RoutesPage() {
           path="verifyemail/:verifyHash"
           element={verified ? <Navigate to={{ pathname: "/" }} /> : <Verify />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

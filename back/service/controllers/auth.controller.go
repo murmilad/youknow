@@ -67,6 +67,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		return
 	}
 
+
 	now := time.Now()
 	newUser := models.User{
 		Name:      payload.Name,
@@ -79,6 +80,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
+//	ac.DB.Delete(&models.User{}, "email = ? AND verified = ?", )
 
 	result := ac.DB.Create(&newUser)
 

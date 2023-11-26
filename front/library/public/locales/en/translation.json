@@ -13,7 +13,8 @@
         "forgot-password" : "Enter your email address and we’ll send you a link to reset your password.",
         "email-sent": "We have sent you a password recovery email.",
         "reset-password": "Reset password",
-        "reseted": "Your password has been successfuly reseted."
+        "reseted": "Your password has been successfuly reseted.",
+        "not-found": "Page is not found."
     },
     "field": {
       "know-type-name": "Type Name",
