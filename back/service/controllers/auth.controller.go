@@ -68,8 +68,15 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 
+	existsUser := models.User{}
+	ac.DB.Where("email = ? AND provider = ? AND verified = ?", 
+		strings.ToLower(payload.Email),
+		"local", 
+		false).First(&existsUser)
+
 	now := time.Now()
 	newUser := models.User{
+		ID:        existsUser.ID,
 		Name:      payload.Name,
 		Email:     strings.ToLower(payload.Email),
 		Password:  hashedPassword,
@@ -80,9 +87,8 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
-//	ac.DB.Delete(&models.User{}, "email = ? AND verified = ?", )
 
-	result := ac.DB.Create(&newUser)
+	result := ac.DB.Save(&newUser)
 
 	if result.Error != nil && strings.Contains(result.Error.Error(), "duplicate key value violates unique") {
 		ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "User with that email already exists"})
