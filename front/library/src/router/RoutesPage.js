@@ -34,7 +34,7 @@ function RoutesPage() {
         />
         <Route
           exact
-          path="/know/:id"
+          path="know/:id"
           element={user ? <Know /> : <Navigate to={{ pathname: "/login" }} />}
         />
 
@@ -42,14 +42,14 @@ function RoutesPage() {
           path="login"
           element={user ? <Navigate to={{ pathname: "/" }} /> : <LoginPage />}
         />
-        <Route path="/signup" element={signed_up ? <SignedUp /> : <SignUp />} />
+        <Route path="signup" element={signed_up ? <SignedUp /> : <SignUp />} />
         <Route
-          path="/resetpassword/:verifyHash"
+          path="resetpassword/:verifyHash"
           element={<ResetPasswordPage />}
         />
-        <Route path="/forgot" element={<ForgotPasswordPage />} />
+        <Route path="forgot" element={<ForgotPasswordPage />} />
         <Route
-          path="/verifyemail/:verifyHash"
+          path="verifyemail/:verifyHash"
           element={verified ? <Navigate to={{ pathname: "/" }} /> : <Verify />}
         />
       </Routes>
