@@ -84,7 +84,8 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": message})
 	})
 
-
+/* 	TODO need to cleanup unverified emails
+ */
 	AuthRouteController.AuthRoute(router)
 	UserRouteController.UserRoute(router)
 	YouKnowRouteController.YouKnowRoute(router)
