@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
-import { Navigate, Routes, Route, BrowserRouter } from "react-router-dom";
+import {
+  useNavigate,
+  Navigate,
+  Routes,
+  Route,
+  BrowserRouter,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
+import * as Navigation from "./Navigation";
 
 //pages
 import WorkareaWrapper from "../forms/Workarea/WorkareaWrapper";
@@ -13,6 +21,12 @@ import ResetPasswordPage from "../forms/Login/ResetPassword";
 import ForgotPasswordPage from "../forms/Login/ForgotPassword";
 import NotFound from "../forms/Login/NotFound";
 
+const NavigateSetter = () => {
+  Navigation.setNavigation(useNavigate());
+
+  return null;
+};
+
 function RoutesPage() {
   const user = useSelector((state) => state.user);
   const signed_up = useSelector((state) => state.signed_up);
@@ -20,6 +34,7 @@ function RoutesPage() {
 
   return (
     <BrowserRouter>
+      <NavigateSetter />
       <Routes>
         <Route
           exact
