@@ -28,6 +28,7 @@ RUN npm run build
 # ==== RUN =======
 # production environment
 FROM nginx:1.15.10-alpine
+
 COPY --from=builder /app/build /var/www
 COPY ./nginx.conf /etc/nginx/conf.d/nginx.conf
 CMD ["nginx", "-g", "daemon off;"]

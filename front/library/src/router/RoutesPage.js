@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Navigate,
-  Routes,
-  Route,
-  BrowserRouter,
-  Switch,
-} from "react-router-dom";
+import { Navigate, Routes, Route, BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 //pages
@@ -20,7 +14,6 @@ import ForgotPasswordPage from "../forms/Login/ForgotPassword";
 import NotFound from "../forms/Login/NotFound";
 
 function RoutesPage() {
-  let dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const signed_up = useSelector((state) => state.signed_up);
   const verified = useSelector((state) => state.verified);
