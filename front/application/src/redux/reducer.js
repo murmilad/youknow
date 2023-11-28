@@ -8,10 +8,6 @@ const merge = (prev, next) => ({ ...prev, ...next });
 // eslint-disable-next-line default-param-last
 const userReducer = (state = {}, action) => {
   switch (action.type) {
-    case actions.CLEAN_LOGIN_STATUS:
-      return merge(state, { login_status: null });
-    case actions.SET_VERIFIED:
-      return merge(state, { login_status: loginStatus.LOGIN_STATUS_VERIFIED });
     case actions.SET_USER:
       return merge(state, { user: action.payload.user });
     case actions.SET_MAY_FORGET_PASSWORD:

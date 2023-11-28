@@ -13,12 +13,16 @@ export function* replace(routeName, params, action) {
   yield call(NavigationService.replace, routeName, params);
 }
 export function getErrorMessage(error) {
+  console.log(`error ${JSON.stringify(error)}`);
   const errorMessage = error.response?.data.message || error.response?.data || error.message;
+  if (error.code === 'ERR_NETWORK' || error.status > 500) {
+    return [errorMessage, { type: actions.SET_DISCONNECTED }];
+  }
   if (
     errorMessage === 'invalidate token: Token is expired' ||
     errorMessage === 'You are not logged in'
   ) {
-    return [errorMessage, { type: actions.LOG_OUT }];
+    return ['', { type: actions.LOG_OUT }];
   }
   if (errorMessage === 'Invalid email or Password') {
     return [errorMessage, { type: actions.SET_MAY_FORGET_PASSWORD, payload: { may_forget: true } }];
@@ -65,7 +69,9 @@ export function* getUser(linkCallback, successActions, action) {
     }
   } catch (error) {
     const [errorMessage, errorCallback] = getErrorMessage(error);
-    yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
+    if (errorMessage) {
+      yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
+    }
     if (errorCallback) {
       yield put(errorCallback);
     }

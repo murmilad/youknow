@@ -27,8 +27,6 @@ function AuthNavigation({ navigation, user, status }) {
       navigation.navigate('ResettedScreen');
     } else if (user.login_status === loginStatus.LOGIN_STATUS_PASSWORD_FORGOT) {
       navigation.navigate('ForgottenScreen');
-    } else {
-      navigation.navigate('LoginScreen');
     }
   }, [navigation, user.login_status]);
 

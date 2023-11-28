@@ -18,9 +18,13 @@ function EntryNavigation({ user, status }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (status.server) {
+    if (user.token) {
       dispatch({
-        type: actions.CONNECT_AND_SET_PARAMS,
+        type: actions.GET_USER,
+      });
+    } else if (status.server) {
+      dispatch({
+        type: actions.CHECK_CONNECTION,
         payload: {
           server: status.server,
           port: status.port,

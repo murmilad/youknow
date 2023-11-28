@@ -10,6 +10,7 @@ import {
   putTokenToHeader,
   logOut,
   replace,
+  navigate,
 } from './saga/functions';
 
 import googleAuthorize from '../api/google';
@@ -22,7 +23,7 @@ export function* callServerLastest() {
     actions.CHECK_CONNECTION,
     checkConnection,
     (action) => '/api/healthchecker',
-    (action, response) => [{ type: actions.GET_USER }]
+    () => []
   );
 
   yield takeLatest(
@@ -92,6 +93,7 @@ export function* callServerLastest() {
     (action, response) => [{ type: actions.SET_SIGN_UP }]
   );
   yield takeLatest(actions.SET_SIGN_UP, replace, 'SignedUpScreen');
+  yield takeLatest(actions.CLEAN_LOGIN_STATUS, navigate, 'LoginScreen');
 
   // User Forgot password E-Mail
 
@@ -123,7 +125,6 @@ export function* callServerLastest() {
         .map((key) => `${key}=${encodeURIComponent(action.payload.params[key])}`)
         .join('&')}`,
     (action, response) => [
-      { type: actions.CLEAN_LOGIN_STATUS },
       { type: actions.PUT_TOKEN_HEADER, payload: { token: response.data.token } },
       { type: actions.GET_USER },
     ]
