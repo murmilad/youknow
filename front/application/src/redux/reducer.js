@@ -12,10 +12,6 @@ const userReducer = (state = {}, action) => {
       return merge(state, { user: action.payload.user });
     case actions.SET_MAY_FORGET_PASSWORD:
       return merge(state, { may_forget: action.payload.may_forget });
-    case actions.SET_FORGOT_PASSWORD:
-      return merge(state, { login_status: loginStatus.LOGIN_STATUS_PASSWORD_FORGOT });
-    case actions.SET_RESET:
-      return merge(state, { login_status: loginStatus.LOGIN_STATUS_PASSWORD_RESET });
     case actions.SET_TOKEN:
       return merge(state, {
         login_status: loginStatus.LOGIN_STATUS_LOGGED_IN,

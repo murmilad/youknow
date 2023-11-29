@@ -46,13 +46,13 @@ function LoginScreen({ status, user, navigation }) {
       >
         <FormFieldText name="email" header={t('field.email')} />
         <FormFieldTextPassword name="password" header={t('field.password')} />
-        <FormFieldSubmitButton header={t('action.login')} />
         {user.may_forget && (
           <AbstractButton
             header={t('action.reset-password')}
             onPress={() => navigation.navigate('ForgotPasswordScreen')}
           />
         )}
+        <FormFieldSubmitButton header={t('action.login')} />
         <AbstractButton
           header={t('action.sign-up')}
           onPress={() => navigation.navigate('SignUpScreen')}

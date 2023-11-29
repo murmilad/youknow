@@ -9,6 +9,7 @@ import AuthNavigation from './AuthNavigation';
 import SettingsScreen from '../screens/SettingsScreen';
 import * as actions from '../redux/constants/action';
 import NotFound from '../screens/NotFound';
+import { setBaseUrl } from '../api/server';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
@@ -18,7 +19,9 @@ function EntryNavigation({ user, status }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user.token) {
+    setBaseUrl(status.server, status.port);
+
+    if (status.server && user.token) {
       dispatch({
         type: actions.GET_USER,
       });

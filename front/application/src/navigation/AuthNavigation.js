@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -13,7 +13,6 @@ import ForgottenScreen from '../screens/auth/ForgottenScreen';
 import VerifyScreen from '../screens/auth/VerifyScreen';
 import VerifiedScreen from '../screens/auth/VerifiedScreen';
 
-import * as loginStatus from '../redux/constants/loginStatus';
 import OAuthScreen from '../screens/auth/OAuthScreen';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -21,14 +20,6 @@ const PropTypes = require('prop-types');
 
 function AuthNavigation({ navigation, user, status }) {
   const Navigator = createStackNavigator();
-
-  useEffect(() => {
-    if (user.login_status === loginStatus.LOGIN_STATUS_PASSWORD_RESET) {
-      navigation.navigate('ResettedScreen');
-    } else if (user.login_status === loginStatus.LOGIN_STATUS_PASSWORD_FORGOT) {
-      navigation.navigate('ForgottenScreen');
-    }
-  }, [navigation, user.login_status]);
 
   return (
     <Navigator.Navigator
