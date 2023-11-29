@@ -165,11 +165,10 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 		firstName = strings.Split(firstName, " ")[1]
 	}
 
-
 	emailData := utils.EmailData{
 //		Backend deep link resolver
-//		URL:       template.URL(config.ClientOrigin + "/api/deeplink/?action=resetpassword&code=" + code),
-		URL:       template.URL(config.ClientOrigin + "/resetpassword/" + code),
+//		URL:       template.URL(config.ClientOrigin + "/api/deeplink/?action=resetpassword&code=" + verification_code),
+		URL:       template.URL(config.ClientOrigin + "/resetpassword/" + verification_code),
 		FirstName: firstName,
 		Subject:   "Your new YouknoW password",
 		Header:    "Change password",
