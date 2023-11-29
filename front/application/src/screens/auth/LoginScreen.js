@@ -44,31 +44,35 @@ function LoginScreen({ status, user, navigation }) {
         }}
         validationSchema={validationSchema}
       >
-        <FormFieldText name="email" header={t('field.email')} />
-        <FormFieldTextPassword name="password" header={t('field.password')} />
-        {user.may_forget && (
-          <AbstractButton
-            header={t('action.reset-password')}
-            onPress={() => navigation.navigate('ForgotPasswordScreen')}
-          />
+        {({ values }) => (
+          <>
+            <FormFieldText name="email" header={t('field.email')} />
+            <FormFieldTextPassword name="password" header={t('field.password')} />
+            {user.may_forget && (
+              <AbstractButton
+                header={t('action.reset-password')}
+                onPress={() => navigation.navigate('ForgotPasswordScreen', { email: values.email })}
+              />
+            )}
+            <FormFieldSubmitButton header={t('action.login')} />
+            <AbstractButton
+              header={t('action.sign-up')}
+              onPress={() => navigation.navigate('SignUpScreen')}
+            />
+            <View style={tw`flex-row mx-5 mr-10 w-auto`}>
+              <GoogleButton
+                handleSubmit={() => {
+                  dispatch({ type: 'AUTH_GOOGLE' });
+                }}
+              />
+              <GithubButton
+                handleSubmit={() => {
+                  dispatch({ type: 'AUTH_GITHUB' });
+                }}
+              />
+            </View>
+          </>
         )}
-        <FormFieldSubmitButton header={t('action.login')} />
-        <AbstractButton
-          header={t('action.sign-up')}
-          onPress={() => navigation.navigate('SignUpScreen')}
-        />
-        <View style={tw`flex-row mx-5 mr-10 w-auto`}>
-          <GoogleButton
-            handleSubmit={() => {
-              dispatch({ type: 'AUTH_GOOGLE' });
-            }}
-          />
-          <GithubButton
-            handleSubmit={() => {
-              dispatch({ type: 'AUTH_GITHUB' });
-            }}
-          />
-        </View>
       </FormBody>
     </AuthScreen>
   );

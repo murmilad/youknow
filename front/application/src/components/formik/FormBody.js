@@ -7,7 +7,9 @@ const PropTypes = require('prop-types');
 function FormBody({ children, initialValues, onSubmit, validationSchema }) {
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-      <View>{children}</View>
+      {({ values }) => (
+        <View>{typeof children === 'function' ? children({ values }) : children}</View>
+      )}
     </Formik>
   );
 }

@@ -13,7 +13,7 @@ import * as actions from '../../redux/constants/action';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
-function ForgotPasswordScreen({ status, navigation }) {
+function ForgotPasswordScreen({ status, navigation, route }) {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const validationSchema = yup.object().shape({
@@ -24,7 +24,7 @@ function ForgotPasswordScreen({ status, navigation }) {
     <AuthScreen isLoading={status.is_loading}>
       <FormBody
         initialValues={{
-          email: '',
+          email: route.params.email,
         }}
         onSubmit={(values) => {
           dispatch({
@@ -43,6 +43,7 @@ function ForgotPasswordScreen({ status, navigation }) {
 
 ForgotPasswordScreen.propTypes = {
   status: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

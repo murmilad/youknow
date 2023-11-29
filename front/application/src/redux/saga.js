@@ -107,7 +107,7 @@ export function* callServerLastest() {
       { type: actions.SET_MAY_FORGET_PASSWORD, payload: { may_forget: false } },
     ]
   );
-  yield takeLatest(actions.SET_FORGOT_PASSWORD, replace, 'ForgottenScreen');
+  yield takeLatest(actions.SET_FORGOT_PASSWORD, navigate, 'ForgottenScreen');
   yield takeLatest(
     actions.RESET_PASSWORD,
     submitForm,
@@ -115,7 +115,7 @@ export function* callServerLastest() {
     (request) => request.payload.reset,
     (action, response) => [{ type: actions.SET_RESET }]
   );
-  yield takeLatest(actions.SET_RESET, replace, 'ResettedScreen');
+  yield takeLatest(actions.SET_RESET, navigate, 'ResettedScreen');
 
   // User OAuth login
   yield takeLatest(
