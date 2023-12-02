@@ -1,10 +1,11 @@
 package taskmanager
+
 import (
 	"context"
-	"time"
-	"sync"
-	"fmt"
 	"errors"
+	"sync"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type worker struct {
@@ -18,7 +19,7 @@ type worker struct {
 type WorkerIface interface {
 	Start(pctx context.Context)
 	Stop()
-	QueueTask(task string, workDuration time.Duration) error
+	QueueTask(task string, taskRoutine TaskRoutine) error
 }
 
 func New(workerCount, buffer int) WorkerIface {
@@ -43,11 +44,11 @@ func (w *worker) Start(pctx context.Context) {
 }
 
 func (w *worker) Stop() {
-	fmt.Println("stop workers")
+	log.Info("stop workers")
 	close(w.workchan)
 	w.cancelFunc()
 	w.wg.Wait()
-	fmt.Println("all workers exited!")
+	log.Info("all workers exited!")
 }
 
 func (w *worker) spawnWorkers(ctx context.Context) {
@@ -59,42 +60,36 @@ func (w *worker) spawnWorkers(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		default:
-			w.doWork(ctx, work.TaskID, work.WorkDuration)
+			w.doWork(ctx, work.TaskID, work.TaskRoutine)
 		}
 	}
 }
 
-func (w *worker) doWork(ctx context.Context, task string, workDuration time.Duration) {
-	fmt.Println("task", task, "do some work now...")
-	//log.WithField("task", task).Info("do some work now...")
-	sleepContext(ctx, workDuration)
+func (w *worker) doWork(ctx context.Context, task string, taskRoutine TaskRoutine) {
+	log.WithField("task", task).Debug("do some work now...")
+	taskRoutine.Work(w)
 	// update task management data store indicating that the work is complete!
-	fmt.Println("task", task, "work completed!")
-	//log.WithField("task", task).Info("work completed!")
+	log.WithField("task", task).Debug("work completed!")
 
 }
 
-func sleepContext(ctx context.Context, sleep time.Duration) {
-	select {
-	case <-ctx.Done():
-	case <-time.After(sleep):
-	}
-}
-
-func (w *worker) QueueTask(task string, workDuration time.Duration) error {
+func (w *worker) QueueTask(task string, taskRoutine TaskRoutine) error {
 	if len(w.workchan) >= w.buffer {
 		return ErrWorkerBusy
 	}
 
 	// queue task in the workchan.
-	w.workchan <- workType{TaskID: task, WorkDuration: workDuration}
+	w.workchan <- workType{TaskID: task, TaskRoutine: taskRoutine}
 
 	return nil
 }
 
+type TaskRoutine interface {
+	Work(workers WorkerIface)
+}
 type workType struct {
 	TaskID       string
-	WorkDuration time.Duration
+	TaskRoutine  TaskRoutine
 }
 
 var (

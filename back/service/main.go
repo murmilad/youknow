@@ -1,13 +1,17 @@
 package main
 
 import (
-	"log"
+	"context"
 	"net/http"
 	"os"
+	"strconv"
+
+	log "github.com/sirupsen/logrus"
 
 	"akosarev.info/youknow/controllers"
 	"akosarev.info/youknow/initializers"
 	"akosarev.info/youknow/routes"
+	"akosarev.info/youknow/taskmanager"
 	mobile "github.com/floresj/go-contrib-mobile"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -33,17 +37,19 @@ func init() {
 		log.Fatal("? Could not load environment variables", err)
 	}
 
-	f, err := os.OpenFile(config.LogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+	ll, err := log.ParseLevel(config.LogLevel)
 	if err != nil {
-		log.Fatalf("error opening file: %v", err)
+		log.Fatalf("log level error: %v", err)
 	}
 
-	defer f.Close()
-
-	log.SetOutput(f)
-	log.Println("Youknow application starts")
+	log.SetLevel(ll)
+	log.Info("Youknow application starts")
 
 	initializers.ConnectDB(&config)
+
+
+
 
 	AuthController = controllers.NewAuthController(initializers.DB)
 	AuthRouteController = routes.NewAuthRouteController(AuthController)
@@ -66,6 +72,24 @@ func main() {
 	if err != nil {
 		log.Fatal("? Could not load environment variables", err)
 	}
+	f, err := os.OpenFile(config.LogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+
+
+	log.SetOutput(f)
+
+	ctx := context.Background()	
+	log.Info("starting workers " + strconv.Itoa(config.WorkersCount) + " " + strconv.Itoa(config.WorkersBuffer))
+	worker := taskmanager.New(config.WorkersCount, config.WorkersBuffer)
+	worker.Start(ctx)
+
+	founder := taskmanager.NewTaskFounder()
+	err = worker.QueueTask("[TASK FOUNDER]", founder)
+	if err != nil {
+		log.Fatalf("can't add task: %v", err)
+	}
 
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{config.ExternalBackendAddress + ":" + config.ExternalBackendPort, config.ClientOrigin}
@@ -84,11 +108,16 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": message})
 	})
 
-/* 	TODO need to cleanup unverified emails
- */
+
 	AuthRouteController.AuthRoute(router)
 	UserRouteController.UserRoute(router)
 	YouKnowRouteController.YouKnowRoute(router)
 	SessionRouteController.SessionRoute(router)
-	log.Fatal(server.Run(":" + config.ServerPort))
+
+	log.Info(server.Run(":" + config.ServerPort))
+
+	defer func() {
+		worker.Stop()
+		f.Close()
+	}()	
 }

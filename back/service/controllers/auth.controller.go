@@ -7,6 +7,8 @@ import (
 	"strings"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	"akosarev.info/youknow/initializers"
 	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/utils"
@@ -339,7 +341,7 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 		return
 	}
 
-	fmt.Println("Access_token ", tokenRes.Access_token)
+	log.Debug("Access_token ", tokenRes.Access_token)
 
 	googleUser, err := utils.GetGoogleUser(tokenRes.Access_token, tokenRes.Id_token)
 
@@ -420,7 +422,7 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 		return
 	}
 
-	fmt.Println("Access_token ", tokenRes.Access_token)
+	log.Debug("Access_token ", tokenRes.Access_token)
 
 	githubUser, err := utils.GetGithubUser(tokenRes.Access_token)
 

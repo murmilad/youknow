@@ -47,7 +47,10 @@ type Config struct {
 
 	GinNginxLogPath string `mapstructure:"GIN_NGINX_LOG_PATH"`
 	LogPath         string `mapstructure:"LOG_PATH"`
-
+	LogLevel        string `mapstructure:"LOG_LEVEL"`
+	WorkersCount    int `mapstructure:"WORKERS_COUNT"`
+	WorkersBuffer   int `mapstructure:"WORKERS_BUFFER"`
+	
 	ServerName string `mapstructure:"SERVER_NAME"`
 }
 

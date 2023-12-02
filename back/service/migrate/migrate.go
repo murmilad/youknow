@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	log "github.com/sirupsen/logrus"
 
 	"akosarev.info/youknow/initializers"
 	"akosarev.info/youknow/models"
@@ -21,5 +20,5 @@ func main() {
 	initializers.DB.AutoMigrate(&models.User{})
 	initializers.DB.AutoMigrate(&models.KnowType{})
 	initializers.DB.AutoMigrate(&models.Know{})
-	fmt.Println("? Migration complete")
+	log.Debug("? Migration complete")
 }

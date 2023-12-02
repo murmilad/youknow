@@ -2,7 +2,8 @@ package initializers
 
 import (
 	"fmt"
-	"log"
+
+	log "github.com/sirupsen/logrus"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -18,6 +19,6 @@ func ConnectDB(config *Config) {
 	if err != nil {
 		log.Fatal("Failed to connect to the Database ", err)
 	} else {
-		fmt.Println("🚀 Connected Successfully to the Database")
+		log.Info("🚀 Connected Successfully to the Database")
 	}
 }

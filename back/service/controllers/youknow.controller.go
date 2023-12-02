@@ -5,10 +5,11 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 
 	"akosarev.info/youknow/models"
 	"github.com/gin-gonic/gin"
@@ -136,7 +137,7 @@ func (yc *YouKnowController) PostKnowTypesById(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
-	fmt.Print(records)
+	log.Debug("loaded data:", records)
 
 	loadedCount := 0
 	duplicatedCount := 0
@@ -152,7 +153,7 @@ func (yc *YouKnowController) PostKnowTypesById(ctx *gin.Context) {
 			if len(knows) > 0 {
 				duplicatedCount++
 			} else {
-				log.Println("record: ", record[0], record[1])
+				log.Debug("record: ", record[0], record[1])
 				loadedCount++
 				var know models.Know
 				know.KnowtypeId = uint(knowTypeId)
