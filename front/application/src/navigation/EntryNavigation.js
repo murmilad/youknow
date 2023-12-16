@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 
 import { connect, useDispatch } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import TimeZone from 'react-native-timezone';
 
 import tw from '../../tailwind';
 import WelcomeNavigation from './WelcomeNavigation';
@@ -24,6 +26,12 @@ function EntryNavigation({ user, status }) {
     if (status.server && user.token) {
       dispatch({
         type: actions.GET_USER,
+      });
+      dispatch({
+        type: actions.SET_USER_DATA,
+        payload: {
+          timezone: TimeZone.getTimeZone(),
+        },
       });
     } else if (status.server) {
       dispatch({

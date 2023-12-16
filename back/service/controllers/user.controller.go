@@ -32,3 +32,24 @@ func (uc *UserController) GetMe(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": gin.H{"user": userResponse}})
 }
+
+// [...] SetData
+func (uc *UserController) SetData(ctx *gin.Context) {
+	currentUser := ctx.MustGet("currentUser").(models.User)
+
+	var payload *models.UserDataInput
+
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	currentUser.TimeZone = payload.TimeZone
+	result := uc.DB.Save(&currentUser)
+	if result.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "User with this E-Mail didnt found"})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{"status": "success"})
+}

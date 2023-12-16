@@ -16,6 +16,7 @@ type User struct {
 	Photo            string    `gorm:"not null"`
 	VerificationCode string
 	Verified         bool      `gorm:"not null"`
+	TimeZone         string    `gorm:"type:varchar(255)"`
 	CreatedAt        time.Time `gorm:"not null"`
 	UpdatedAt        time.Time `gorm:"not null"`
 }
@@ -41,8 +42,8 @@ type SignInInput struct {
 }
 
 type ForgotInput struct {
-	Email string `json:"email"  binding:"required"`
-	Initiator       string `json:"initiator,omitempty"`
+	Email     string `json:"email"  binding:"required"`
+	Initiator string `json:"initiator,omitempty"`
 }
 type UserResponse struct {
 	ID        uuid.UUID `json:"id,omitempty"`
@@ -67,4 +68,8 @@ type UpdateDBUser struct {
 	Verified        bool      `json:"verified,omitempty" bson:"verified,omitempty"`
 	CreatedAt       time.Time `json:"created_at,omitempty" bson:"created_at,omitempty"`
 	UpdatedAt       time.Time `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
+}
+
+type UserDataInput struct {
+	TimeZone string `json:"timezone"  binding:"required"`
 }

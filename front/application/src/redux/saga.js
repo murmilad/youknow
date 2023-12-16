@@ -17,6 +17,15 @@ import googleAuthorize from '../api/google';
 import githubAuthorize from '../api/github';
 
 export function* callServerLastest() {
+  // Set user data
+  yield takeLatest(
+    actions.SET_USER_DATA,
+    submitForm,
+    '/api/users/data',
+    (request) => request.payload,
+    (action, response) => []
+  );
+
   // User check
 
   yield takeLatest(

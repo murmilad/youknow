@@ -14,7 +14,6 @@ export const PUT_TOKEN_HEADER = 'PUT_TOKEN_HEADER';
 export const AUTH_GOOGLE = 'AUTH_GOOGLE';
 export const AUTH_GITHUB = 'AUTH_GITHUB';
 export const VERIFY = 'VERIFY';
-export const GET_USER = 'GET_USER';
 export const SIGN_UP = 'SIGN_UP';
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
@@ -33,3 +32,6 @@ export const CONNECT_AND_SET_PARAMS = 'CONNECT_AND_SET_PARAMS';
 export const SET_CONNECTION_PARAMS = 'SET_CONNECTION_PARAMS';
 export const SET_CONNECTED = 'SET_CONNECTED';
 export const SET_DISCONNECTED = 'SET_DISCONNECTED';
+
+export const GET_USER = 'GET_USER';
+export const SET_USER_DATA = 'SET_USER_DATA';
