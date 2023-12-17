@@ -3,6 +3,8 @@ package controllers
 import (
 	"net/http"
 
+	log "github.com/sirupsen/logrus"
+
 	"akosarev.info/youknow/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -44,7 +46,8 @@ func (uc *UserController) SetData(ctx *gin.Context) {
 		return
 	}
 
-	currentUser.TimeZone = payload.TimeZone
+	log.Debug("Save user " + currentUser.Email + " data: timezone" + payload.Timezone)
+	currentUser.Timezone = payload.Timezone
 	result := uc.DB.Save(&currentUser)
 	if result.Error != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "User with this E-Mail didnt found"})

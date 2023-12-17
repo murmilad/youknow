@@ -16,7 +16,7 @@ type User struct {
 	Photo            string    `gorm:"not null"`
 	VerificationCode string
 	Verified         bool      `gorm:"not null"`
-	TimeZone         string    `gorm:"type:varchar(255)"`
+	Timezone         string    `gorm:"type:varchar(255)"`
 	CreatedAt        time.Time `gorm:"not null"`
 	UpdatedAt        time.Time `gorm:"not null"`
 }
@@ -71,5 +71,5 @@ type UpdateDBUser struct {
 }
 
 type UserDataInput struct {
-	TimeZone string `json:"timezone"  binding:"required"`
+	Timezone string `json:"timezone"  binding:"required"`
 }

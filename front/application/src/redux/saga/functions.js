@@ -13,14 +13,16 @@ export function* replace(routeName, params, action) {
   yield call(NavigationService.replace, routeName, params);
 }
 export function getErrorMessage(error) {
-  console.log(`error ${JSON.stringify(error)}`);
+  console.log(`[ERROR] ${JSON.stringify(error)}`);
   const errorMessage = error.response?.data.message || error.response?.data || error.message;
-  if (error.code === 'ERR_NETWORK' || error.status > 500) {
+  if (error.code === 'ERR_NETWORK' || error.response?.status > 500) {
     return [errorMessage, { type: actions.SET_DISCONNECTED }];
   }
   if (
     errorMessage === 'invalidate token: Token is expired' ||
-    errorMessage === 'You are not logged in'
+    errorMessage === 'You are not logged in' ||
+    errorMessage === 'the user belonging to this token no logger exists' ||
+    error.response?.status > 400
   ) {
     return ['', { type: actions.LOG_OUT }];
   }

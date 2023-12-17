@@ -15,7 +15,7 @@ const userReducer = (state = {}, action) => {
     case actions.SET_TOKEN:
       return merge(state, {
         login_status: loginStatus.LOGIN_STATUS_LOGGED_IN,
-        token: { token: action.payload.token },
+        token: action.payload.token,
       });
     case actions.REMOVE_TOKEN:
       return {

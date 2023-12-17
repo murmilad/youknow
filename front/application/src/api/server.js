@@ -7,6 +7,8 @@ export const setBaseUrl = (server, port) => {
 };
 
 export const setCredentails = (token) => {
+  console.log(`[TOKEN] ${JSON.stringify(token)}`);
+
   SERVER.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 

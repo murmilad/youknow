@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { getCalendars } from 'expo-localization';
+
 import { all, takeLatest } from 'redux-saga/effects';
 
 import * as actions from './constants/action';
@@ -16,13 +19,15 @@ import {
 import googleAuthorize from '../api/google';
 import githubAuthorize from '../api/github';
 
+const { timeZone } = getCalendars()[0];
+
 export function* callServerLastest() {
   // Set user data
   yield takeLatest(
     actions.SET_USER_DATA,
     submitForm,
     '/api/users/data',
-    (request) => request.payload,
+    (request) => ({ timezone: timeZone }),
     (action, response) => []
   );
 
@@ -67,6 +72,7 @@ export function* callServerLastest() {
     (action, response) => [
       { type: actions.PUT_TOKEN_HEADER, payload: { token: response.data.token } },
       { type: actions.GET_USER },
+      { type: actions.SET_USER_DATA },
       { type: actions.SET_MAY_FORGET_PASSWORD, payload: { may_forget: false } },
     ]
   );

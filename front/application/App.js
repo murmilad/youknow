@@ -36,7 +36,7 @@ export default function App() {
         AuthNavigation: {
           screens: {
             OAuthScreen: {
-              path: '/api/sessions/oauth/:oauthType',
+              path: 'api/sessions/oauth/:oauthType',
             },
             ResetPasswordScreen: {
               path: 'resetpassword/:verifyHash',

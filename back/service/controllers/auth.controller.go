@@ -39,13 +39,13 @@ func (ac *AuthController) DeepLink(ctx *gin.Context) {
 	config, _ := initializers.LoadConfig(".")
 
 	switch {
-    case device.Normal():
-		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOrigin + action + "/" + code)
-    case device.Mobile():
-		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOriginApp  + action + "/" + code)
-    case device.Tablet():
-		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOriginApp  + action + "/" + code)
-    }
+	case device.Normal():
+		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOrigin+action+"/"+code)
+	case device.Mobile():
+		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOriginApp+action+"/"+code)
+	case device.Tablet():
+		ctx.Redirect(http.StatusTemporaryRedirect, config.ClientOriginApp+action+"/"+code)
+	}
 }
 
 // [...] SignUp User
@@ -69,11 +69,10 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		return
 	}
 
-
 	existsUser := models.User{}
-	ac.DB.Where("email = ? AND provider = ? AND verified = ?", 
+	ac.DB.Where("email = ? AND provider = ? AND verified = ?",
 		strings.ToLower(payload.Email),
-		"local", 
+		"local",
 		false).First(&existsUser)
 
 	now := time.Now()
@@ -96,7 +95,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "User with that email already exists"})
 		return
 	} else if result.Error != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Something bad happened"})
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Can't save User " + result.Error.Error()})
 		return
 	}
 
@@ -118,8 +117,8 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 	emailData := utils.EmailData{
-//		Backend deep link resolver
-//		URL:       template.URL(config.ClientOrigin + "/api/deeplink/?action=verifyemail&code=" + code),
+		//		Backend deep link resolver
+		//		URL:       template.URL(config.ClientOrigin + "/api/deeplink/?action=verifyemail&code=" + code),
 		URL:       template.URL(config.ClientOrigin + "/verifyemail/" + code),
 		FirstName: firstName,
 		Subject:   "Welcome to YouknoW",
@@ -168,8 +167,8 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 	}
 
 	emailData := utils.EmailData{
-//		Backend deep link resolver
-//		URL:       template.URL(config.ClientOrigin + "/api/deeplink/?action=resetpassword&code=" + verification_code),
+		//		Backend deep link resolver
+		//		URL:       template.URL(config.ClientOrigin + "/api/deeplink/?action=resetpassword&code=" + verification_code),
 		URL:       template.URL(config.ClientOrigin + "/resetpassword/" + verification_code),
 		FirstName: firstName,
 		Subject:   "Your new YouknoW password",
@@ -295,6 +294,7 @@ func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 	ctx.SetCookie("token", "", -1, "/", config.ServerName, false, true)
 	ctx.JSON(http.StatusOK, gin.H{"status": "success"})
 }
+
 //mobile
 ///api/sessions/oauth/google?
 //mobile=1
@@ -306,13 +306,13 @@ func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 //20profile%20https%3A%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20openid
 //state=eeQTRmvJufZLFpB63RVznA
 
-//web
-///api/sessions/oauth/google?
-//state=%2F
-//code=4%2F0AfJohXltk2tR6wKlTDwrAjxdhICfGa5YUGBqpcAJ8oJLKK7PYsAxxPdR_q2XYlSQMmQLTA
-//scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid
-//authuser=0
-//prompt=consent
+// web
+// /api/sessions/oauth/google?
+// state=%2F
+// code=4%2F0AfJohXltk2tR6wKlTDwrAjxdhICfGa5YUGBqpcAJ8oJLKK7PYsAxxPdR_q2XYlSQMmQLTA
+// scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid
+// authuser=0
+// prompt=consent
 func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 	code := ctx.Query("code")
 	initiator := ctx.Query("initiator")
@@ -330,7 +330,7 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 	var tokenRes *utils.GoogleOauthToken
 	var err error
 
-	if (initiator == "mobile"){
+	if initiator == "mobile" {
 		tokenRes, err = utils.GetGoogleOauthToken(code, config.GoogleAppClientID, "", config.GoogleOAuthAppRedirectUrl)
 	} else {
 		tokenRes, err = utils.GetGoogleOauthToken(code, config.GoogleClientID, config.GoogleClientSecret, config.GoogleOAuthRedirectUrl)
@@ -416,7 +416,6 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 
 	tokenRes, err := utils.GetGithubOauthToken(code, config.GithubClientID, config.GithubClientSecret, config.GithubOAuthRedirectUrl)
 
-
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
 		return
@@ -470,7 +469,7 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 
 	if initiator == "mobile" {
 		//Github supports only one callback, then we redirect from web to deeplink after check
-		ctx.Redirect(http.StatusTemporaryRedirect, "app.youknow:/api/sessions/oauth/github?token=" + access_token)
+		ctx.Redirect(http.StatusTemporaryRedirect, "app.youknow:/api/sessions/oauth/github?token="+access_token)
 	} else {
 		ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprint(config.ClientOrigin, pathUrl))
 	}
