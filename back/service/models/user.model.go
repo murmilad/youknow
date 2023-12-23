@@ -56,6 +56,12 @@ type UserResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type NotificationPeriod struct {
+	UserId    uuid.UUID `json:"user_id,omitempty"`
+	BeginTime string    `json:"begin_time"`
+	EndTime   string    `json:"end_time"`
+}
+
 type UpdateDBUser struct {
 	ID              uuid.UUID `json:"id,omitempty" bson:"_id,omitempty"`
 	Name            string    `json:"name,omitempty" bson:"name,omitempty"`

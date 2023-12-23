@@ -88,5 +88,11 @@ CREATE TABLE IF NOT EXISTS knows (
 );
 ALTER TABLE knows add IF NOT EXISTS lesson_type_handler character varying(255) NOT NULL REFERENCES lesson_types(handler) DEFAULT 'FORGET_CURVE';
 
+CREATE TABLE IF NOT EXISTS notifications_periods (
+    user_id uuid NOT NULL REFERENCES users(id),
+    begin_time TIME with time zone NOT NULL,
+    end_time TIME with time zone NOT NULL,
+    deleted boolean NOT NULL DEFAULT false
+);
 
 
