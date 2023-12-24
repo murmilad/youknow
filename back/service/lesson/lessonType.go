@@ -4,6 +4,6 @@ import "akosarev.info/youknow/models"
 
 type LessonType interface {
 	GetNotify(lesson models.Lesson)
-	GetKnow() *models.Know
+	GetKnow(count int) *[]models.Know
 	GetKnowCount() int
 }

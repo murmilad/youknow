@@ -14,9 +14,49 @@ type forgetcurveLessonType struct {
 	User *models.User
 }
 
-// GetKnow implements lesson.LessonType.
-func (flt *forgetcurveLessonType) GetKnow() *models.Know {
-	panic("unimplemented")
+// GetKnow get list of know for new lesson.
+func (flt *forgetcurveLessonType) GetKnow(count int) *[]models.Know {
+	knows := []models.Know{}
+	err := flt.DB.Raw(`
+			SELECT knows.*, count(lessons_knows.lesson_id) AS right_count, max(lessons_knows_right.ask_at) AS last_ask_at FROM knows
+				LEFT JOIN lessons
+					ON lessons_knows.lesson_id = lessons.id
+				LEFT JOIN (
+					SELECT know_id, max(ask_at) AS ask_at wrong_at FROM lessons_knows
+							ON knows.id = lessons_knows.know_id AND 
+						INNER JOIN lessons
+							ON lessons_knows.lesson_id = lessons.id
+					WHERE 
+						know_status = 'KNOW_WRONG'
+						AND user_id = ?	
+					GROUP BY know_id
+				) lessons_knows_wrong
+					ON knows.id = lessons_knows_wrong.know_id
+				LEFT JOIN lessons_knows_right
+					ON 
+						knows.id = lessons_knows.know_id 
+						AND (
+							lessons_knows.ask_at IS NULL 
+							OR lessons_knows.ask_at >= lessons_knows_wrong.ask_at)
+						AND know_status = 'KNOW_RIGHT'
+
+			WHERE lessons.user_id = ? AND lessons_knows_right != 'KNOW_NEW'
+			GROUP BY knows.*
+			HAVING 
+				right_count == 0 AND last_ask_at > CURRENT_DATE - interval '1 minute'
+				OR  right_count == 1 AND last_ask_at > CURRENT_DATE - interval '2 hour'
+				OR  right_count == 2 AND last_ask_at > CURRENT_DATE - interval '1 day'
+				OR  right_count == 3 AND last_ask_at > CURRENT_DATE - interval '7 day'
+			SORT last_ask_at
+			LIMIT ?
+
+	`, flt.User.ID, flt.User.ID, count).Find(&knows)
+
+	if err != nil {
+		log.Error("Error getting Know: ", err)
+	}
+
+	return &knows
 }
 
 // GetKnowCount Determine count of knows per 10 days for up to Month interval.
