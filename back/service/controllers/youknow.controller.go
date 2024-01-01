@@ -1,34 +1,32 @@
 package controllers
 
 import (
-	"bytes"
-	"encoding/csv"
 	"fmt"
-	"io"
 	"net/http"
 	"strconv"
-	"strings"
-
-	log "github.com/sirupsen/logrus"
 
 	"akosarev.info/youknow/models"
+	"akosarev.info/youknow/services"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type YouKnowController struct {
-	DB *gorm.DB
+	KnowService services.KnowProvider
 }
 
-func NewYouKnowController(DB *gorm.DB) YouKnowController {
-	return YouKnowController{DB}
+func NewYouKnowController(knowService services.KnowProvider) YouKnowController {
+	return YouKnowController{knowService}
 }
 
 func (yc *YouKnowController) GetKnowTypes(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
 	var knowtypes []models.KnowTypeResponse
-	yc.DB.Order("id").Find(&knowtypes, "user_id = ? AND deleted = false", currentUser.ID)
+	err := yc.KnowService.GetKnowtypesByUser(&knowtypes, &currentUser)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	ctx.IndentedJSON(http.StatusOK, knowtypes)
 }
@@ -44,14 +42,27 @@ func (yc *YouKnowController) PostKnowType(ctx *gin.Context) {
 
 	knowtype.UserID = currentUser.ID
 
-	yc.DB.Save(&knowtype)
+	err := yc.KnowService.SaveKnowtype(&knowtype)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	ctx.IndentedJSON(http.StatusCreated, knowtype)
 }
 
 func (yc *YouKnowController) GetKnowTypeByID(ctx *gin.Context) {
 	var knowtypes []models.KnowTypeResponse
-	yc.DB.Find(&knowtypes, "id = ? AND deleted = false", ctx.Param("id"))
+	knowTypeId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	if err := yc.KnowService.GetKnowtypesById(&knowtypes, uint(knowTypeId)); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	if len(knowtypes) > 0 {
 		ctx.IndentedJSON(http.StatusOK, knowtypes[0])
@@ -63,19 +74,20 @@ func (yc *YouKnowController) GetKnowTypeByID(ctx *gin.Context) {
 }
 
 func (yc *YouKnowController) DeleteKnowTypeByID(ctx *gin.Context) {
-	var knowtypes []models.KnowTypeResponse
-	yc.DB.Find(&knowtypes, "id = ? AND deleted = false", ctx.Param("id"))
-
-	if len(knowtypes) > 0 {
-		knowtypes[0].Deleted = true
-		yc.DB.Save(knowtypes[0])
-
-		ctx.IndentedJSON(http.StatusOK, knowtypes[0])
+	knowTypeId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Element not found"})
+	var knowtypes []models.KnowTypeResponse
+	err = yc.KnowService.DeleteKnowtype(uint(knowTypeId))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
+	ctx.IndentedJSON(http.StatusOK, knowtypes[0])
 }
 
 func (yc *YouKnowController) PostKnowTypesById(ctx *gin.Context) {
@@ -92,76 +104,10 @@ func (yc *YouKnowController) PostKnowTypesById(ctx *gin.Context) {
 		return
 	}
 
-	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, file); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
-		return
-	}
-
-	/* 	file, err := ctx.FormFile("file")
-	   	if err != nil {
-	   		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
-	   		return
-	   	}
-
-	   	src, err := file.Open()
-	   	if err != nil {
-	   		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
-	   		return
-	   	}
-	*/
-	/* 	log.Println("file ", string(buf.Bytes()))
-		in := `first_name|last_name|username
-	"Rob"|"Pike"|rob
-	# lines beginning with a # character are ignored
-	Ken|Thompson|ken
-	"Robert"|"Griesemer"|"gri"
-	`
-	*/
-	r := csv.NewReader(
-		strings.NewReader(
-			strings.ReplaceAll(
-				strings.ReplaceAll(
-					strings.ReplaceAll(
-						strings.ReplaceAll(string(buf.Bytes()),
-							`"`, `""`),
-						`\\`, `<DOUBLESLASH>`),
-					`\`, `"`),
-				`<DOUBLESLASH>`, `\`)))
-
-	r.Comma = '|'
-	r.Comment = '#'
-
-	records, err := r.ReadAll()
+	loadedCount, duplicatedCount, err := yc.KnowService.AddKnowsFromFile(file, uint(knowTypeId))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
-	}
-	log.Debug("loaded data:", records)
-
-	loadedCount := 0
-	duplicatedCount := 0
-	for _, record := range records {
-		if record[0] != "" && record[1] != "" {
-
-			var knows []models.Know
-
-			yc.DB.Where("knowtype_id = ? AND deleted = false AND LOWER(TRIM(name)) = LOWER(TRIM(?)) AND LOWER(TRIM(value)) = LOWER(TRIM(?))",
-				knowTypeId, record[0], record[1]).
-				Find(&knows)
-
-			if len(knows) > 0 {
-				duplicatedCount++
-			} else {
-				log.Debug("record: ", record[0], record[1])
-				loadedCount++
-				var know models.Know
-				know.KnowtypeId = uint(knowTypeId)
-				know.Name = record[0]
-				know.Value = record[1]
-				yc.DB.Save(&know)
-			}
-		}
 	}
 
 	ctx.IndentedJSON(http.StatusOK, gin.H{"status": "loaded", "message": fmt.Sprintf("Uploaded %d, Duplicated %d", loadedCount, duplicatedCount)})
@@ -169,7 +115,17 @@ func (yc *YouKnowController) PostKnowTypesById(ctx *gin.Context) {
 
 func (yc *YouKnowController) GetKnows(ctx *gin.Context) {
 	var knows []models.Know
-	yc.DB.Order("id desc").Find(&knows, "knowtype_id = ? AND deleted = false", ctx.Param("knowtype_id"))
+	knowTypeId, err := strconv.Atoi(ctx.Param("knowtype_id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	err = yc.KnowService.GetKnowsByKnowtypeId(&knows, uint(knowTypeId))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	ctx.IndentedJSON(http.StatusOK, knows)
 }
@@ -182,14 +138,26 @@ func (yc *YouKnowController) PostKnow(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "JWT generator error"})
 	}
 
-	yc.DB.Save(&know)
+	if err := yc.KnowService.SaveKnow(&know); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	ctx.IndentedJSON(http.StatusCreated, know)
 }
 
 func (yc *YouKnowController) GetKnowByID(ctx *gin.Context) {
 	var knows []models.Know
-	yc.DB.Find(&knows, "id = ? AND deleted = false", ctx.Param("id"))
+	knowId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	if err := yc.KnowService.GetKnowsById(&knows, uint(knowId)); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	if len(knows) > 0 {
 		ctx.IndentedJSON(http.StatusOK, knows[0])
@@ -201,14 +169,14 @@ func (yc *YouKnowController) GetKnowByID(ctx *gin.Context) {
 }
 
 func (yc *YouKnowController) DeleteKnowByID(ctx *gin.Context) {
-	var knows []models.Know
-	yc.DB.Find(&knows, "id = ? AND deleted = false", ctx.Param("id"))
+	knowId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
-	if len(knows) > 0 {
-		knows[0].Deleted = true
-		yc.DB.Save(knows[0])
-
-		ctx.IndentedJSON(http.StatusOK, knows[0])
+	if err := yc.KnowService.DeleteKnow(uint(knowId)); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
 

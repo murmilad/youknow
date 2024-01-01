@@ -1,7 +1,8 @@
 package tasks
 
 import (
-	"strconv"
+	"context"
+	"time"
 
 	"akosarev.info/youknow/taskmanager"
 	log "github.com/sirupsen/logrus"
@@ -16,11 +17,23 @@ func NewTaskFounder() taskmanager.TaskRoutine {
 	return &tf
 }
 
-func (tf *taskFounder) Work(workers taskmanager.WorkerIface) {
+func (tf *taskFounder) Work(workers taskmanager.WorkerIface, ctx context.Context) {
 	log.Debug("start Founder")
 
-	for i := 0; i < 10; i++ {
-		sender := NewTaskSender(i)
-		workers.QueueTask("[TASK SENTDER]"+strconv.Itoa(i), sender)
+	ticker := time.NewTicker(time.Second)
+	defer ticker.Stop()
+
+	for {
+		log.Debug("[SEARCH LESSON]")
+
+		//		sender := NewTaskSender(i)
+		//		workers.QueueTask("[TASK SENTDER]"+strconv.Itoa(i), sender)
+
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			log.Debug("[SEARCH LESSON] redo")
+		}
 	}
 }

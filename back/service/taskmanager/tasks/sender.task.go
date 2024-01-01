@@ -1,6 +1,8 @@
 package tasks
 
 import (
+	"context"
+
 	"akosarev.info/youknow/taskmanager"
 	log "github.com/sirupsen/logrus"
 )
@@ -15,6 +17,6 @@ func NewTaskSender(i int) taskmanager.TaskRoutine {
 	return &t
 }
 
-func (tf *taskSender) Work(workers taskmanager.WorkerIface){
+func (tf *taskSender) Work(workers taskmanager.WorkerIface, ctx context.Context) {
 	log.Debug("Send ", tf.QuestionId)
 }

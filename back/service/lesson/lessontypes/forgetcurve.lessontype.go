@@ -2,6 +2,7 @@ package lessontypes
 
 import (
 	"math"
+	"time"
 
 	"akosarev.info/youknow/lesson"
 	"akosarev.info/youknow/models"
@@ -15,7 +16,7 @@ type forgetcurveLessonType struct {
 }
 
 // GetKnow get list of know for new lesson.
-func (flt *forgetcurveLessonType) GetKnow(count int) *[]models.Know {
+func (flt *forgetcurveLessonType) GetKnows(count int) *[]models.Know {
 	knows := []models.Know{}
 	err := flt.DB.Raw(`
 			SELECT knows.*, count(lessons_knows.lesson_id) AS right_count, max(lessons_knows_right.ask_at) AS last_ask_at FROM knows
@@ -29,10 +30,11 @@ func (flt *forgetcurveLessonType) GetKnow(count int) *[]models.Know {
 					WHERE 
 						know_status = 'KNOW_WRONG'
 						AND user_id = ?	
+						AND lesson_type_handler = 'FORGET_CURVE'
 					GROUP BY know_id
-				) lessons_knows_wrong
+				) AS lessons_knows_wrong
 					ON knows.id = lessons_knows_wrong.know_id
-				LEFT JOIN lessons_knows_right
+				LEFT JOIN lessons_knows AS lessons_knows_right
 					ON 
 						knows.id = lessons_knows.know_id 
 						AND (
@@ -40,7 +42,10 @@ func (flt *forgetcurveLessonType) GetKnow(count int) *[]models.Know {
 							OR lessons_knows.ask_at >= lessons_knows_wrong.ask_at)
 						AND know_status = 'KNOW_RIGHT'
 
-			WHERE lessons.user_id = ? AND lessons_knows_right != 'KNOW_NEW'
+			WHERE 
+				lessons.user_id = ?
+				AND lessons_knows_right != 'KNOW_NEW'
+				AND lesson_type_handler = 'FORGET_CURVE'
 			GROUP BY knows.*
 			HAVING 
 				right_count == 0 AND last_ask_at > CURRENT_DATE - interval '1 minute'
@@ -79,6 +84,7 @@ func (flt *forgetcurveLessonType) GetKnowCount() int {
 					know_status = 'KNOW_RIGHT' 
 					AND ask_at > CURRENT_DATE - 30
 					AND lessons.user_id = ?
+					AND lesson_type_handler = 'FORGET_CURVE'
 				GROUP BY knows.id
 			) learned_knows
 		WHERE learned_knows.lessons > ?
@@ -98,9 +104,18 @@ func (flt *forgetcurveLessonType) GetKnowCount() int {
 	}
 }
 
-// GetNotify implements lesson.LessonType.
-func (flt *forgetcurveLessonType) GetNotify(lesson models.Lesson) {
-	panic("unimplemented")
+// isLessonActual check if lesson actual
+func (flt *forgetcurveLessonType) IsLessonActual(lesson *models.Lesson) bool {
+
+	return lesson.ShowTimes == 1 && lesson.ShowAt.After(
+		time.Now().Local().Add(-time.Hour*time.Duration(2))) &&
+		lesson.ShowTimes == 2 && lesson.ShowAt.After(
+		time.Now().Local().AddDate(0, 0, -1)) &&
+		lesson.ShowTimes == 3 && lesson.ShowAt.After(
+		time.Now().Local().AddDate(0, 0, -7)) &&
+		lesson.ShowTimes == 4 && lesson.ShowAt.After(
+		time.Now().Local().AddDate(0, -1, 0))
+
 }
 
 func NewForgetcurveLessonType(user *models.User) lesson.LessonType {

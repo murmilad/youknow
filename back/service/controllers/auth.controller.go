@@ -11,21 +11,21 @@ import (
 
 	"akosarev.info/youknow/initializers"
 	"akosarev.info/youknow/models"
+	"akosarev.info/youknow/services"
 	"akosarev.info/youknow/utils"
 
 	mobile "github.com/floresj/go-contrib-mobile"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/thanhpk/randstr"
-	"gorm.io/gorm"
 )
 
 type AuthController struct {
-	DB *gorm.DB
+	UserService services.UserProvider
 }
 
-func NewAuthController(DB *gorm.DB) AuthController {
-	return AuthController{DB}
+func NewAuthController(UserService services.UserProvider) AuthController {
+	return AuthController{UserService}
 }
 
 // [...] DeepLink resolver
@@ -70,10 +70,11 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 	existsUser := models.User{}
-	ac.DB.Where("email = ? AND provider = ? AND verified = ?",
-		strings.ToLower(payload.Email),
-		"local",
-		false).First(&existsUser)
+	err = ac.UserService.GetUnverifiedUser(&existsUser, payload.Email)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Can't get exists User " + err.Error()})
+		return
+	}
 
 	now := time.Now()
 	newUser := models.User{
@@ -89,13 +90,13 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		UpdatedAt: now,
 	}
 
-	result := ac.DB.Save(&newUser)
+	err = ac.UserService.SaveUser(&newUser)
 
-	if result.Error != nil && strings.Contains(result.Error.Error(), "duplicate key value violates unique") {
+	if err != nil && strings.Contains(err.Error(), "duplicate key value violates unique") {
 		ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "User with that email already exists"})
 		return
-	} else if result.Error != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Can't save User " + result.Error.Error()})
+	} else if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Can't save User " + err.Error()})
 		return
 	}
 
@@ -108,7 +109,11 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 
 	// Update User in Database
 	newUser.VerificationCode = verification_code
-	ac.DB.Save(newUser)
+	err = ac.UserService.SaveUser(&newUser)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Can't save User verification code " + err.Error()})
+		return
+	}
 
 	var firstName = newUser.Name
 
@@ -143,8 +148,9 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 	}
 
 	var user models.User
-	result := ac.DB.First(&user, "email = ?", strings.ToLower(payload.Email))
-	if result.Error != nil {
+
+	err := ac.UserService.GetUser(&user, payload.Email)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "User with this E-Mail didnt found"})
 		return
 	}
@@ -158,7 +164,12 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 
 	// Update User in Database
 	user.VerificationCode = verification_code
-	ac.DB.Save(user)
+
+	err = ac.UserService.SaveUser(&user)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Can't save User " + err.Error()})
+		return
+	}
 
 	var firstName = user.Name
 
@@ -192,8 +203,8 @@ func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 	}
 
 	var updatedUser models.User
-	result := ac.DB.First(&updatedUser, "verification_code = ?", payload.VerifyHash)
-	if result.Error != nil {
+	err := ac.UserService.GetUserForVerification(&updatedUser, payload.VerifyHash)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Change password failed. Please try to start change password procedure again"})
 		return
 	}
@@ -216,7 +227,11 @@ func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 	updatedUser.Verified = true
 	updatedUser.Password = hashedPassword
 
-	ac.DB.Save(&updatedUser)
+	err = ac.UserService.SaveUser(&updatedUser)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Can't save User " + err.Error()})
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Password changed successfully"})
 
@@ -229,8 +244,8 @@ func (ac *AuthController) VerifyEmail(ctx *gin.Context) {
 	verification_code := utils.Encode(code)
 
 	var updatedUser models.User
-	result := ac.DB.First(&updatedUser, "verification_code = ?", verification_code)
-	if result.Error != nil {
+	err := ac.UserService.GetUserForVerification(&updatedUser, verification_code)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid verification code or user doesn't exists"})
 		return
 	}
@@ -242,7 +257,11 @@ func (ac *AuthController) VerifyEmail(ctx *gin.Context) {
 
 	updatedUser.VerificationCode = ""
 	updatedUser.Verified = true
-	ac.DB.Save(&updatedUser)
+	err = ac.UserService.SaveUser(&updatedUser)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Email verified successfully"})
 }
@@ -257,8 +276,8 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 	}
 
 	var user models.User
-	result := ac.DB.First(&user, "email = ?", strings.ToLower(payload.Email))
-	if result.Error != nil {
+	err := ac.UserService.GetUser(&user, payload.Email)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid email or Password"})
 		return
 	}
@@ -351,7 +370,11 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 	}
 
 	var users []models.User
-	ac.DB.Find(&users, "email = ?  AND provider = 'google'", googleUser.Email)
+	err = ac.UserService.GetUsersByProvider(&users, googleUser.Email, "google")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	var userID uuid.UUID
 	if len(users) > 0 {
@@ -371,10 +394,9 @@ func (ac *AuthController) GoogleOAuth(ctx *gin.Context) {
 		UpdatedAt: createdAt,
 	}
 
-	ac.DB.Save(&user)
-
+	err = ac.UserService.SaveUser(user)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
 
@@ -431,7 +453,11 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 	}
 
 	var users []models.User
-	ac.DB.Find(&users, "email = ? AND provider = 'github'", githubUser.Email)
+	err = ac.UserService.GetUsersByProvider(&users, githubUser.Email, "github")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
 	var userID uuid.UUID
 	if len(users) > 0 {
@@ -451,8 +477,7 @@ func (ac *AuthController) GithubOAuth(ctx *gin.Context) {
 		UpdatedAt: createdAt,
 	}
 
-	ac.DB.Save(&user)
-
+	err = ac.UserService.SaveUser(user)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
 		return

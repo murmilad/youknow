@@ -3,7 +3,7 @@ package lesson
 import "akosarev.info/youknow/models"
 
 type LessonType interface {
-	GetNotify(lesson models.Lesson)
-	GetKnow(count int) *[]models.Know
+	IsLessonActual(lesson *models.Lesson) bool
+	GetKnows(count int) *[]models.Know
 	GetKnowCount() int
 }

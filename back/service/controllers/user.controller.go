@@ -6,16 +6,16 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"akosarev.info/youknow/models"
+	"akosarev.info/youknow/services"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type UserController struct {
-	DB *gorm.DB
+	UserService services.UserProvider
 }
 
-func NewUserController(DB *gorm.DB) UserController {
-	return UserController{DB}
+func NewUserController(UserService services.UserProvider) UserController {
+	return UserController{UserService}
 }
 
 func (uc *UserController) GetMe(ctx *gin.Context) {
@@ -48,9 +48,9 @@ func (uc *UserController) SetData(ctx *gin.Context) {
 
 	log.Debug("Save user " + currentUser.Email + " data: timezone" + payload.Timezone)
 	currentUser.Timezone = payload.Timezone
-	result := uc.DB.Save(&currentUser)
-	if result.Error != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "User with this E-Mail didnt found"})
+	err := uc.UserService.SaveUser(&currentUser)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
 

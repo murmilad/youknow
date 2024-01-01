@@ -10,7 +10,9 @@ import (
 
 	"akosarev.info/youknow/controllers"
 	"akosarev.info/youknow/initializers"
+	providersgorm "akosarev.info/youknow/providers/gorm"
 	"akosarev.info/youknow/routes"
+	"akosarev.info/youknow/services"
 	"akosarev.info/youknow/taskmanager"
 	"akosarev.info/youknow/taskmanager/tasks"
 	mobile "github.com/floresj/go-contrib-mobile"
@@ -48,13 +50,19 @@ func init() {
 
 	initializers.ConnectDB(&config)
 
-	AuthController = controllers.NewAuthController(initializers.DB)
+	UserProvider := providersgorm.NewUserProvider(initializers.DB)
+	KnowProvider := providersgorm.NewKnowProvider(initializers.DB)
+
+	UserService := services.NewUserService(UserProvider)
+	KnowService := services.NewKnowService(KnowProvider)
+
+	AuthController = controllers.NewAuthController(UserService)
 	AuthRouteController = routes.NewAuthRouteController(AuthController)
 
-	UserController = controllers.NewUserController(initializers.DB)
+	UserController = controllers.NewUserController(UserService)
 	UserRouteController = routes.NewRouteUserController(UserController)
 
-	YouKnowController = controllers.NewYouKnowController(initializers.DB)
+	YouKnowController = controllers.NewYouKnowController(KnowService)
 	YouKnowRouteController = routes.NewYouKnowRouteController(YouKnowController)
 
 	SessionRouteController = routes.NewSessionRouteController(AuthController)

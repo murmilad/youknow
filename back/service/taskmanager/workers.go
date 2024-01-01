@@ -67,7 +67,7 @@ func (w *worker) spawnWorkers(ctx context.Context) {
 
 func (w *worker) doWork(ctx context.Context, task string, taskRoutine TaskRoutine) {
 	log.WithField("task", task).Debug("do some work now...")
-	taskRoutine.Work(w)
+	taskRoutine.Work(w, ctx)
 	// update task management data store indicating that the work is complete!
 	log.WithField("task", task).Debug("work completed!")
 
@@ -85,11 +85,11 @@ func (w *worker) QueueTask(task string, taskRoutine TaskRoutine) error {
 }
 
 type TaskRoutine interface {
-	Work(workers WorkerIface)
+	Work(workers WorkerIface, ctx context.Context)
 }
 type workType struct {
-	TaskID       string
-	TaskRoutine  TaskRoutine
+	TaskID      string
+	TaskRoutine TaskRoutine
 }
 
 var (
