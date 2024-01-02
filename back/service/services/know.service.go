@@ -7,6 +7,7 @@ import (
 	"mime/multipart"
 	"strings"
 
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 
 	"akosarev.info/youknow/models"
@@ -24,6 +25,8 @@ type KnowProvider interface {
 	GetKnowsById(knows *[]models.Know, id uint) (err error)
 	GetKnowsByKnowtypeId(knows *[]models.Know, knowTypeId uint) (err error)
 	DeleteKnow(id uint) (err error)
+	GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID, periods []models.Period, count int) (err error)
+	GetCoefKnowDays(coef *float64, days int, userId uuid.UUID, times int) (err error)
 }
 
 type knowService struct {
@@ -145,4 +148,12 @@ func (s *knowService) GetKnowsByData(knows *[]models.Know, name string, value st
 
 func (s *knowService) SaveKnow(know *models.Know) (err error) {
 	return s.KnowProvider.SaveKnow(know)
+}
+
+func (s *knowService) GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID, periods []models.Period, count int) (err error) {
+	return s.KnowProvider.GetKnowsByPeriods(knows, userId, periods, count)
+}
+
+func (s *knowService) GetCoefKnowDays(coef *float64, days int, userId uuid.UUID, times int) (err error) {
+	return s.KnowProvider.GetCoefKnowDays(coef, days, userId, times)
 }

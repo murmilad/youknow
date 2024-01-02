@@ -19,6 +19,12 @@ type Know struct {
 	Value      string `json:"value" gorm:"not null"`
 	Deleted    bool   `json:"deleted" gorm:"not null; default false"`
 }
+
+type Period struct {
+	AskCount         int
+	NextShowInterval string
+}
+
 type KnowTypeResponse struct {
 	Id      uint   `json:"id"`
 	Name    string `json:"name"`
