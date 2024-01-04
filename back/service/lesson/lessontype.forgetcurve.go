@@ -1,10 +1,8 @@
-package lessontypes
+package lesson
 
 import (
-	"math"
 	"time"
 
-	"akosarev.info/youknow/lesson"
 	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/services"
 	log "github.com/sirupsen/logrus"
@@ -13,6 +11,14 @@ import (
 type forgetcurveLessonType struct {
 	KnowService services.KnowProvider
 	User        *models.User
+}
+
+func NewForgetcurveLessonType(user *models.User, knowService services.KnowProvider) LessonType {
+
+	return &forgetcurveLessonType{
+		KnowService: knowService,
+		User:        user,
+	}
 }
 
 // GetKnow get list of know for new lesson.
@@ -34,20 +40,8 @@ func (flt *forgetcurveLessonType) GetKnows(count int) *[]models.Know {
 }
 
 // GetKnowCount Determine count of knows per 10 days for up to Month interval.
-func (flt *forgetcurveLessonType) GetKnowCount() int {
-	var coef float64
-
-	if err := flt.KnowService.GetCoefKnowDays(&coef, 10, flt.User.ID, 4); err != nil {
-		log.Error("Error getting KnowCount: ", err)
-		return 5
-	}
-	if coef < 5 {
-		log.Debug("KnowCount: ", 5)
-		return 5
-	} else {
-		log.Debug("KnowCount: ", coef)
-		return int(math.Ceil(coef))
-	}
+func (flt *forgetcurveLessonType) GetCurrentKnowCount() (err error, knowCount int) {
+	return flt.KnowService.GetCurrentKnowCountByDays(10, flt.User.ID, 4)
 }
 
 // isLessonActual check if lesson actual
@@ -62,10 +56,4 @@ func (flt *forgetcurveLessonType) IsLessonActual(lesson *models.Lesson) bool {
 		lesson.ShowTimes == 4 && lesson.ShowAt.After(
 		time.Now().Local().AddDate(0, -1, 0))
 
-}
-
-func NewForgetcurveLessonType(user *models.User) lesson.LessonType {
-	flt := forgetcurveLessonType{User: user}
-
-	return &flt
 }

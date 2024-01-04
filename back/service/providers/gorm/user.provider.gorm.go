@@ -40,6 +40,11 @@ func (p *userProvider) GetUser(user *models.User, email string) (err error) {
 	return result.Error
 }
 
+func (p *userProvider) GetUsers() (err error, users []models.User) {
+	result := p.DB.Find(users, "deleted = false")
+	return result.Error, users
+}
+
 func (p *userProvider) GetUserForVerification(user *models.User, verifyHash string) (err error) {
 	result := p.DB.First(&user, "verification_code = ?", verifyHash)
 	return result.Error

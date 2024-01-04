@@ -11,6 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"akosarev.info/youknow/models"
+	"akosarev.info/youknow/types"
 )
 
 type KnowProvider interface {
@@ -26,7 +27,10 @@ type KnowProvider interface {
 	GetKnowsByKnowtypeId(knows *[]models.Know, knowTypeId uint) (err error)
 	DeleteKnow(id uint) (err error)
 	GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID, periods []models.Period, count int) (err error)
-	GetCoefKnowDays(coef *float64, days int, userId uuid.UUID, times int) (err error)
+	GetCurrentKnowCountByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int)
+	GetActualLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson)
+	GetLessonTypes() (err error, lessonTypes []models.LessonType)
+	GetWaitKnowCount(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int)
 }
 
 type knowService struct {
@@ -154,6 +158,25 @@ func (s *knowService) GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID, 
 	return s.KnowProvider.GetKnowsByPeriods(knows, userId, periods, count)
 }
 
-func (s *knowService) GetCoefKnowDays(coef *float64, days int, userId uuid.UUID, times int) (err error) {
-	return s.KnowProvider.GetCoefKnowDays(coef, days, userId, times)
+func (s *knowService) GetCurrentKnowCountByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int) {
+
+	err, knows := s.KnowProvider.GetCurrentKnowCountByDays(days, userId, maxRightAnswerTimes)
+	if knows < 5 {
+		knows = 5
+	}
+
+	return err, knows
+}
+
+func (s *knowService) GetActualLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
+	return s.KnowProvider.GetActualLessonsByUserId(userId)
+}
+
+func (s *knowService) GetLessonTypes() (err error, lessonTypes []models.LessonType) {
+
+	return s.KnowProvider.GetLessonTypes()
+}
+
+func (s *knowService) GetWaitKnowCount(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int) {
+	return s.KnowProvider.GetWaitKnowCount(userId, lessonHandler)
 }

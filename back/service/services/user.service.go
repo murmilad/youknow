@@ -8,6 +8,7 @@ type UserProvider interface {
 	GetUsersByProvider(users *[]models.User, email string, provider string) (err error)
 	GetUser(user *models.User, email string) (err error)
 	GetUserForVerification(user *models.User, verifyHash string) (err error)
+	GetUsers() (err error, users []models.User)
 }
 
 type userService struct {
@@ -33,7 +34,9 @@ func (s *userService) GetUsersByProvider(users *[]models.User, email string, pro
 func (s *userService) GetUser(user *models.User, email string) (err error) {
 	return s.UserProvider.GetUser(user, email)
 }
-
+func (s *userService) GetUsers() (err error, users []models.User) {
+	return s.UserProvider.GetUsers()
+}
 func (s *userService) GetUserForVerification(user *models.User, verifyHash string) (err error) {
 	return s.UserProvider.GetUserForVerification(user, verifyHash)
 }

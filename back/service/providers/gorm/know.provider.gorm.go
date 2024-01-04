@@ -4,6 +4,7 @@ import (
 	"mime/multipart"
 
 	"akosarev.info/youknow/models"
+	"akosarev.info/youknow/types"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -111,9 +112,11 @@ func (p *knowProvider) GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID,
 	return result.Error
 }
 
-func (p *knowProvider) GetCoefKnowDays(coef *float64, days int, userId uuid.UUID, times int) (err error) {
+func (p *knowProvider) GetCurrentKnowCountByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int) {
+	knows := float64(0)
+
 	result := p.DB.Raw(`
-		SELECT count(learned_knows.id) * ? / NULLIF(CURRENT_DATE - min(learned_knows.first_ask), 0) AS words to days FROM 
+		SELECT count(learned_knows.id) / NULLIF(CURRENT_DATE - min(learned_knows.first_ask), 0) * ? AS know_count to days FROM 
 			(
 				SELECT knows.id, count(lessons_knows.lesson_id) lessons, min(lessons_knows.ask_at) first_ask knows
 					INNER JOIN lessons_knows 
@@ -128,6 +131,22 @@ func (p *knowProvider) GetCoefKnowDays(coef *float64, days int, userId uuid.UUID
 				GROUP BY knows.id
 			) learned_knows
 		WHERE learned_knows.lessons > ?
-	`, days, userId, times).Scan(&coef)
-	return result.Error
+	`, days, userId, maxRightAnswerTimes).Scan(&knows)
+	return result.Error, int(knows)
+}
+
+func (p *knowProvider) GetActualLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
+	result := p.DB.Find(lessons, "user_id = ? AND deleted = false AND lesson_status != 'LESSON_FINISHED'", userId)
+	return result.Error, lessons
+}
+
+func (p *knowProvider) GetLessonTypes() (err error, lessonTypes []models.LessonType) {
+	result := p.DB.Find(lessonTypes, "deleted = false")
+	return result.Error, lessonTypes
+}
+
+func (p *knowProvider) GetWaitKnowCount(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int) {
+	result := p.DB.Raw(``, userId).Scan(&waitKnowCount)
+	return result.Error, waitKnowCount
+
 }

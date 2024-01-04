@@ -32,6 +32,9 @@ var (
 	YouKnowRouteController routes.YouKnowRouteController
 
 	SessionRouteController routes.SessionRouteController
+
+	worker  taskmanager.WorkerIface
+	founder taskmanager.TaskRoutine
 )
 
 func init() {
@@ -70,6 +73,10 @@ func init() {
 	server = gin.Default()
 
 	server.Use(mobile.Resolver())
+
+	log.Info("starting workers " + strconv.Itoa(config.WorkersCount) + " " + strconv.Itoa(config.WorkersBuffer))
+	worker = taskmanager.New(config.WorkersCount, config.WorkersBuffer)
+	founder = tasks.NewTaskFounder(KnowService, UserService)
 }
 
 func main() {
@@ -85,11 +92,9 @@ func main() {
 	log.SetOutput(f)
 
 	ctx := context.Background()
-	log.Info("starting workers " + strconv.Itoa(config.WorkersCount) + " " + strconv.Itoa(config.WorkersBuffer))
-	worker := taskmanager.New(config.WorkersCount, config.WorkersBuffer)
+
 	worker.Start(ctx)
 
-	founder := tasks.NewTaskFounder()
 	err = worker.QueueTask("[TASK FOUNDER]", founder)
 	if err != nil {
 		log.Fatalf("can't add task: %v", err)
