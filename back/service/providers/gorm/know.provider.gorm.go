@@ -71,30 +71,27 @@ func (p *knowProvider) GetKnowsByKnowtypeId(knows *[]models.Know, knowTypeId uin
 
 func (p *knowProvider) GetKnowByPeriods(lessonId uint, lessonType types.LessonType, periods []models.Period) (err error, know *models.Know) {
 	query := p.DB.Raw(`
-		SELECT knows.*, count(lessons_knows.lesson_id) AS right_count, max(lessons_knows_right.ask_at) AS last_ask_at FROM lessons_knows
-			INNER JOIN knows
-				ON lessons_knows.know_id = knows.id
+		SELECT knows.*, count(lessons_knows_right.id) AS right_count, max(lessons_knows_right.ask_at) AS last_ask_at FROM knows
 			INNER JOIN lessons
 				ON lessons_knows.lesson_id = lessons.id
 			LEFT JOIN (
-				SELECT know_id, max(ask_at) AS ask_at wrong_at FROM lessons_knows
+				SELECT know_id, max(ask_at) AS ask_at FROM lessons_knows
 					INNER JOIN lessons
 						ON lessons_knows.lesson_id = lessons.id
 				WHERE 
 					know_status = @knowStatusWrong
 					AND lesson_type_handler = @lessonType
-					AND lessons_knows.lesson_id = ?
+					AND lessons_knows.lesson_id = @lessonId
 				GROUP BY know_id
 			) AS lessons_knows_wrong
 				ON knows.id = lessons_knows_wrong.know_id
 			LEFT JOIN lessons_knows AS lessons_knows_right
 				ON 
-					knows.id = lessons_knows.know_id 
+					knows.id = lessons_knows_right.know_id 
 					AND (
-						lessons_knows.ask_at IS NULL 
-						OR lessons_knows.ask_at >= lessons_knows_wrong.ask_at)
+						lessons_knows_right.ask_at IS NULL 
+						OR lessons_knows_right.ask_at >= lessons_knows_wrong.ask_at)
 					AND know_status = @knowStatusRight
-
 		WHERE 
 			lessons_knows.know_status != @knowStatusNew
 			AND lesson_type_handler = @lessonType
@@ -122,26 +119,29 @@ func (p *knowProvider) GetKnowByPeriods(lessonId uint, lessonType types.LessonTy
 	return result.Error, know
 }
 
-func (p *knowProvider) GetKnowCountPossibleByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int) {
+func (p *knowProvider) GetKnowCountPossibleByDays(lessonId uint, lessonType types.LessonType, days int, maxRightAnswerTimes int) (err error, knowCount int) {
 	knows := float64(0)
 
 	result := p.DB.Raw(`
-		SELECT count(learned_knows.id) / NULLIF(CURRENT_DATE - min(learned_knows.first_ask), 0) * ? AS know_count to days FROM 
+		SELECT sum(learned_knows.id) / NULLIF(CURRENT_DATE - min(learned_knows.first_ask) TO DAYS, 0) * @days AS know_count  FROM 
 			(
-				SELECT knows.id, count(lessons_knows.lesson_id) lessons, min(lessons_knows.ask_at) first_ask knows
-					INNER JOIN lessons_knows 
-						ON knows.id = lessons_knows.know_id
-					INNER JOIN lessons
-						ON lessons_knows.lesson_id = lessons.id
+				SELECT knows.id, count(lessons_knows.id) lessons_count, min(lessons_knows.ask_at) first_ask FROM lessons_knows
+					INNER JOIN knows 
+						ON lessons_knows.know_id = knows.id
 				WHERE 
-					know_status = 'KNOW_RIGHT' 
+					know_status = @knowStatusRight 
 					AND ask_at > CURRENT_DATE - 30
-					AND lessons.user_id = ?
-					AND lesson_type_handler = 'FORGET_CURVE'
+					AND lessons_knows.lessonId = @lessonId
+					AND lesson_type_handler = @lessonType
 				GROUP BY knows.id
+				HAVING lessons_count > @maxRightAnswerTimes
 			) learned_knows
-		WHERE learned_knows.lessons > ?
-	`, days, userId, maxRightAnswerTimes).Scan(&knows)
+	`,
+		sql.Named("days", days),
+		sql.Named("knowStatusRight", types.KNOW_RIGHT),
+		sql.Named("lessonId", lessonId),
+		sql.Named("lessonType", lessonType),
+		sql.Named("maxRightAnswerTimes", maxRightAnswerTimes)).Scan(&knows)
 	return result.Error, int(knows)
 }
 
@@ -155,8 +155,44 @@ func (p *knowProvider) GetLessonTypes() (err error, lessonTypes []models.LessonT
 	return result.Error, lessonTypes
 }
 
-func (p *knowProvider) GetKnowCountWait(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int) {
-	result := p.DB.Raw(``, userId).Scan(&waitKnowCount)
-	return result.Error, waitKnowCount
+func (p *knowProvider) GetKnowCountWait(lessonId uint, lessonType types.LessonType, maxRightAnswerTimes int) (err error, waitKnowCount int) {
+	knows := []models.Know{}
+
+	result := p.DB.Raw(`
+		SELECT knows.*, count(lessons_knows_right.id) AS right_count, max(lessons_knows_right.ask_at) AS last_ask_at FROM knows
+			INNER JOIN lessons
+				ON lessons_knows.lesson_id = lessons.id
+			LEFT JOIN (
+				SELECT know_id, max(ask_at) AS ask_at FROM lessons_knows
+					INNER JOIN lessons
+						ON lessons_knows.lesson_id = lessons.id
+				WHERE 
+					know_status = @knowStatusWrong
+					AND lesson_type_handler = @lessonType
+					AND lessons_knows.lesson_id = @lessonId
+				GROUP BY know_id
+			) AS lessons_knows_wrong
+				ON knows.id = lessons_knows_wrong.know_id
+			LEFT JOIN lessons_knows AS lessons_knows_right
+				ON 
+					knows.id = lessons_knows_right.know_id 
+					AND (
+						lessons_knows_right.ask_at IS NULL 
+						OR lessons_knows_right.ask_at >= lessons_knows_wrong.ask_at)
+					AND know_status = @knowStatusRight
+		WHERE
+			lesson_type_handler = @lessonType
+			AND lessons_knows.lesson_id = @lessonId
+		GROUP BY knows.*
+		HAVING
+			right_count < @maxRightAnswerTimes
+	`, sql.Named("lessonId", lessonId),
+		sql.Named("lessonType", lessonType),
+		sql.Named("knowStatusWrong", types.KNOW_WRONG),
+		sql.Named("knowStatusRight", types.KNOW_RIGHT),
+		sql.Named("knowStatusNew", types.KNOW_NEW),
+		sql.Named("maxRightAnswerTimes", maxRightAnswerTimes)).Find(&knows)
+
+	return result.Error, len(knows)
 
 }

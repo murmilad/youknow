@@ -9,8 +9,8 @@ import (
 type LessonType interface {
 	IsLessonActual(lesson models.Lesson) bool
 	GetActualKnow(lessonId uint) (err error, know *models.Know)
-	GetKnowCountPossible() (err error, knowCountPossible int)
-	GetKnowCountActive() (err error, knowCountActive int)
+	GetKnowCountPossible(lessonId uint) (err error, knowCountPossible int)
+	GetKnowCountActive(lessonId uint) (err error, knowCountActive int)
 }
 
 func GetLessonType(lessonTypeDB models.LessonType, user *models.User, knowService services.KnowProvider) (lessonType LessonType) {

@@ -27,10 +27,10 @@ type KnowProvider interface {
 	GetKnowsByKnowtypeId(knows *[]models.Know, knowTypeId uint) (err error)
 	DeleteKnow(id uint) (err error)
 	GetKnowByPeriods(lessonId uint, lessonType types.LessonType, periods []models.Period) (err error, know *models.Know)
-	GetKnowCountPossibleByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int)
+	GetKnowCountPossibleByDays(lessonId uint, lessonType types.LessonType, days int, maxRightAnswerTimes int) (err error, knowCount int)
 	GetActualLessons(userId uuid.UUID, lessonType types.LessonType) (err error, lessons []models.Lesson)
 	GetLessonTypes() (err error, lessonTypes []models.LessonType)
-	GetKnowCountWait(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int)
+	GetKnowCountWait(lessonId uint, lessonType types.LessonType, maxRightAnswerTimes int) (err error, waitKnowCount int)
 }
 
 type knowService struct {
@@ -158,9 +158,9 @@ func (s *knowService) GetKnowByPeriods(lessonId uint, lessonType types.LessonTyp
 	return s.KnowProvider.GetKnowByPeriods(lessonId, lessonType, periods)
 }
 
-func (s *knowService) GetKnowCountPossibleByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int) {
+func (s *knowService) GetKnowCountPossibleByDays(lessonId uint, lessonType types.LessonType, days int, maxRightAnswerTimes int) (err error, knowCount int) {
 
-	err, knows := s.KnowProvider.GetKnowCountPossibleByDays(days, userId, maxRightAnswerTimes)
+	err, knows := s.KnowProvider.GetKnowCountPossibleByDays(lessonId, lessonType, days, maxRightAnswerTimes)
 	if knows < 5 {
 		knows = 5
 	}
@@ -177,6 +177,6 @@ func (s *knowService) GetLessonTypes() (err error, lessonTypes []models.LessonTy
 	return s.KnowProvider.GetLessonTypes()
 }
 
-func (s *knowService) GetKnowCountWait(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int) {
-	return s.KnowProvider.GetKnowCountWait(userId, lessonHandler)
+func (s *knowService) GetKnowCountWait(lessonId uint, lessonType types.LessonType, maxRightAnswerTimes int) (err error, waitKnowCount int) {
+	return s.KnowProvider.GetKnowCountWait(lessonId, lessonType, maxRightAnswerTimes)
 }
