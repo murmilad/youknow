@@ -26,11 +26,11 @@ type KnowProvider interface {
 	GetKnowsById(knows *[]models.Know, id uint) (err error)
 	GetKnowsByKnowtypeId(knows *[]models.Know, knowTypeId uint) (err error)
 	DeleteKnow(id uint) (err error)
-	GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID, periods []models.Period, count int) (err error)
-	GetCurrentKnowCountByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int)
-	GetActualLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson)
+	GetKnowByPeriods(lessonId uint, lessonType types.LessonType, periods []models.Period) (err error, know *models.Know)
+	GetKnowCountPossibleByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int)
+	GetActualLessons(userId uuid.UUID, lessonType types.LessonType) (err error, lessons []models.Lesson)
 	GetLessonTypes() (err error, lessonTypes []models.LessonType)
-	GetWaitKnowCount(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int)
+	GetKnowCountWait(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int)
 }
 
 type knowService struct {
@@ -154,13 +154,13 @@ func (s *knowService) SaveKnow(know *models.Know) (err error) {
 	return s.KnowProvider.SaveKnow(know)
 }
 
-func (s *knowService) GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID, periods []models.Period, count int) (err error) {
-	return s.KnowProvider.GetKnowsByPeriods(knows, userId, periods, count)
+func (s *knowService) GetKnowByPeriods(lessonId uint, lessonType types.LessonType, periods []models.Period) (err error, know *models.Know) {
+	return s.KnowProvider.GetKnowByPeriods(lessonId, lessonType, periods)
 }
 
-func (s *knowService) GetCurrentKnowCountByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int) {
+func (s *knowService) GetKnowCountPossibleByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int) {
 
-	err, knows := s.KnowProvider.GetCurrentKnowCountByDays(days, userId, maxRightAnswerTimes)
+	err, knows := s.KnowProvider.GetKnowCountPossibleByDays(days, userId, maxRightAnswerTimes)
 	if knows < 5 {
 		knows = 5
 	}
@@ -168,8 +168,8 @@ func (s *knowService) GetCurrentKnowCountByDays(days int, userId uuid.UUID, maxR
 	return err, knows
 }
 
-func (s *knowService) GetActualLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
-	return s.KnowProvider.GetActualLessonsByUserId(userId)
+func (s *knowService) GetActualLessons(userId uuid.UUID, lessonType types.LessonType) (err error, lessons []models.Lesson) {
+	return s.KnowProvider.GetActualLessons(userId, lessonType)
 }
 
 func (s *knowService) GetLessonTypes() (err error, lessonTypes []models.LessonType) {
@@ -177,6 +177,6 @@ func (s *knowService) GetLessonTypes() (err error, lessonTypes []models.LessonTy
 	return s.KnowProvider.GetLessonTypes()
 }
 
-func (s *knowService) GetWaitKnowCount(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int) {
-	return s.KnowProvider.GetWaitKnowCount(userId, lessonHandler)
+func (s *knowService) GetKnowCountWait(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int) {
+	return s.KnowProvider.GetKnowCountWait(userId, lessonHandler)
 }

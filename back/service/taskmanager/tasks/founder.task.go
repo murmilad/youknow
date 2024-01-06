@@ -30,6 +30,7 @@ func (tf *taskFounder) Work(workers taskmanager.WorkerIface, ctx context.Context
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
 
+root:
 	for {
 		log.Debug("[SEARCH LESSON]")
 
@@ -41,24 +42,31 @@ func (tf *taskFounder) Work(workers taskmanager.WorkerIface, ctx context.Context
 			for _, lessonTypeDB := range lessonTypes {
 				lessonType := lesson.GetLessonType(lessonTypeDB, &user, tf.KnowService)
 
-				_, currentKnowCount := lessonType.GetCurrentKnowCount()
+				_, lessons := tf.KnowService.GetActualLessons(user.ID, lessonTypeDB.LessonHandler)
 
-				_, sentKnowCount := tf.KnowService.GetWaitKnowCount(user.ID, lessonTypeDB.LessonHandler)
+				for _, lesson := range lessons {
 
-				for i := 0; i < currentKnowCount-sentKnowCount; i++ {
-					workers.QueueTask("[TASK SENTDER]", NewTaskSender(&lessons[0]))
-				}
+					if lessonType.IsLessonActual(lesson) {
 
-				_, lessons := tf.KnowService.GetActualLessonsByUserId(user.ID)
+						_, know := lessonType.GetActualKnow(lesson.Id)
 
-				if len(lessons) > 0 {
-					if lessonType.IsLessonActual(&lessons[0]) {
+						_, currentKnowCount := lessonType.GetKnowCountActive(lesson.Id)
+
+						_, sentKnowCount := lessonType.GetKnowCountPossible(lesson.Id)
+
+						if currentKnowCount-sentKnowCount > 0 {
+							_, know = tf.KnowService.GetNewKnow(user.ID, lesson.Id)
+							if know != nil {
+								tf.KnowService.AddNewKnowToLesson(user.ID, lesson.Id, know)
+							}
+						}
+
+						if know != nil {
+							workers.QueueTask("[TASK SENTDER]", NewTaskSender(know))
+							continue root
+						}
 					}
-				} else {
-					knows := lessonType.GetKnows(lessonType.GetKnowCount())
-					lesson := tf.KnowService.CreateLesson(&knows)
 
-					workers.QueueTask("[TASK SENTDER]", NewTaskSender(&lesson))
 				}
 			}
 		}

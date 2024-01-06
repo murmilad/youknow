@@ -14,6 +14,7 @@ type LessonType struct {
 }
 
 type Lesson struct {
+	Id                uint               `json:"id" gorm:"not null;primaryKey"`
 	KnowTypeId        int                `json:"know_type_id"`
 	ShowAt            time.Time          `json:"show_at"`
 	ShowTimes         int                `json:"show_times" gorm:"not null"`

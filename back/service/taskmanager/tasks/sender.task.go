@@ -9,15 +9,15 @@ import (
 )
 
 type taskSender struct {
-	Lesson *models.Lesson
+	Know *models.Know
 }
 
-func NewTaskSender(lesson *models.Lesson) taskmanager.TaskRoutine {
-	t := taskSender{lesson}
+func NewTaskSender(know *models.Know) taskmanager.TaskRoutine {
+	t := taskSender{know}
 
 	return &t
 }
 
 func (tf *taskSender) Work(workers taskmanager.WorkerIface, ctx context.Context) {
-	log.Debug("Send ", tf.Lesson)
+	log.Debug("Send know ", tf.Know)
 }

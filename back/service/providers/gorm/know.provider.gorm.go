@@ -1,6 +1,7 @@
 package providersgorm
 
 import (
+	"database/sql"
 	"mime/multipart"
 
 	"akosarev.info/youknow/models"
@@ -68,20 +69,21 @@ func (p *knowProvider) GetKnowsByKnowtypeId(knows *[]models.Know, knowTypeId uin
 	return result.Error
 }
 
-func (p *knowProvider) GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID, periods []models.Period, count int) (err error) {
+func (p *knowProvider) GetKnowByPeriods(lessonId uint, lessonType types.LessonType, periods []models.Period) (err error, know *models.Know) {
 	query := p.DB.Raw(`
-		SELECT knows.*, count(lessons_knows.lesson_id) AS right_count, max(lessons_knows_right.ask_at) AS last_ask_at FROM knows
-			LEFT JOIN lessons
+		SELECT knows.*, count(lessons_knows.lesson_id) AS right_count, max(lessons_knows_right.ask_at) AS last_ask_at FROM lessons_knows
+			INNER JOIN knows
+				ON lessons_knows.know_id = knows.id
+			INNER JOIN lessons
 				ON lessons_knows.lesson_id = lessons.id
 			LEFT JOIN (
 				SELECT know_id, max(ask_at) AS ask_at wrong_at FROM lessons_knows
-						ON knows.id = lessons_knows.know_id AND 
 					INNER JOIN lessons
 						ON lessons_knows.lesson_id = lessons.id
 				WHERE 
-					know_status = 'KNOW_WRONG'
-					AND user_id = ?	
-					AND lesson_type_handler = 'FORGET_CURVE'
+					know_status = @knowStatusWrong
+					AND lesson_type_handler = @lessonType
+					AND lessons_knows.lesson_id = ?
 				GROUP BY know_id
 			) AS lessons_knows_wrong
 				ON knows.id = lessons_knows_wrong.know_id
@@ -91,14 +93,19 @@ func (p *knowProvider) GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID,
 					AND (
 						lessons_knows.ask_at IS NULL 
 						OR lessons_knows.ask_at >= lessons_knows_wrong.ask_at)
-					AND know_status = 'KNOW_RIGHT'
+					AND know_status = @knowStatusRight
 
 		WHERE 
-			lessons.user_id = ?
-			AND lessons_knows_right != 'KNOW_NEW'
-			AND lesson_type_handler = 'FORGET_CURVE'
+			lessons_knows.know_status != @knowStatusNew
+			AND lesson_type_handler = @lessonType
+			AND lessons_knows.lesson_id = @lessonId
 		GROUP BY knows.*
-	`, userId, userId, count)
+	`, sql.Named("lessonId", lessonId),
+		sql.Named("lessonType", lessonType),
+		sql.Named("knowStatusWrong", types.KNOW_WRONG),
+		sql.Named("knowStatusRight", types.KNOW_RIGHT),
+		sql.Named("knowStatusNew", types.KNOW_NEW))
+
 	for index, period := range periods {
 		having := p.DB.Where("right_count = ?", period.AskCount).Where("last_ask_at > CURRENT_DATE - " + period.NextShowInterval)
 		if index == 0 {
@@ -107,12 +114,15 @@ func (p *knowProvider) GetKnowsByPeriods(knows *[]models.Know, userId uuid.UUID,
 			query = query.Or(having)
 		}
 	}
-	result := query.Limit(count).Find(knows)
+	result := query.First(know)
+	if result.Error.Error() == "ErrRecordNotFound" {
+		return nil, nil
+	}
 
-	return result.Error
+	return result.Error, know
 }
 
-func (p *knowProvider) GetCurrentKnowCountByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int) {
+func (p *knowProvider) GetKnowCountPossibleByDays(days int, userId uuid.UUID, maxRightAnswerTimes int) (err error, knowCount int) {
 	knows := float64(0)
 
 	result := p.DB.Raw(`
@@ -135,8 +145,8 @@ func (p *knowProvider) GetCurrentKnowCountByDays(days int, userId uuid.UUID, max
 	return result.Error, int(knows)
 }
 
-func (p *knowProvider) GetActualLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
-	result := p.DB.Find(lessons, "user_id = ? AND deleted = false AND lesson_status != 'LESSON_FINISHED'", userId)
+func (p *knowProvider) GetActualLessons(userId uuid.UUID, lessonType types.LessonType) (err error, lessons []models.Lesson) {
+	result := p.DB.Find(lessons, "user_id = ? AND deleted = false AND lesson_status != ? AND lesson_type_handler = ?", userId, types.LESSON_PAUSED, lessonType)
 	return result.Error, lessons
 }
 
@@ -145,7 +155,7 @@ func (p *knowProvider) GetLessonTypes() (err error, lessonTypes []models.LessonT
 	return result.Error, lessonTypes
 }
 
-func (p *knowProvider) GetWaitKnowCount(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int) {
+func (p *knowProvider) GetKnowCountWait(userId uuid.UUID, lessonHandler types.LessonType) (err error, waitKnowCount int) {
 	result := p.DB.Raw(``, userId).Scan(&waitKnowCount)
 	return result.Error, waitKnowCount
 
