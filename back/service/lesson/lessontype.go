@@ -4,13 +4,14 @@ import (
 	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/services"
 	"akosarev.info/youknow/types"
+	"github.com/google/uuid"
 )
 
 type LessonType interface {
 	IsLessonActual(lesson models.Lesson) bool
 	GetActualKnow(lessonId uint) (err error, know *models.Know)
-	GetKnowCountPossible(lessonId uint) (err error, knowCountPossible int)
-	GetKnowCountActive(lessonId uint) (err error, knowCountActive int)
+	GetKnowCountPossible(userId uuid.UUID) (err error, knowCountPossible int)
+	GetKnowCountActive(userId uuid.UUID) (err error, knowCountActive int)
 }
 
 func GetLessonType(lessonTypeDB models.LessonType, user *models.User, knowService services.KnowProvider) (lessonType LessonType) {

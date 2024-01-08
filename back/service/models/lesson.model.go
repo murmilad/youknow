@@ -21,6 +21,7 @@ type Lesson struct {
 	LessonStatus      types.LessonStatus `json:"lesson_status" gorm:"not null;type:lesson_status"`
 	LessonTypeHandler types.LessonType   `json:"lesson_type_handler" gorm:"not null"`
 	UserID            uuid.UUID          `json:"user_id" gorm:"type:uuid;not null"`
+	PriorityPercent   uint               `json:"priority_percent"`
 	Deleted           bool               `json:"deleted" gorm:"not null; default false"`
 }
 

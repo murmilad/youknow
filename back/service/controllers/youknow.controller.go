@@ -184,6 +184,72 @@ func (yc *YouKnowController) DeleteKnowByID(ctx *gin.Context) {
 
 }
 
+func (yc *YouKnowController) GetLessons(ctx *gin.Context) {
+	currentUser := ctx.MustGet("currentUser").(models.User)
+
+	err, lessons := yc.KnowService.GetLessonsByUser(&currentUser)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, lessons)
+}
+
+func (yc *YouKnowController) DeleteLesson(ctx *gin.Context) {
+	lessonId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	if err := yc.KnowService.DeleteLessonByID(uint(lessonId)); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Element not found"})
+}
+
+func (yc *YouKnowController) GetLessonByID(ctx *gin.Context) {
+	lessonId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	err, lesson := yc.KnowService.GetLessonById(uint(lessonId))
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	if lesson != nil {
+		ctx.IndentedJSON(http.StatusOK, lesson)
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Element not found"})
+
+}
+
+func (yc *YouKnowController) PostLesson(ctx *gin.Context) {
+
+	var lesson models.Lesson
+
+	if err := ctx.BindJSON(&lesson); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "JWT generator error"})
+	}
+
+	if err := yc.KnowService.SaveLesson(&lesson); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusCreated, lesson)
+}
+
 /*
 
 

@@ -50,17 +50,6 @@ root:
 
 						_, know := lessonType.GetActualKnow(lesson.Id)
 
-						_, currentKnowCount := lessonType.GetKnowCountActive(lesson.Id)
-
-						_, sentKnowCount := lessonType.GetKnowCountPossible(lesson.Id)
-
-						if currentKnowCount-sentKnowCount > 0 {
-							_, know = tf.KnowService.GetNewKnow(user.ID, lesson.Id)
-							if know != nil {
-								tf.KnowService.AddNewKnowToLesson(user.ID, lesson.Id, know)
-							}
-						}
-
 						if know != nil {
 							workers.QueueTask("[TASK SENTDER]", NewTaskSender(know))
 							continue root
@@ -68,6 +57,19 @@ root:
 					}
 
 				}
+
+				_, currentKnowCount := lessonType.GetKnowCountActive(user.ID)
+
+				_, sentKnowCount := lessonType.GetKnowCountPossible(user.ID)
+
+				if currentKnowCount-sentKnowCount > 0 {
+
+					_, know := tf.KnowService.GetNewKnow(user.ID, lessonTypeDB.LessonHandler, knowtypeId)
+					if know != nil {
+						tf.KnowService.AddNewKnowToLesson(user.ID, lessonTypeDB.LessonHandler, know.Id)
+					}
+				}
+
 			}
 		}
 

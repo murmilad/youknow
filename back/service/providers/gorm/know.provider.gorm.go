@@ -119,7 +119,7 @@ func (p *knowProvider) GetKnowByPeriods(lessonId uint, lessonType types.LessonTy
 	return result.Error, know
 }
 
-func (p *knowProvider) GetKnowCountPossibleByDays(lessonId uint, lessonType types.LessonType, days int, maxRightAnswerTimes int) (err error, knowCount int) {
+func (p *knowProvider) GetKnowCountPossibleByDays(userId uuid.UUID, lessonType types.LessonType, days int, maxRightAnswerTimes int) (err error, knowCount int) {
 	knows := float64(0)
 
 	result := p.DB.Raw(`
@@ -128,10 +128,12 @@ func (p *knowProvider) GetKnowCountPossibleByDays(lessonId uint, lessonType type
 				SELECT knows.id, count(lessons_knows.id) lessons_count, min(lessons_knows.ask_at) first_ask FROM lessons_knows
 					INNER JOIN knows 
 						ON lessons_knows.know_id = knows.id
+					INNER JOIN lessons 
+						ON lessons_knows.lesson_id = lessons.id
 				WHERE 
 					know_status = @knowStatusRight 
 					AND ask_at > CURRENT_DATE - 30
-					AND lessons_knows.lessonId = @lessonId
+					AND lessons.user_id = @userId
 					AND lesson_type_handler = @lessonType
 				GROUP BY knows.id
 				HAVING lessons_count > @maxRightAnswerTimes
@@ -139,7 +141,7 @@ func (p *knowProvider) GetKnowCountPossibleByDays(lessonId uint, lessonType type
 	`,
 		sql.Named("days", days),
 		sql.Named("knowStatusRight", types.KNOW_RIGHT),
-		sql.Named("lessonId", lessonId),
+		sql.Named("userId", userId),
 		sql.Named("lessonType", lessonType),
 		sql.Named("maxRightAnswerTimes", maxRightAnswerTimes)).Scan(&knows)
 	return result.Error, int(knows)
@@ -155,7 +157,7 @@ func (p *knowProvider) GetLessonTypes() (err error, lessonTypes []models.LessonT
 	return result.Error, lessonTypes
 }
 
-func (p *knowProvider) GetKnowCountWait(lessonId uint, lessonType types.LessonType, maxRightAnswerTimes int) (err error, waitKnowCount int) {
+func (p *knowProvider) GetKnowCountWait(userId uuid.UUID, lessonType types.LessonType, maxRightAnswerTimes int) (err error, waitKnowCount int) {
 	knows := []models.Know{}
 
 	result := p.DB.Raw(`
@@ -169,7 +171,7 @@ func (p *knowProvider) GetKnowCountWait(lessonId uint, lessonType types.LessonTy
 				WHERE 
 					know_status = @knowStatusWrong
 					AND lesson_type_handler = @lessonType
-					AND lessons_knows.lesson_id = @lessonId
+					AND lessons.user_id = @userId
 				GROUP BY know_id
 			) AS lessons_knows_wrong
 				ON knows.id = lessons_knows_wrong.know_id
@@ -182,11 +184,11 @@ func (p *knowProvider) GetKnowCountWait(lessonId uint, lessonType types.LessonTy
 					AND know_status = @knowStatusRight
 		WHERE
 			lesson_type_handler = @lessonType
-			AND lessons_knows.lesson_id = @lessonId
+			AND lessons.user_id = @userId
 		GROUP BY knows.*
 		HAVING
 			right_count < @maxRightAnswerTimes
-	`, sql.Named("lessonId", lessonId),
+	`, sql.Named("userId", userId),
 		sql.Named("lessonType", lessonType),
 		sql.Named("knowStatusWrong", types.KNOW_WRONG),
 		sql.Named("knowStatusRight", types.KNOW_RIGHT),
@@ -195,4 +197,63 @@ func (p *knowProvider) GetKnowCountWait(lessonId uint, lessonType types.LessonTy
 
 	return result.Error, len(knows)
 
+}
+
+func (p *knowProvider) GetNewKnow(userId uuid.UUID, lessonType types.LessonType, knowTypeId uint) (err error, know *models.Know) {
+	result := p.DB.Raw(`
+		SELECT know.* FROM know
+			LEFT JOIN (
+				SELECT lessons_knows.know_id FROM knows 
+					INNER JOIN lessons_knows
+						ON knows.id = lessons_knows.know_id
+					INNER JOIN lessons
+						ON lessons_knows.lesson_id = lessons.id
+							AND lessons.user_id = @userId
+							AND lessons.lesson_type_handler = @lessonType
+				WHERE knows.knowtype_id = @knowTypeId
+			) AS lessons_knows
+		WHERE 
+			lessons_knows.know_id IS NULL
+			AND knows.knowtype_id = @knowTypeId
+		ORDER BY know.id
+		LIMIT 1
+	`, sql.Named("userId", userId),
+		sql.Named("lessonType", lessonType),
+		sql.Named("knowTypeId", knowTypeId)).First(know)
+
+	if result.Error.Error() == "ErrRecordNotFound" {
+		return nil, nil
+	}
+
+	return result.Error, know
+}
+
+func (p *knowProvider) GetLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
+	result := p.DB.Order("id").Find(&lessons, "user_id = ? AND deleted = false", userId)
+	return result.Error, lessons
+}
+
+func (p *knowProvider) DeleteLesson(lessonId uint) (err error) {
+	result := p.DB.Save(&models.Lesson{Id: lessonId, Deleted: true})
+	return result.Error
+}
+
+func (p *knowProvider) GetLessonById(lessonId uint) (err error, lesson *models.Lesson) {
+	result := p.DB.First(lesson, "id = ? AND deleted = false", lessonId)
+	if result.Error.Error() == "ErrRecordNotFound" {
+		return nil, nil
+	}
+
+	return result.Error, lesson
+}
+
+func (p *knowProvider) SaveLesson(lesson *models.Lesson) (err error) {
+	result := p.DB.Save(&lesson)
+	return result.Error
+}
+
+func (p *knowProvider) Transaction(operations func() (err error)) (err error) {
+	return p.DB.Transaction(func(tx *gorm.DB) error {
+		return operations()
+	})
 }

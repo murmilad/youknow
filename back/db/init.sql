@@ -59,6 +59,8 @@ CREATE TABLE IF NOT EXISTS know_types (
     deleted boolean NOT NULL DEFAULT false
 );
 
+--Lesson
+
 DROP TABLE lessons;
 
 CREATE TABLE IF NOT EXISTS lessons (
@@ -69,9 +71,59 @@ CREATE TABLE IF NOT EXISTS lessons (
     show_times int NOT NULL,
     lesson_type_handler character varying(255) NOT NULL REFERENCES lesson_types(handler),
     lesson_status lesson_status NOT NULL DEFAULT 'LESSON_NEW',
+    priority_percent int CHECK (priority_percent BETWEEN 1 AND 100), 
     deleted boolean NOT NULL DEFAULT false,
     UNIQUE (know_type_id, user_id)
 );
+
+
+/*
+CREATE OR REPLACE FUNCTION update_percent() RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $_$
+DECLARE
+    _count int;
+    _user_id uuid;
+BEGIN
+
+IF TG_OP <> 'INSERT' THEN
+    _user_id = OLD.user_id;
+END IF
+IF TG_OP <> 'DELETE' THEN
+    _user_id = NEW.user_id;
+END IF
+
+SELECT count(*)
+    INTO _count
+FROM lessons
+WHERE user_id = _user_id;
+
+IF TG_OP = 'INSERT' THEN
+    UPDATE lessons
+        SET priority_percent = IF priority_percent WHEN NULL THEN 100/_count ELSE priority_percent - (priority_percent/100*100/_count) END IF
+    WHERE user_id = _user_id
+END IF;
+IF TG_OP == 'DELETE' THEN
+    UPDATE lessons
+        SET priority_percent = priority_percent + (priority_percent/100*100/(_count+1))
+    WHERE user_id = _user_id
+END IF;
+IF TG_OP == 'UPDATE' AND OLD.priority_percent <> NEW.priority_percent THEN
+    UPDATE lessons
+        SET priority_percent = priority_percent + (priority_percent/100*(OLD.priority_percent - NEW.priority_percent))
+    WHERE 
+        id != OLD.id
+        AND user_id = _user_id
+END IF;
+
+RETURN NULL;
+END;
+$_$;
+
+CREATE TRIGGER update_percent AFTER INSERT OR UPDATE OR DELETE ON lessons
+FOR EACH STATEMENT EXECUTE PROCEDURE update_percent();
+*/
+--Lesson know
 
 DROP TABLE lessons_knows 
 
