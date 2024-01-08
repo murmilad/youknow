@@ -6,7 +6,6 @@ import (
 	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/services"
 	"akosarev.info/youknow/types"
-	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -44,8 +43,8 @@ func (flt *forgetcurveLessonType) GetActualKnow(lessonId uint) (err error, know 
 	return err, know
 }
 
-func (flt *forgetcurveLessonType) GetKnowCountPossible(userId uuid.UUID) (err error, knowCountPossible int) {
-	err, knowCountPossible = flt.KnowService.GetKnowCountPossibleByDays(userId, flt.LessonType, 10, len(flt.Periods))
+func (flt *forgetcurveLessonType) GetKnowCountPossible() (err error, knowCountPossible int) {
+	err, knowCountPossible = flt.KnowService.GetKnowCountPossibleByDays(flt.User.ID, flt.LessonType, 10, len(flt.Periods))
 	if err != nil {
 		log.Error("Error getting knowCountPossible: ", err)
 		return err, 0
@@ -58,10 +57,10 @@ func (flt *forgetcurveLessonType) GetKnowCountPossible(userId uuid.UUID) (err er
 	return err, knowCountPossible
 }
 
-func (flt *forgetcurveLessonType) GetKnowCountActive(userId uuid.UUID) (err error, knowCountActive int) {
-	err, knowCountActive = flt.KnowService.GetKnowCountWait(userId, flt.LessonType, len(flt.Periods))
+func (flt *forgetcurveLessonType) GetKnowCountActive(lessonId uint) (err error, knowCountActive int) {
+	err, knowCountActive = flt.KnowService.GetKnowCountWait(lessonId, len(flt.Periods))
 	if err != nil {
-		log.Error("Error getting knowCountWait: ", err)
+		log.Error("Error getting knowCountActive: ", err)
 	}
 	return err, knowCountActive
 }

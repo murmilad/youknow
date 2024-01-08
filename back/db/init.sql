@@ -132,8 +132,8 @@ CREATE TABLE IF NOT EXISTS lessons_knows (
     know_id bigint NOT NULL REFERENCES knows(id),
     lesson_id bigint NOT NULL REFERENCES lessons(id),
     know_status know_status NOT NULL DEFAULT 'KNOW_NEW',
-    ask_at timestamp with time zone NOT NULL,
-    ask_times int NOT NULL,
+    ask_at timestamp with time zone,
+    ask_times int NOT NULL DEFAULT 0,
     deleted boolean NOT NULL DEFAULT false
 );
 

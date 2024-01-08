@@ -15,9 +15,9 @@ type LessonType struct {
 
 type Lesson struct {
 	Id                uint               `json:"id" gorm:"not null;primaryKey"`
-	KnowTypeId        int                `json:"know_type_id"`
+	KnowTypeId        uint               `json:"know_type_id"`
 	ShowAt            time.Time          `json:"show_at"`
-	ShowTimes         int                `json:"show_times" gorm:"not null"`
+	ShowTimes         uint               `json:"show_times" gorm:"not null"`
 	LessonStatus      types.LessonStatus `json:"lesson_status" gorm:"not null;type:lesson_status"`
 	LessonTypeHandler types.LessonType   `json:"lesson_type_handler" gorm:"not null"`
 	UserID            uuid.UUID          `json:"user_id" gorm:"type:uuid;not null"`

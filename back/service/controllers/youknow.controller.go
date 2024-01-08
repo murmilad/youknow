@@ -187,7 +187,7 @@ func (yc *YouKnowController) DeleteKnowByID(ctx *gin.Context) {
 func (yc *YouKnowController) GetLessons(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
-	err, lessons := yc.KnowService.GetLessonsByUser(&currentUser)
+	err, lessons := yc.KnowService.GetLessonsByUserId(currentUser.ID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
@@ -203,7 +203,7 @@ func (yc *YouKnowController) DeleteLesson(ctx *gin.Context) {
 		return
 	}
 
-	if err := yc.KnowService.DeleteLessonByID(uint(lessonId)); err != nil {
+	if err := yc.KnowService.DeleteLesson(uint(lessonId)); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}

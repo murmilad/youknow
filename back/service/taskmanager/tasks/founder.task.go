@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"akosarev.info/youknow/lesson"
+	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/services"
 	"akosarev.info/youknow/taskmanager"
 	log "github.com/sirupsen/logrus"
@@ -58,15 +59,21 @@ root:
 
 				}
 
-				_, currentKnowCount := lessonType.GetKnowCountActive(user.ID)
+				_, knowCountPossible := lessonType.GetKnowCountPossible()
 
-				_, sentKnowCount := lessonType.GetKnowCountPossible(user.ID)
+				for _, lessonPriority := range lessons {
 
-				if currentKnowCount-sentKnowCount > 0 {
-
-					_, know := tf.KnowService.GetNewKnow(user.ID, lessonTypeDB.LessonHandler, knowtypeId)
-					if know != nil {
-						tf.KnowService.AddNewKnowToLesson(user.ID, lessonTypeDB.LessonHandler, know.Id)
+					_, knowCountCurrent := lessonType.GetKnowCountActive(lessonPriority.Id)
+					if int(knowCountPossible/knowCountCurrent) < int(100/lessonPriority.PriorityPercent) {
+						_, know := tf.KnowService.GetNewKnow(lessonPriority.KnowTypeId, lessonPriority.Id)
+						if know != nil {
+							lessonKnow := models.LessonKnow{
+								KnowId:   know.Id,
+								LessonId: lessonPriority.Id,
+							}
+							_ = tf.KnowService.SaveLessonKnow(lessonKnow)
+							continue root
+						}
 					}
 				}
 

@@ -30,13 +30,15 @@ type KnowProvider interface {
 	GetKnowCountPossibleByDays(userId uuid.UUID, lessonType types.LessonType, days int, maxRightAnswerTimes int) (err error, knowCount int)
 	GetActualLessons(userId uuid.UUID, lessonType types.LessonType) (err error, lessons []models.Lesson)
 	GetLessonTypes() (err error, lessonTypes []models.LessonType)
-	GetKnowCountWait(userId uuid.UUID, lessonType types.LessonType, maxRightAnswerTimes int) (err error, waitKnowCount int)
-	GetNewKnow(userId uuid.UUID, lessonType types.LessonType, knowTypeId uint) (err error, know *models.Know)
+	GetKnowCountWait(lessonId uint, maxRightAnswerTimes int) (err error, waitKnowCount int)
+	GetNewKnow(knowTypeId uint, lessonId uint) (err error, know *models.Know)
 
 	GetLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson)
 	DeleteLesson(lessonId uint) (err error)
 	GetLessonById(lessonId uint) (err error, lesson *models.Lesson)
 	SaveLesson(lesson *models.Lesson) (err error)
+
+	SaveLessonKnow(lessonKnow models.LessonKnow) (err error)
 
 	Transaction(operations func() (err error)) (err error)
 }
@@ -180,12 +182,13 @@ func (s *knowService) GetLessonTypes() (err error, lessonTypes []models.LessonTy
 	return s.KnowProvider.GetLessonTypes()
 }
 
-func (s *knowService) GetKnowCountWait(userId uuid.UUID, lessonType types.LessonType, maxRightAnswerTimes int) (err error, waitKnowCount int) {
-	return s.KnowProvider.GetKnowCountWait(userId, lessonType, maxRightAnswerTimes)
+func (s *knowService) GetKnowCountWait(lessonId uint, maxRightAnswerTimes int) (err error, waitKnowCount int) {
+	return s.KnowProvider.GetKnowCountWait(lessonId, maxRightAnswerTimes)
 }
 
-func (s *knowService) GetNewKnow(userId uuid.UUID, lessonType types.LessonType, knowTypeId uint) (err error, know *models.Know) {
-	return s.KnowProvider.GetNewKnow(userId, lessonType, knowTypeId)
+func (s *knowService) GetNewKnow(knowTypeId uint, lessonId uint) (err error, know *models.Know) {
+
+	return s.KnowProvider.GetNewKnow(knowTypeId, lessonId)
 
 }
 
@@ -227,17 +230,17 @@ func (s *knowService) DeleteLesson(lessonId uint) (err error) {
 func (s *knowService) GetLessonById(lessonId uint) (err error, lesson *models.Lesson) {
 	return s.KnowProvider.GetLessonById(lessonId)
 }
-func (s *knowService) SaveLesson(lesson *models.Lesson) (err error) {
-	if lesson.Id != 0 { // Update exists lesson
-		err, lessonCurrent := s.KnowProvider.GetLessonById(lesson.Id)
+func (s *knowService) SaveLesson(lessonNew *models.Lesson) (err error) {
+	if lessonNew.Id != 0 { // Update exists lesson
+		err, lessonOld := s.KnowProvider.GetLessonById(lessonNew.Id)
 		if err != nil {
 			return err
 		}
 
-		if lessonCurrent.PriorityPercent == lesson.PriorityPercent {
-			return s.KnowProvider.SaveLesson(lesson)
+		if lessonOld.PriorityPercent == lessonNew.PriorityPercent {
+			return s.KnowProvider.SaveLesson(lessonNew)
 		} else {
-			err, lessons := s.KnowProvider.GetLessonsByUserId(lesson.UserID)
+			err, lessons := s.KnowProvider.GetLessonsByUserId(lessonNew.UserID)
 			if err != nil {
 				return err
 			}
@@ -245,8 +248,8 @@ func (s *knowService) SaveLesson(lesson *models.Lesson) (err error) {
 			err = s.KnowProvider.Transaction(func() (err error) {
 
 				for _, lessonOther := range lessons {
-					if lessonOther.Id != lessonCurrent.Id {
-						lessonOther.PriorityPercent += uint(lessonOther.PriorityPercent / 100 * (lessonCurrent.PriorityPercent - lesson.PriorityPercent))
+					if lessonOther.Id != lessonOld.Id {
+						lessonOther.PriorityPercent += uint(lessonOther.PriorityPercent / 100 * (lessonOld.PriorityPercent - lessonNew.PriorityPercent))
 
 						if err := s.KnowProvider.SaveLesson(&lessonOther); err != nil {
 							return err
@@ -254,12 +257,12 @@ func (s *knowService) SaveLesson(lesson *models.Lesson) (err error) {
 					}
 				}
 
-				return s.KnowProvider.SaveLesson(lessonCurrent)
+				return s.KnowProvider.SaveLesson(lessonNew)
 			})
 			return err
 		}
 	} else { // Create new lesson
-		err, lessons := s.KnowProvider.GetLessonsByUserId(lesson.UserID)
+		err, lessons := s.KnowProvider.GetLessonsByUserId(lessonNew.UserID)
 		if err != nil {
 			return err
 		}
@@ -274,11 +277,16 @@ func (s *knowService) SaveLesson(lesson *models.Lesson) (err error) {
 				}
 			}
 
-			return s.KnowProvider.SaveLesson(lesson)
+			lessonNew.PriorityPercent = uint(100 / (len(lessons) + 1))
+			return s.KnowProvider.SaveLesson(lessonNew)
 		})
 		return err
 
 	}
+}
+
+func (s *knowService) SaveLessonKnow(lessonKnow models.LessonKnow) (err error) {
+	return s.KnowProvider.SaveLessonKnow(lessonKnow)
 }
 
 func (s *knowService) Transaction(operations func() (err error)) (err error) {
