@@ -250,6 +250,22 @@ func (yc *YouKnowController) PostLesson(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusCreated, lesson)
 }
 
+func (yc *YouKnowController) PostLessonKnow(ctx *gin.Context) {
+
+	var lessonKnow models.LessonKnow
+
+	if err := ctx.BindJSON(&lessonKnow); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "JWT generator error"})
+	}
+
+	if err := yc.KnowService.SaveLessonKnow(&lessonKnow); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusCreated, lessonKnow)
+}
+
 /*
 
 

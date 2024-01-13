@@ -33,4 +33,7 @@ func (yc *YouKnowRouteController) YouKnowRoute(rg *gin.RouterGroup) {
 	router.GET("/lesson/:id", middleware.DeserializeUser(), yc.youKnowController.GetLessonByID)
 	router.POST("/lesson", middleware.DeserializeUser(), yc.youKnowController.PostLesson)
 	router.DELETE("/lesson/:id", middleware.DeserializeUser(), yc.youKnowController.DeleteLesson)
+
+	router.POST("/lessonKnow", middleware.DeserializeUser(), yc.youKnowController.PostLessonKnow)
+
 }

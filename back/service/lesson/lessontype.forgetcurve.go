@@ -43,8 +43,8 @@ func (flt *forgetcurveLessonType) GetActualKnow(lessonId uint) (err error, know 
 	return err, know
 }
 
-func (flt *forgetcurveLessonType) GetKnowCountPossible() (err error, knowCountPossible int) {
-	err, knowCountPossible = flt.KnowService.GetKnowCountPossibleByDays(flt.User.ID, flt.LessonType, 10, len(flt.Periods))
+func (flt *forgetcurveLessonType) GetKnowCountPossible(lessonId uint) (err error, knowCountPossible int) {
+	err, knowCountPossible = flt.KnowService.GetKnowCountPossibleByDays(lessonId, flt.LessonType, 10, len(flt.Periods))
 	if err != nil {
 		log.Error("Error getting knowCountPossible: ", err)
 		return err, 0

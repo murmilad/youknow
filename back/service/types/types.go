@@ -18,9 +18,9 @@ type KnowStatus string
 type LessonType string
 
 const (
-	LESSON_NEW     LessonStatus = "LESSON_NEW"
-	LESSON_STARTED LessonStatus = "LESSON_STARTED"
 	LESSON_PAUSED  LessonStatus = "LESSON_PAUSED"
+	LESSON_STARTED LessonStatus = "LESSON_STARTED"
+	LESSON_WAIT    LessonStatus = "LESSON_WAIT"
 
 	KNOW_WRONG KnowStatus = "KNOW_WRONG"
 	KNOW_NEW   KnowStatus = "KNOW_NEW"

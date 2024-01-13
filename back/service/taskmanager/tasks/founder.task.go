@@ -8,6 +8,7 @@ import (
 	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/services"
 	"akosarev.info/youknow/taskmanager"
+	"akosarev.info/youknow/types"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -35,43 +36,57 @@ root:
 	for {
 		log.Debug("[SEARCH LESSON]")
 
+		// Users
 		_, users := tf.UserService.GetUsers()
-
 		for _, user := range users {
 
+			// Methons of teachering
 			_, lessonTypes := tf.KnowService.GetLessonTypes()
 			for _, lessonTypeDB := range lessonTypes {
 				lessonType := lesson.GetLessonType(lessonTypeDB, &user, tf.KnowService)
 
+				// Types of know
 				_, lessons := tf.KnowService.GetActualLessons(user.ID, lessonTypeDB.LessonHandler)
-
 				for _, lesson := range lessons {
 
-					if lessonType.IsLessonActual(lesson) {
+					// If lesson is used by User
+					if lesson.LessonStatus == types.LESSON_STARTED ||
+						lesson.LessonStatus == types.LESSON_PAUSED && lessonType.IsLessonActual(lesson) {
 
+						// TODO dont get NEXT know if previous is not answered, maybe set lesson
+						// to PAUSED while we willnt receive an answer
+
+						// Get actual know if exist
 						_, know := lessonType.GetActualKnow(lesson.Id)
 
 						if know != nil {
-							workers.QueueTask("[TASK SENTDER]", NewTaskSender(know))
+							// Send know notification
+							workers.QueueTask("[TASK SENTDER]", NewTaskSender(tf.KnowService, &lesson, know))
 							continue root
 						}
 					}
 
 				}
 
-				_, knowCountPossible := lessonType.GetKnowCountPossible()
+				// Check if need to learn a new know
+				_, lessonsPriority := tf.KnowService.GetLessonsByUserId(user.ID)
+				for _, lessonPriority := range lessonsPriority {
+					// Get a know level (count of knows) for User
+					_, knowCountPossible := lessonType.GetKnowCountPossible(lessonPriority.Id)
 
-				for _, lessonPriority := range lessons {
-
+					// Get unfinished know count by Knowtype for User
 					_, knowCountCurrent := lessonType.GetKnowCountActive(lessonPriority.Id)
+
+					// Determine which know need to add by Knowtype priority
 					if int(knowCountPossible/knowCountCurrent) < int(100/lessonPriority.PriorityPercent) {
 						_, know := tf.KnowService.GetNewKnow(lessonPriority.KnowTypeId, lessonPriority.Id)
+						// Add new know to learning
 						if know != nil {
 							lessonKnow := models.LessonKnow{
 								KnowId:   know.Id,
 								LessonId: lessonPriority.Id,
 							}
-							_ = tf.KnowService.SaveLessonKnow(lessonKnow)
+							_ = tf.KnowService.SaveLessonKnow(&lessonKnow)
 							continue root
 						}
 					}

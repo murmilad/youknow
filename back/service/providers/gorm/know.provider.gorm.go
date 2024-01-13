@@ -119,7 +119,7 @@ func (p *knowProvider) GetKnowByPeriods(lessonId uint, lessonType types.LessonTy
 	return result.Error, know
 }
 
-func (p *knowProvider) GetKnowCountPossibleByDays(userId uuid.UUID, lessonType types.LessonType, days int, maxRightAnswerTimes int) (err error, knowCount int) {
+func (p *knowProvider) GetKnowCountPossibleByDays(lessonId uint, lessonType types.LessonType, days int, maxRightAnswerTimes int) (err error, knowCount int) {
 	knows := float64(0)
 
 	result := p.DB.Raw(`
@@ -128,12 +128,10 @@ func (p *knowProvider) GetKnowCountPossibleByDays(userId uuid.UUID, lessonType t
 				SELECT knows.id, count(lessons_knows.id) lessons_count, min(lessons_knows.ask_at) first_ask FROM lessons_knows
 					INNER JOIN knows 
 						ON lessons_knows.know_id = knows.id
-					INNER JOIN lessons 
-						ON lessons_knows.lesson_id = lessons.id
 				WHERE 
 					know_status = @knowStatusRight 
 					AND ask_at > CURRENT_DATE - 30
-					AND lessons.user_id = @userId
+					AND lessons_knows.lesson_id = @lessonId
 					AND lesson_type_handler = @lessonType
 				GROUP BY knows.id
 				HAVING lessons_count > @maxRightAnswerTimes
@@ -141,14 +139,14 @@ func (p *knowProvider) GetKnowCountPossibleByDays(userId uuid.UUID, lessonType t
 	`,
 		sql.Named("days", days),
 		sql.Named("knowStatusRight", types.KNOW_RIGHT),
-		sql.Named("userId", userId),
+		sql.Named("lessonId", lessonId),
 		sql.Named("lessonType", lessonType),
 		sql.Named("maxRightAnswerTimes", maxRightAnswerTimes)).Scan(&knows)
 	return result.Error, int(knows)
 }
 
 func (p *knowProvider) GetActualLessons(userId uuid.UUID, lessonType types.LessonType) (err error, lessons []models.Lesson) {
-	result := p.DB.Find(lessons, "user_id = ? AND deleted = false AND lesson_status != ? AND lesson_type_handler = ?", userId, types.LESSON_PAUSED, lessonType)
+	result := p.DB.Find(lessons, "user_id = ? AND deleted = false AND lesson_status != ? AND lesson_type_handler = ?", userId, types.LESSON_WAIT, lessonType)
 	return result.Error, lessons
 }
 
@@ -245,7 +243,7 @@ func (p *knowProvider) Transaction(operations func() (err error)) (err error) {
 	})
 }
 
-func (p *knowProvider) SaveLessonKnow(lessonKnow models.LessonKnow) (err error) {
+func (p *knowProvider) SaveLessonKnow(lessonKnow *models.LessonKnow) (err error) {
 	result := p.DB.Save(&lessonKnow)
 	return result.Error
 }
