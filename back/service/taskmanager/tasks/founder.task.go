@@ -46,7 +46,7 @@ root:
 				lessonType := lesson.GetLessonType(lessonTypeDB, &user, tf.KnowService)
 
 				// Types of know
-				_, lessons := tf.KnowService.GetActualLessons(user.ID, lessonTypeDB.LessonHandler)
+				_, lessons := tf.KnowService.GetActualLessons(user.ID, lessonTypeDB.Handler)
 				for _, lesson := range lessons {
 
 					// If lesson is used by User
@@ -76,9 +76,18 @@ root:
 
 					// Get unfinished know count by Knowtype for User
 					_, knowCountCurrent := lessonType.GetKnowCountActive(lessonPriority.Id)
+					lessonCurrentCoef := 0
+					if knowCountCurrent != 0 {
+						lessonCurrentCoef = int(knowCountPossible / knowCountCurrent)
+					}
+
+					lessonCoef := 0
+					if lessonPriority.PriorityPercent != 0 {
+						lessonCoef = int(100 / lessonPriority.PriorityPercent)
+					}
 
 					// Determine which know need to add by Knowtype priority
-					if int(knowCountPossible/knowCountCurrent) < int(100/lessonPriority.PriorityPercent) {
+					if lessonCurrentCoef < lessonCoef {
 						_, know := tf.KnowService.GetNewKnow(lessonPriority.KnowTypeId, lessonPriority.Id)
 						// Add new know to learning
 						if know != nil {

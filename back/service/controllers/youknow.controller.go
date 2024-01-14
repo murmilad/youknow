@@ -8,6 +8,7 @@ import (
 	"akosarev.info/youknow/models"
 	"akosarev.info/youknow/services"
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 )
 
 type YouKnowController struct {
@@ -33,6 +34,7 @@ func (yc *YouKnowController) GetKnowTypes(ctx *gin.Context) {
 
 func (yc *YouKnowController) PostKnowType(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
+	log.Debug("post knowtype")
 
 	var knowtype models.KnowType
 

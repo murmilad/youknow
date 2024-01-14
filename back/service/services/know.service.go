@@ -60,6 +60,8 @@ func (s *knowService) GetKnowtypesByUser(knowtypes *[]models.KnowTypeResponse, u
 func (s *knowService) SaveKnowtype(knowtype *models.KnowType) (err error) {
 	newKnowtype := knowtype.Id == 0
 
+	log.Debug("new knowtype.Id = ", knowtype.Id)
+
 	if err = s.KnowProvider.SaveKnowtype(knowtype); err != nil {
 		return err
 	}
@@ -72,7 +74,7 @@ func (s *knowService) SaveKnowtype(knowtype *models.KnowType) (err error) {
 			LessonTypeHandler: types.LESSON_TYPE_FORGETCURVE,
 			ShowTimes:         0,
 		}
-		if err = s.KnowProvider.SaveLesson(&lesson); err != nil {
+		if err = s.SaveLesson(&lesson); err != nil {
 			return err
 		}
 	}
@@ -250,6 +252,8 @@ func (s *knowService) GetLessonById(lessonId uint) (err error, lesson *models.Le
 	return s.KnowProvider.GetLessonById(lessonId)
 }
 func (s *knowService) SaveLesson(lessonNew *models.Lesson) (err error) {
+	log.Debug("saveLesson lesson.Id = ", lessonNew.Id)
+
 	if lessonNew.Id != 0 { // Update exists lesson
 		err, lessonOld := s.KnowProvider.GetLessonById(lessonNew.Id)
 		if err != nil {

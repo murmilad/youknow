@@ -14,9 +14,12 @@ type LessonType interface {
 }
 
 func GetLessonType(lessonTypeDB models.LessonType, user *models.User, knowService services.KnowProvider) (lessonType LessonType) {
-	switch lessonTypeDB.LessonHandler {
+
+	switch lessonTypeDB.Handler {
 	case types.LESSON_TYPE_FORGETCURVE:
 		lessonType = NewForgetcurveLessonType(user, knowService)
+	default:
+		panic("unimplemented lessonType " + lessonTypeDB.Handler)
 	}
 	return lessonType
 }

@@ -6,7 +6,6 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	gormv2logrus "github.com/thomas-tacquet/gormv2-logrus"
-	"gorm.io/gorm/logger"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -19,7 +18,7 @@ func ConnectDB(config *Config) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai", config.DBHost, config.DBUserName, config.DBUserPassword, config.DBName, config.DBPort)
 
 	gormLogger := gormv2logrus.NewGormlog(gormv2logrus.WithLogrusEntry(log.WithTime(time.Time{})))
-	gormLogger.LogMode(logger.Info)
+	//gormLogger.LogMode(logger.Error)
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: gormLogger,

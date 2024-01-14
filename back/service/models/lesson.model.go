@@ -8,8 +8,8 @@ import (
 )
 
 type LessonType struct {
-	LessonHandler types.LessonType `json:"lesson_handler" gorm:"not null"`
-	Deleted       bool             `json:"deleted" gorm:"not null; default false"`
+	Handler types.LessonType `json:"handler" gorm:"not null"`
+	Deleted bool             `json:"deleted" gorm:"not null; default false"`
 }
 
 type Lesson struct {

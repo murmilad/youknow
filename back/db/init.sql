@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE (email, provider)
 );
 ALTER TABLE users add IF NOT EXISTS timezone character varying(255);
+ALTER TABLE users add IF NOT EXISTS deleted boolean NOT NULL DEFAULT false;
 
 
 CREATE TABLE IF NOT EXISTS lesson_types (
@@ -70,7 +71,7 @@ CREATE TABLE IF NOT EXISTS lessons (
     show_times int NOT NULL,
     lesson_type_handler character varying(255) NOT NULL REFERENCES lesson_types(handler),
     lesson_status lesson_status NOT NULL DEFAULT 'LESSON_PAUSED',
-    priority_percent int CHECK (priority_percent BETWEEN 1 AND 100), 
+    priority_percent int CHECK (priority_percent BETWEEN 0 AND 100), 
     deleted boolean NOT NULL DEFAULT false,
     UNIQUE (know_type_id, user_id)
 );
