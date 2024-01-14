@@ -70,6 +70,8 @@ func (p *knowProvider) GetKnowsByKnowtypeId(knows *[]models.Know, knowTypeId uin
 }
 
 func (p *knowProvider) GetKnowByPeriods(lessonId uint, lessonType types.LessonType, periods []models.Period) (err error, know *models.Know) {
+	know = &models.Know{}
+
 	query := p.DB.Raw(`
 		SELECT knows.*, count(lessons_knows_right.id) AS right_count, max(lessons_knows_right.ask_at) AS last_ask_at FROM knows
 			INNER JOIN lessons
@@ -146,12 +148,14 @@ func (p *knowProvider) GetKnowCountPossibleByDays(lessonId uint, lessonType type
 }
 
 func (p *knowProvider) GetActualLessons(userId uuid.UUID, lessonType types.LessonType) (err error, lessons []models.Lesson) {
-	result := p.DB.Find(lessons, "user_id = ? AND deleted = false AND lesson_status != ? AND lesson_type_handler = ?", userId, types.LESSON_WAIT, lessonType)
+	lessons = []models.Lesson{}
+	result := p.DB.Find(&lessons, "user_id = ? AND deleted = false AND lesson_status != ? AND lesson_type_handler = ?", userId, types.LESSON_WAIT, lessonType)
 	return result.Error, lessons
 }
 
 func (p *knowProvider) GetLessonTypes() (err error, lessonTypes []models.LessonType) {
-	result := p.DB.Find(lessonTypes, "deleted = false")
+	lessonTypes = []models.LessonType{}
+	result := p.DB.Find(&lessonTypes, "deleted = false")
 	return result.Error, lessonTypes
 }
 
@@ -193,6 +197,7 @@ func (p *knowProvider) GetKnowCountWait(lessonId uint, maxRightAnswerTimes int) 
 }
 
 func (p *knowProvider) GetNewKnow(knowTypeId uint, lessonId uint) (err error, know *models.Know) {
+	know = &models.Know{}
 	result := p.DB.Raw(`
 		SELECT know.* FROM know
 			LEFT JOIN lessons_knows
@@ -214,6 +219,7 @@ func (p *knowProvider) GetNewKnow(knowTypeId uint, lessonId uint) (err error, kn
 }
 
 func (p *knowProvider) GetLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
+	lessons = []models.Lesson{}
 	result := p.DB.Order("id").Find(&lessons, "user_id = ? AND deleted = false", userId)
 	return result.Error, lessons
 }
@@ -224,6 +230,7 @@ func (p *knowProvider) DeleteLesson(lessonId uint) (err error) {
 }
 
 func (p *knowProvider) GetLessonById(lessonId uint) (err error, lesson *models.Lesson) {
+	lesson = &models.Lesson{}
 	result := p.DB.First(lesson, "id = ? AND deleted = false", lessonId)
 	if result.Error.Error() == "ErrRecordNotFound" {
 		return nil, nil

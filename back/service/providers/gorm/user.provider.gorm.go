@@ -41,7 +41,8 @@ func (p *userProvider) GetUser(user *models.User, email string) (err error) {
 }
 
 func (p *userProvider) GetUsers() (err error, users []models.User) {
-	result := p.DB.Find(users, "deleted = false")
+	users = []models.User{}
+	result := p.DB.Find(&users, "deleted = false")
 	return result.Error, users
 }
 
