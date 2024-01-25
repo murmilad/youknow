@@ -72,8 +72,9 @@ proxy/fail2ban/action.d/*
 #proxy logs
 
 proxy/log/fail2ban/
-proxy/log/*.log
-proxy/log/nginx/*.log
+proxy/log/*.log*
+proxy/log/nginx/*.log*
+proxy/log/back/*.log*
 
 #proxy certs
 
