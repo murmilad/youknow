@@ -39,6 +39,7 @@ type KnowProvider interface {
 	SaveLesson(lesson *models.Lesson) (err error)
 
 	SaveLessonKnow(lessonKnow *models.LessonKnow) (err error)
+	CreateLessonKnow(lessonKnow *models.LessonKnow) (err error)
 
 	Transaction(operations func() (err error)) (err error)
 }
@@ -310,6 +311,10 @@ func (s *knowService) SaveLesson(lessonNew *models.Lesson) (err error) {
 
 func (s *knowService) SaveLessonKnow(lessonKnow *models.LessonKnow) (err error) {
 	return s.KnowProvider.SaveLessonKnow(lessonKnow)
+}
+
+func (s *knowService) CreateLessonKnow(lessonKnow *models.LessonKnow) (err error) {
+	return s.KnowProvider.CreateLessonKnow(lessonKnow)
 }
 
 func (s *knowService) Transaction(operations func() (err error)) (err error) {

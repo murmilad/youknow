@@ -8,6 +8,8 @@ services:
       - POSTGRES_PASSWORD
     build:
       context: ./back/db
+    ports:
+      - ${POSTGRES_PORT}:5432
     healthcheck:
       test:
         [
@@ -29,8 +31,8 @@ services:
     environment:
       - SERVER_NAME
 
-      - POSTGRES_HOST
-      - POSTGRES_PORT
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB

@@ -82,14 +82,13 @@ func (yc *YouKnowController) DeleteKnowTypeByID(ctx *gin.Context) {
 		return
 	}
 
-	var knowtypes []models.KnowTypeResponse
 	err = yc.KnowService.DeleteKnowtype(uint(knowTypeId))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, knowtypes[0])
+	ctx.IndentedJSON(http.StatusOK, gin.H{"status": "deleted"})
 }
 
 func (yc *YouKnowController) PostKnowTypesById(ctx *gin.Context) {
@@ -182,8 +181,7 @@ func (yc *YouKnowController) DeleteKnowByID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Element not found"})
-
+	ctx.IndentedJSON(http.StatusOK, gin.H{"status": "deleted"})
 }
 
 func (yc *YouKnowController) GetLessons(ctx *gin.Context) {
@@ -210,7 +208,7 @@ func (yc *YouKnowController) DeleteLesson(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Element not found"})
+	ctx.IndentedJSON(http.StatusOK, gin.H{"status": "deleted"})
 }
 
 func (yc *YouKnowController) GetLessonByID(ctx *gin.Context) {

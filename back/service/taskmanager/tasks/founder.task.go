@@ -65,7 +65,7 @@ root:
 
 							if know != nil {
 								// Send know notification
-								workers.QueueTask("[TASK SENTDER]", NewTaskSender(tf.KnowService, &lesson, know))
+								workers.QueueTask("[TASK SENDER]", NewTaskSender(tf.KnowService, &lesson, know))
 								continue root
 							}
 						}
@@ -96,10 +96,11 @@ root:
 							// Add new know to learning
 							if know != nil {
 								lessonKnow := models.LessonKnow{
-									KnowId:   know.Id,
-									LessonId: lessonPriority.Id,
+									KnowId:     know.Id,
+									KnowStatus: types.KNOW_NEW,
+									LessonId:   lessonPriority.Id,
 								}
-								_ = tf.KnowService.SaveLessonKnow(&lessonKnow)
+								_ = tf.KnowService.CreateLessonKnow(&lessonKnow)
 								continue root
 							}
 						}

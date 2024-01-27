@@ -29,6 +29,9 @@ type LessonKnow struct {
 	LessonId   uint             `json:"lesson_id" gorm:"not null;primaryKey"`
 	KnowStatus types.KnowStatus `json:"know_status" gorm:"not null;type:know_status"`
 	AskAt      time.Time        `json:"show_at"`
-	AskTimes   int              `json:"show_times" gorm:"not null"`
 	Deleted    bool             `json:"deleted" gorm:"not null; default false"`
+}
+
+func (LessonKnow) TableName() string {
+	return "lessons_knows"
 }
