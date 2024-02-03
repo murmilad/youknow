@@ -32,15 +32,15 @@ func NewForgetcurveLessonType(user *models.User, knowService services.KnowProvid
 }
 
 // GetKnow get list of know for new lesson.
-func (flt *forgetcurveLessonType) GetActualKnow(lessonId uint) (err error, know *models.Know) {
+func (flt *forgetcurveLessonType) GetActualLessonKnow(lessonId uint) (err error, lessonKnow *models.LessonKnow) {
 
-	err, know = flt.KnowService.GetKnowByPeriods(lessonId, flt.LessonType, flt.Periods)
+	err, lessonKnow = flt.KnowService.GetLessonKnowByPeriods(lessonId, flt.LessonType, flt.Periods)
 
 	if err != nil {
 		log.Error("Error getting Know: ", err)
 	}
 
-	return err, know
+	return err, lessonKnow
 }
 
 func (flt *forgetcurveLessonType) GetKnowCountPossible(lessonId uint) (err error, knowCountPossible int) {
@@ -67,14 +67,23 @@ func (flt *forgetcurveLessonType) GetKnowCountActive(lessonId uint) (err error, 
 
 // isLessonActual check if lesson actual
 func (flt *forgetcurveLessonType) IsLessonActual(lesson models.Lesson) bool {
-
-	return lesson.ShowTimes == 1 && lesson.ShowAt.After(
-		time.Now().Local().Add(-time.Hour*time.Duration(2))) &&
-		lesson.ShowTimes == 2 && lesson.ShowAt.After(
-		time.Now().Local().AddDate(0, 0, -1)) &&
-		lesson.ShowTimes == 3 && lesson.ShowAt.After(
-		time.Now().Local().AddDate(0, 0, -7)) &&
-		lesson.ShowTimes == 4 && lesson.ShowAt.After(
-		time.Now().Local().AddDate(0, -1, 0))
+	log.WithFields(log.Fields{
+		"Show at":   lesson.ShowAt,
+		"Date":      time.Now().Local().Add(-time.Hour * time.Duration(2)),
+		"ShowTimes": lesson.ShowTimes,
+	}).Debug("IsLessonActual")
+	return lesson.ShowTimes == 0 ||
+		lesson.ShowTimes == 1 &&
+			time.Now().Local().Add(-time.Hour*time.Duration(2)).
+				After(lesson.ShowAt) ||
+		lesson.ShowTimes == 2 &&
+			time.Now().Local().AddDate(0, 0, -1).
+				After(lesson.ShowAt) ||
+		lesson.ShowTimes == 3 &&
+			time.Now().Local().AddDate(0, 0, -7).
+				After(lesson.ShowAt) ||
+		lesson.ShowTimes == 4 &&
+			time.Now().Local().AddDate(0, -1, 0).
+				After(lesson.ShowAt)
 
 }

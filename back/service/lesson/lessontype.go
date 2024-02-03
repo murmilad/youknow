@@ -8,7 +8,7 @@ import (
 
 type LessonType interface {
 	IsLessonActual(lesson models.Lesson) bool
-	GetActualKnow(lessonId uint) (err error, know *models.Know)
+	GetActualLessonKnow(lessonId uint) (err error, lessonKnow *models.LessonKnow)
 	GetKnowCountPossible(lessonId uint) (err error, knowCountPossible int)
 	GetKnowCountActive(lessonId uint) (err error, knowCountActive int)
 }

@@ -41,31 +41,47 @@ root:
 		case <-ticker.C:
 			log.Debug("[SEARCH LESSON] redo")
 			// Users
-			_, users := tf.UserService.GetUsers()
+			err, users := tf.UserService.GetUsers()
+			if err != nil {
+				log.Error("[SEARCH LESSON] GetUsers ERROR:", err)
+				return
+			}
 			for _, user := range users {
 
 				// Methons of teachering
-				_, lessonTypes := tf.KnowService.GetLessonTypes()
+				err, lessonTypes := tf.KnowService.GetLessonTypes()
+				if err != nil {
+					log.Error("[SEARCH LESSON] GetLessonTypes ERROR:", err)
+					return
+				}
+
 				for _, lessonTypeDB := range lessonTypes {
 					lessonType := lesson.GetLessonType(lessonTypeDB, &user, tf.KnowService)
 
 					// Types of know
 					_, lessons := tf.KnowService.GetActualLessons(user.ID, lessonTypeDB.Handler)
 					for _, lesson := range lessons {
-
+						log.WithFields(log.Fields{
+							"lesson.LessonStatus":       lesson.LessonStatus,
+							"lessonType.IsLessonActual": lessonType.IsLessonActual(lesson),
+						}).Debug("lessonType.IsLessonActual")
 						// If lesson is used by User
 						if lesson.LessonStatus == types.LESSON_STARTED ||
-							lesson.LessonStatus == types.LESSON_PAUSED && lessonType.IsLessonActual(lesson) {
+							lesson.LessonStatus == types.LESSON_WAIT && lessonType.IsLessonActual(lesson) {
 
 							// TODO dont get NEXT know if previous is not answered, maybe set lesson
 							// to PAUSED while we willnt receive an answer
 
 							// Get actual know if exist
-							_, know := lessonType.GetActualKnow(lesson.Id)
+							err, lessonKnow := lessonType.GetActualLessonKnow(lesson.Id)
+							if err != nil {
+								log.Error("[SEARCH LESSON] GetActualLessonKnow ERROR:", err)
+								continue root
+							}
 
-							if know != nil {
+							if lessonKnow != nil {
 								// Send know notification
-								workers.QueueTask("[TASK SENDER]", NewTaskSender(tf.KnowService, &lesson, know))
+								workers.QueueTask("[TASK SENDER]", NewTaskSender(tf.KnowService, &lesson, lessonKnow))
 								continue root
 							}
 						}
@@ -73,13 +89,25 @@ root:
 					}
 
 					// Check if need to learn a new know
-					_, lessonsPriority := tf.KnowService.GetLessonsByUserId(user.ID)
+					err, lessonsPriority := tf.KnowService.GetLessonsByUserId(user.ID)
+					if err != nil {
+						log.Error("[SEARCH LESSON] GetLessonsByUserId ERROR:", err)
+						continue root
+					}
 					for _, lessonPriority := range lessonsPriority {
 						// Get a know level (count of knows) for User
-						_, knowCountPossible := lessonType.GetKnowCountPossible(lessonPriority.Id)
+						err, knowCountPossible := lessonType.GetKnowCountPossible(lessonPriority.Id)
+						if err != nil {
+							log.Error("[SEARCH LESSON] GetKnowCountPossible ERROR:", err)
+							continue root
+						}
 
 						// Get unfinished know count by Knowtype for User
-						_, knowCountCurrent := lessonType.GetKnowCountActive(lessonPriority.Id)
+						err, knowCountCurrent := lessonType.GetKnowCountActive(lessonPriority.Id)
+						if err != nil {
+							log.Error("[SEARCH LESSON] GetKnowCountActive ERROR:", err)
+							continue root
+						}
 						lessonCurrentCoef := 0
 						if knowCountCurrent != 0 {
 							lessonCurrentCoef = int(knowCountPossible / knowCountCurrent)
@@ -92,7 +120,11 @@ root:
 
 						// Determine which know need to add by Knowtype priority
 						if lessonCurrentCoef < lessonCoef {
-							_, know := tf.KnowService.GetNewKnow(lessonPriority.KnowTypeId, lessonPriority.Id)
+							err, know := tf.KnowService.GetNewKnow(lessonPriority.KnowTypeId, lessonPriority.Id)
+							if err != nil {
+								log.Error("[SEARCH LESSON] GetNewKnow ERROR:", err)
+								continue root
+							}
 							// Add new know to learning
 							if know != nil {
 								lessonKnow := models.LessonKnow{
@@ -100,7 +132,11 @@ root:
 									KnowStatus: types.KNOW_NEW,
 									LessonId:   lessonPriority.Id,
 								}
-								_ = tf.KnowService.CreateLessonKnow(&lessonKnow)
+								err = tf.KnowService.CreateLessonKnow(&lessonKnow)
+								if err != nil {
+									log.Error("[SEARCH LESSON] CreateLessonKnow ERROR:", err)
+									continue root
+								}
 								continue root
 							}
 						}
