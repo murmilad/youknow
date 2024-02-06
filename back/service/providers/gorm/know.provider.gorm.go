@@ -95,8 +95,7 @@ func (p *knowProvider) GetLessonKnowByPeriods(lessonId uint, lessonType types.Le
 						OR lessons_knows_right.ask_at >= lessons_knows_wrong.ask_at)
 					AND lessons_knows_right.know_status = @knowStatusRight
 		WHERE 
-			lessons_knows.know_status != @knowStatusNew
-			AND lesson_type_handler = @lessonType
+			lesson_type_handler = @lessonType
 			AND lessons_knows.lesson_id = @lessonId
 		GROUP BY lessons_knows.id
 	`, sql.Named("lessonId", lessonId),
