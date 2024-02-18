@@ -230,7 +230,7 @@ func (p *knowProvider) GetLessonsByUserId(userId uuid.UUID) (err error, lessons 
 }
 
 func (p *knowProvider) DeleteLesson(lessonId uint) (err error) {
-	result := p.DB.Model(&models.Lesson{Id: lessonId}).Update("deleted", true)
+	result := p.DB.Model(&models.Lesson{Id: lessonId}).Updates(models.Lesson{Deleted: true, PriorityPercent: 0})
 	return result.Error
 }
 

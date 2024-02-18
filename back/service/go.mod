@@ -71,4 +71,5 @@ require (
 	gorm.io/driver/mysql v1.5.0 // indirect
 	gorm.io/driver/postgres v1.5.0 // indirect
 	gorm.io/gorm v1.25.5 // indirect
+	robpike.io/filter v0.0.0-20210831053821-dcb4225e6ac8 // indirect
 )

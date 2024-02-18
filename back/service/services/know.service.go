@@ -7,6 +7,8 @@ import (
 	"mime/multipart"
 	"strings"
 
+	"robpike.io/filter"
+
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 
@@ -217,6 +219,30 @@ func (s *knowService) GetNewKnow(knowTypeId uint, lessonId uint) (err error, kno
 func (s *knowService) GetLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
 	return s.KnowProvider.GetLessonsByUserId(userId)
 }
+
+func (s *knowService) ResetPercents(lessons []models.Lesson, base float32) (err error) {
+	sumPercent := uint(0)
+	for _, lessonOther := range lessons {
+		sumPercent += uint(lessonOther.PriorityPercent)
+	}
+
+	for _, lessonOther := range lessons {
+		log.WithFields(log.Fields{
+			"lessonOther.PriorityPercent": lessonOther.PriorityPercent,
+			"sumPercent":                  sumPercent,
+			"base":                        base,
+			"reuslt":                      float32(lessonOther.PriorityPercent) / float32(sumPercent) * float32(base),
+		}).Debug("Person calculation")
+		lessonOther.PriorityPercent = float32(lessonOther.PriorityPercent) / float32(sumPercent) * float32(base)
+
+		if err := s.KnowProvider.SaveLesson(&lessonOther); err != nil {
+			return err
+		}
+	}
+
+	return
+}
+
 func (s *knowService) DeleteLesson(lessonId uint) (err error) {
 	err, lessonCurrent := s.KnowProvider.GetLessonById(lessonId)
 	if err != nil {
@@ -235,12 +261,9 @@ func (s *knowService) DeleteLesson(lessonId uint) (err error) {
 				return err
 			}
 
-			for _, lessonOther := range lessons {
-				lessonOther.PriorityPercent += uint(int(lessonOther.PriorityPercent) / 100 * 100 / (len(lessons) + 1))
-
-				if err := s.KnowProvider.SaveLesson(&lessonOther); err != nil {
-					return err
-				}
+			err = s.ResetPercents(lessons, 100)
+			if err != nil {
+				return err
 			}
 			return
 		})
@@ -270,15 +293,12 @@ func (s *knowService) SaveLesson(lessonNew *models.Lesson) (err error) {
 			}
 
 			err = s.KnowProvider.Transaction(func() (err error) {
-
-				for _, lessonOther := range lessons {
-					if lessonOther.Id != lessonOld.Id {
-						lessonOther.PriorityPercent += uint(lessonOther.PriorityPercent / 100 * (lessonOld.PriorityPercent - lessonNew.PriorityPercent))
-
-						if err := s.KnowProvider.SaveLesson(&lessonOther); err != nil {
-							return err
-						}
-					}
+				filteredLessons := filter.Choose(lessons, func(lesson models.Lesson) bool {
+					return lesson.Id != lessonNew.Id
+				})
+				err = s.ResetPercents(filteredLessons.([]models.Lesson), 100-lessonNew.PriorityPercent)
+				if err != nil {
+					return err
 				}
 
 				return s.KnowProvider.SaveLesson(lessonNew)
@@ -293,15 +313,14 @@ func (s *knowService) SaveLesson(lessonNew *models.Lesson) (err error) {
 
 		err = s.KnowProvider.Transaction(func() (err error) {
 
-			for _, lessonOther := range lessons {
-				lessonOther.PriorityPercent -= uint(int(lessonOther.PriorityPercent) / 100 * 100 / (len(lessons) + 1))
+			meidane := float32(100 / (len(lessons) + 1))
+			lessonNew.PriorityPercent = meidane
 
-				if err := s.KnowProvider.SaveLesson(&lessonOther); err != nil {
-					return err
-				}
+			err = s.ResetPercents(lessons, 100-meidane)
+			if err != nil {
+				return err
 			}
 
-			lessonNew.PriorityPercent = uint(100 / (len(lessons) + 1))
 			return s.KnowProvider.SaveLesson(lessonNew)
 		})
 		return err
