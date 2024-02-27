@@ -223,6 +223,18 @@ func (p *knowProvider) GetNewKnow(knowTypeId uint, lessonId uint) (err error, kn
 	return result.Error, know
 }
 
+func (p *knowProvider) GetLessonKnowtypesByUserId(userId uuid.UUID) (err error, lessons []models.LessonKnowtype) {
+
+	lessons = []models.LessonKnowtype{}
+	result := p.DB.Raw(`
+		SELECT lessons.*, know_types.name, know_types.style 
+			FROM lessons
+				INNER JOIN know_types 
+					ON lessons.know_type_id = know_types.id
+		WHERE lessons.user_id = ? AND lessons.deleted = false AND know_types.deleted = false`, userId).Scan(&lessons)
+	return result.Error, lessons
+}
+
 func (p *knowProvider) GetLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
 	lessons = []models.Lesson{}
 	result := p.DB.Order("id").Find(&lessons, "user_id = ? AND deleted = false", userId)

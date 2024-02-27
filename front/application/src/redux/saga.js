@@ -21,7 +21,8 @@ import githubAuthorize from '../api/github';
 
 const { timeZone } = getCalendars()[0];
 
-export function* callServerLastest() {
+// user data
+export function* userSaga() {
   // Set user data
   yield takeLatest(
     actions.SET_USER_DATA,
@@ -149,7 +150,18 @@ export function* callServerLastest() {
   );
 }
 
+export function* lessonSaga() {
+  // User get
+
+  yield takeLatest(
+    actions.GET_LESSONS,
+    submitGet,
+    (action) => `/api/youknow/lessons`,
+    (action, response) => [{ type: actions.SET_LESSONS, payload: { lessons: response.data } }]
+  );
+}
+
 export default function* rootSaga() {
-  yield console.log('Hello Sagas!');
-  yield all([callServerLastest()]);
+  yield console.debug('Hello Sagas!');
+  yield all([userSaga(), lessonSaga()]);
 }

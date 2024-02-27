@@ -28,6 +28,15 @@ const userReducer = (state = {}, action) => {
 };
 
 // eslint-disable-next-line default-param-last
+const lessonReducer = (state = {}, action) => {
+  switch (action.type) {
+    case actions.SET_LESSONS:
+      return merge(state, { lessons: action.payload.lessons });
+    default:
+      return state;
+  }
+};
+// eslint-disable-next-line default-param-last
 const messageReducer = (state = {}, action) => {
   switch (action.type) {
     case actions.MESSAGE_START:
@@ -63,6 +72,7 @@ const reducer = combineReducers({
   user: userReducer,
   message: messageReducer,
   status: statusReducer,
+  lesson: lessonReducer,
 });
 
 export default reducer;

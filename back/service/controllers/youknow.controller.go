@@ -187,7 +187,7 @@ func (yc *YouKnowController) DeleteKnowByID(ctx *gin.Context) {
 func (yc *YouKnowController) GetLessons(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
-	err, lessons := yc.KnowService.GetLessonsByUserId(currentUser.ID)
+	err, lessons := yc.KnowService.GetLessonKnowtypesByUserId(currentUser.ID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return

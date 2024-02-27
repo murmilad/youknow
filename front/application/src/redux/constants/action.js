@@ -35,3 +35,6 @@ export const SET_DISCONNECTED = 'SET_DISCONNECTED';
 
 export const GET_USER = 'GET_USER';
 export const SET_USER_DATA = 'SET_USER_DATA';
+
+export const GET_LESSONS = 'GET_LESSONS';
+export const SET_LESSONS = 'SET_LESSONS';

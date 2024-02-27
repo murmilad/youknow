@@ -121,6 +121,8 @@ export function* oauth(handler, successActions, action) {
 
 export function* submitGet(linkCallback, successActions, action) {
   try {
+    console.log(`[HERE] Get`);
+
     yield put({ type: actions.SET_LOADING, payload: { loading: true } });
     const result = yield call(SERVER.get, linkCallback(action));
     console.log(`[SUCCESS] LINK ${linkCallback(action)} RESULT ${JSON.stringify(result)}`);
@@ -129,6 +131,7 @@ export function* submitGet(linkCallback, successActions, action) {
     }
   } catch (error) {
     console.log(`[ERROR] LINK ${linkCallback(action)} ERROR ${JSON.stringify(error)}`);
+    console.log(`[ERROR] MESSAGE ${getErrorMessage(error)}`);
     const [errorMessage, errorCallback] = getErrorMessage(error);
     yield put({ type: actions.MESSAGE_ERROR, payload: { message: errorMessage } });
     if (errorCallback) {

@@ -36,6 +36,7 @@ type KnowProvider interface {
 	GetNewKnow(knowTypeId uint, lessonId uint) (err error, know *models.Know)
 
 	GetLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson)
+	GetLessonKnowtypesByUserId(userId uuid.UUID) (err error, lessons []models.LessonKnowtype)
 	DeleteLesson(lessonId uint) (err error)
 	GetLessonById(lessonId uint) (err error, lesson *models.Lesson)
 	SaveLesson(lesson *models.Lesson) (err error)
@@ -214,6 +215,10 @@ func (s *knowService) GetNewKnow(knowTypeId uint, lessonId uint) (err error, kno
 
 	return s.KnowProvider.GetNewKnow(knowTypeId, lessonId)
 
+}
+
+func (s *knowService) GetLessonKnowtypesByUserId(userId uuid.UUID) (err error, lessons []models.LessonKnowtype) {
+	return s.KnowProvider.GetLessonKnowtypesByUserId(userId)
 }
 
 func (s *knowService) GetLessonsByUserId(userId uuid.UUID) (err error, lessons []models.Lesson) {
