@@ -41,6 +41,7 @@ type LessonKnowtype struct {
 	LessonTypeHandler types.LessonType   `json:"lesson_type_handler" gorm:"not null"`
 	UserID            uuid.UUID          `json:"user_id" gorm:"type:uuid;not null"`
 	PriorityPercent   float32            `json:"priority_percent"`
+	ProgressPercent   float32            `json:"progress_percent"`
 	Name              string             `json:"name" gorm:"not null"`
 	Style             string             `json:"style" gorm:"not null"` // `gorm:"-" default:"[]"`
 	Deleted           bool               `json:"deleted" gorm:"not null; default false"`

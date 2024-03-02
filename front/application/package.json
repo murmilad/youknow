@@ -10,6 +10,7 @@
     "clean-env-cache": "rm -rf node_modules/.cache/babel-loader/*"
   },
   "dependencies": {
+    "@babel/plugin-transform-react-jsx-self": "^7.23.3",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native/codegen": "^0.72.7",
