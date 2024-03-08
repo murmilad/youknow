@@ -25,13 +25,15 @@ func NewTaskSender(knowService services.KnowProvider, lesson *models.Lesson, les
 }
 
 func (ts *taskSender) Work(workers taskmanager.WorkerIface, ctx context.Context) {
+	log.Debug("[SEND LESSON]")
+
 	if ts.Lesson.LessonStatus == types.LESSON_WAIT {
 		ts.Lesson.ShowTimes++
 		log.WithFields(log.Fields{
 			"Lesson":    ts.Lesson.KnowTypeId,
 			"User":      ts.Lesson.UserID,
 			"Showtimes": ts.Lesson.ShowTimes,
-		}).Debug("Increment Lesson")
+		}).Debug("[SEND LESSON] Increment Lesson")
 	} else {
 		ts.Lesson.ShowTimes = 1
 		ts.Lesson.LessonStatus = types.LESSON_WAIT
@@ -39,7 +41,7 @@ func (ts *taskSender) Work(workers taskmanager.WorkerIface, ctx context.Context)
 			"Lesson":    ts.Lesson.KnowTypeId,
 			"User":      ts.Lesson.UserID,
 			"Showtimes": ts.Lesson.ShowTimes,
-		}).Debug("Init showtimes")
+		}).Debug("[SEND LESSON] Init showtimes")
 	}
 	ts.Lesson.ShowAt = time.Now().Local()
 
@@ -48,5 +50,5 @@ func (ts *taskSender) Work(workers taskmanager.WorkerIface, ctx context.Context)
 	ts.LessonKnow.AskAt = time.Now().Local()
 	_ = ts.KnowService.SaveLessonKnow(ts.LessonKnow)
 
-	log.Debug("Send know ", ts.LessonKnow)
+	log.Debug("[SEND LESSON] Send know ", ts.LessonKnow)
 }

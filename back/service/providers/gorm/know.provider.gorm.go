@@ -227,25 +227,32 @@ func (p *knowProvider) GetLessonKnowtypesByUserId(userId uuid.UUID) (err error, 
 
 	lessons = []models.LessonKnowtype{}
 	result := p.DB.Raw(`
-		SELECT lessons.*, know_types.name, know_types.style, SUM(lessons_knows_right.know_id) /
-			CASE SUM(lessons_knows_total.know_id) 
+	SELECT lessons.*, know_types.name, know_types.style,cast(
+			cast(COALESCE( lessons_knows_right.count, 0 ) AS DECIMAL) /
+			cast(CASE lessons_knows_total.count
 				WHEN 0 THEN 1 
-				ELSE SUM(lessons_knows_total.know_id)
-			END
-			* 100 AS progress_percent
-			FROM lessons
-				INNER JOIN know_types 
-					ON lessons.know_type_id = know_types.id
-				LEFT JOIN lessons_knows AS lessons_knows_right 
-					ON lessons.id = lessons_knows_right.lesson_id 
-					AND lessons_knows_right.know_status = @knowStatusRight
-				LEFT JOIN lessons_knows AS lessons_knows_total 
-					ON lessons.id = lessons_knows_total.lesson_id 
-		WHERE 
-			lessons.user_id = @userId
-			AND lessons.deleted = false
-			AND know_types.deleted = false
-		GROUP BY lessons.id, know_types.id`,
+				ELSE COALESCE( lessons_knows_total.count, 1)
+			END AS DECIMAL) * 100 AS INTEGER) AS progress_percent
+	FROM lessons
+		INNER JOIN know_types 
+			ON lessons.know_type_id = know_types.id
+		LEFT JOIN (
+			SELECT COUNT(id) count, lesson_id 
+				FROM lessons_knows
+			WHERE know_status =  @knowStatusRight
+			GROUP BY lesson_id
+		) AS lessons_knows_right
+			ON lessons.id = lessons_knows_right.lesson_id 
+		LEFT JOIN (
+			SELECT COUNT(knows.id) count, knowtype_id 
+				FROM knows
+			GROUP BY knowtype_id
+		) AS lessons_knows_total
+			ON lessons.know_type_id = lessons_knows_total.knowtype_id
+	WHERE 
+		lessons.user_id = @userId
+		AND	lessons.deleted = false
+		AND know_types.deleted = false`,
 		sql.Named("userId", userId),
 		sql.Named("knowStatusRight", types.KNOW_RIGHT),
 	).Scan(&lessons)

@@ -29,6 +29,7 @@ func NewTaskFounder(knowService services.KnowProvider, userService services.User
 func (tf *taskFounder) Work(workers taskmanager.WorkerIface, ctx context.Context) {
 	log.Debug("start Founder")
 
+	//	ticker := time.NewTicker(time.Minute)
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
 
@@ -81,6 +82,8 @@ root:
 
 							if lessonKnow != nil {
 								// Send know notification
+								log.Debug("[SEARCH LESSON] start sender task for Know ", lessonKnow.KnowId)
+
 								workers.QueueTask("[TASK SENDER]", NewTaskSender(tf.KnowService, &lesson, lessonKnow))
 								continue root
 							}
@@ -127,6 +130,8 @@ root:
 							}
 							// Add new know to learning
 							if know != nil {
+								log.Debug("[SEARCH LESSON] create lesson for know ", know.Id)
+
 								lessonKnow := models.LessonKnow{
 									KnowId:     know.Id,
 									KnowStatus: types.KNOW_NEW,
