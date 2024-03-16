@@ -32,6 +32,15 @@ const lessonReducer = (state = {}, action) => {
   switch (action.type) {
     case actions.SET_LESSONS:
       return merge(state, { lessons: action.payload.lessons });
+    case actions.CLEAN_LESSONS:
+      //      return merge(state, {
+      //        lessons: state.lessons.map((lesson) =>
+      //          merge(lesson, { priority_percent: 0, progress_percent: 0 })
+      //        ),
+      //      });
+      return merge(state, {
+        lessons: [],
+      });
     default:
       return state;
   }

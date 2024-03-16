@@ -252,7 +252,8 @@ func (p *knowProvider) GetLessonKnowtypesByUserId(userId uuid.UUID) (err error, 
 	WHERE 
 		lessons.user_id = @userId
 		AND	lessons.deleted = false
-		AND know_types.deleted = false`,
+		AND know_types.deleted = false
+	ORDER BY lessons.priority_percent DESC`,
 		sql.Named("userId", userId),
 		sql.Named("knowStatusRight", types.KNOW_RIGHT),
 	).Scan(&lessons)

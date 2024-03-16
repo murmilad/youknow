@@ -38,3 +38,4 @@ export const SET_USER_DATA = 'SET_USER_DATA';
 
 export const GET_LESSONS = 'GET_LESSONS';
 export const SET_LESSONS = 'SET_LESSONS';
+export const CLEAN_LESSONS = 'CLEAN_LESSONS';

@@ -8,7 +8,7 @@ import LessonRowProgress from './LessonRowProgress';
 
 const PropTypes = require('prop-types');
 
-function LessonRow({ priority_percent, progress_percent, name, style, onSelectLesson }) {
+function LessonRow({ percent, name, style, onSelectLesson, progressColor }) {
   return (
     <TouchableOpacity
       style={tw`p-3`}
@@ -19,7 +19,7 @@ function LessonRow({ priority_percent, progress_percent, name, style, onSelectLe
       <View style={tw`m-1 rounded-2 overflow-hidden h-20`}>
         <View style={tw`inset-x-0 top-0 z-50 text-left bg-white  `}>
           <Bubbles width="250%" height="250%" style={tw`left--30 top--30 text-[${style}]`} />
-          <LessonRowProgress percent={progress_percent} color="bg-blue-500" />
+          <LessonRowProgress percent={percent} color={progressColor} />
           <View style={tw`ml-1 h-20 w-full absolute text-left justify-center flex-1`}>
             <Text style={tw`text-3xl font-bold text-gray-600`}>{name}</Text>
           </View>
@@ -30,10 +30,10 @@ function LessonRow({ priority_percent, progress_percent, name, style, onSelectLe
 }
 
 LessonRow.propTypes = {
-  priority_percent: PropTypes.number.isRequired,
-  progress_percent: PropTypes.number.isRequired,
+  percent: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   style: PropTypes.string.isRequired,
+  progressColor: PropTypes.string.isRequired,
   onSelectLesson: PropTypes.func.isRequired,
 };
 

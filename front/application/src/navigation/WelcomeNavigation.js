@@ -1,36 +1,51 @@
 /* eslint-disable import/no-named-default */
 import React from 'react';
 
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { default as ChatDotsComposite } from '../assets/chat_dots_composite.svg';
-import { default as PersistCircle } from '../assets/person-circle.svg';
+import { useTranslation } from 'react-i18next';
+import { default as ChatDots } from '../assets/chat_dots.svg';
+import { default as BarChart } from '../assets/bar-chart-rotated.svg';
+import { default as Gear } from '../assets/gear.svg';
 import UserScreen from '../screens/UserScreen';
-import FeedScreen from '../screens/FeedScreen';
 import tw from '../../tailwind';
+import LessonScreen from '../screens/LessonScreen';
+import LessonPriorityScreen from '../screens/LessonPriorityScreen';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 const PropTypes = require('prop-types');
 
 function WelcomeNavigation({ navigation, user, status }) {
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+
   const Navigator = createStackNavigator();
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Feed"
-        component={FeedScreen}
+        name={t('tab.lessons')}
+        component={LessonScreen}
         options={{
           // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: () => <ChatDotsComposite width={20} height={20} style={tw`text-blue-600`} />,
+          tabBarIcon: () => <ChatDots width={20} height={20} style={tw`text-blue-600`} />,
         }}
       />
       <Tab.Screen
-        name="Account"
+        name={t('tab.priority')}
+        component={LessonPriorityScreen}
+        options={{
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: () => <BarChart width={20} height={20} style={tw`text-blue-600`} />,
+        }}
+      />
+      <Tab.Screen
+        name={t('tab.settings')}
         component={UserScreen}
         options={{
           // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: () => <PersistCircle width={20} height={20} style={tw`text-blue-600`} />,
+          tabBarIcon: () => <Gear width={20} height={20} style={tw`text-blue-600`} />,
         }}
       />
     </Tab.Navigator>
