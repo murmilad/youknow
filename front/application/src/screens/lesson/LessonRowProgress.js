@@ -15,7 +15,7 @@ function LessonRowProgress({ percent, color }) {
       translation.setValue(0);
       Animated.timing(translation, {
         toValue: percent,
-        duration: 700,
+        duration: 0,
       }).start();
     }
   }, [percent, translation]);

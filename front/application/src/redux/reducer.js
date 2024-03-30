@@ -41,6 +41,16 @@ const lessonReducer = (state = {}, action) => {
       return merge(state, {
         lessons: [],
       });
+    case actions.SELECT_LESSON_PRIORITY:
+      return merge(state, {
+        lessons: state.lessons.map((lesson) =>
+          merge(lesson, { priority_selected: lesson.id === action.payload.id })
+        ),
+      });
+    case actions.CLEAN_SELECTION_LESSON_PRIORITY:
+      return merge(state, {
+        lessons: state.lessons.map((lesson) => merge(lesson, { priority_selected: false })),
+      });
     default:
       return state;
   }
