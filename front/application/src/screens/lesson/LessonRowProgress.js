@@ -5,7 +5,7 @@ import tw from '../../../tailwind';
 
 const PropTypes = require('prop-types');
 
-function LessonRowProgress({ percent, color }) {
+function LessonRowProgress({ percent, color, isSelected }) {
   const translation = useRef(new Animated.Value(0)).current;
   const inputRange = [0, 100];
   const outputRange = ['0%', '100%'];
@@ -15,10 +15,10 @@ function LessonRowProgress({ percent, color }) {
       translation.setValue(0);
       Animated.timing(translation, {
         toValue: percent,
-        duration: 0,
+        duration: isSelected ? 0 : 200,
       }).start();
     }
-  }, [percent, translation]);
+  }, [percent, isSelected, translation]);
 
   const animStyle = {
     width: translation.interpolate({ inputRange, outputRange }),
@@ -30,6 +30,7 @@ function LessonRowProgress({ percent, color }) {
 LessonRowProgress.propTypes = {
   percent: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
+  isSelected: PropTypes.bool.isRequired,
 };
 
 export default LessonRowProgress;

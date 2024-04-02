@@ -52,7 +52,7 @@ function LessonRow({ percent, name, style, onSelectLesson, progressColor, select
       >
         <View style={tw`inset-x-0 top-0 z-50 text-left bg-white  `}>
           <Bubbles width="250%" height="250%" style={tw`left--30 top--30 text-[${style}]`} />
-          <LessonRowProgress percent={lessonPercent} color={progressColor} />
+          <LessonRowProgress percent={lessonPercent} color={progressColor} isSelected={selected} />
           <View
             style={tw`ml-1 ${selectedStyle.height} w-full absolute text-left justify-center flex-1`}
           >
