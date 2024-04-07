@@ -59,6 +59,7 @@ const lessonReducer = (state = {}, action) => {
       return merge(state, {
         lessons: state.lessons.map((lesson) => merge(lesson, { animate: false })),
       });
+
     default:
       return state;
   }

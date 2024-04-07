@@ -15,6 +15,7 @@ import {
   replace,
   navigate,
   startActions,
+  changeLessonPriority,
 } from './saga/functions';
 
 import googleAuthorize from '../api/google';
@@ -167,6 +168,10 @@ export function* lessonSaga() {
   yield takeLatest(actions.ANIMATE_LESSONS, startActions, (action) => [
     { type: actions.ANIMATE_LESSONS_START },
     { type: actions.ANIMATE_LESSONS_STOP },
+  ]);
+
+  yield takeLatest(actions.CHANGE_LESSON_PRIORITY, changeLessonPriority, (action, response) => [
+    { type: actions.SET_LESSONS, payload: { lessons: response } },
   ]);
 }
 

@@ -219,3 +219,28 @@ export function* fetchResource(linkCallback, resultCallback, successActions, act
     }
   }
 }
+
+export function* changeLessonPriority(successActions, action) {
+  if (action.payload.lesson && action.payload.lessons) {
+    const base = 100 - action.payload.lesson.priority_percent;
+    const sum = action.payload.lessons
+      .filter((lesson) => lesson.id !== action.payload.lesson.id)
+      .reduce((accumulator, lesson) => accumulator + lesson.priority_percent, 0);
+    const lessons = [];
+
+    for (const currentLesson of action.payload.lessons) {
+      if (currentLesson.id !== action.payload.lesson.id) {
+        lessons.push({
+          ...currentLesson,
+          priority_percent: sum === 0 ? 0 : (currentLesson.priority_percent / sum) * base,
+        });
+      } else {
+        lessons.push(action.payload.lesson);
+      }
+    }
+    console.log(`lessons ${JSON.stringify(lessons)}`);
+    for (const successAction of successActions(action, lessons)) {
+      yield put(successAction);
+    }
+  }
+}
