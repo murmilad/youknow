@@ -14,6 +14,7 @@ import {
   logOut,
   replace,
   navigate,
+  startActions,
 } from './saga/functions';
 
 import googleAuthorize from '../api/google';
@@ -157,8 +158,16 @@ export function* lessonSaga() {
     actions.GET_LESSONS,
     submitGet,
     (action) => `/api/youknow/lessons`,
-    (action, response) => [{ type: actions.SET_LESSONS, payload: { lessons: response.data } }]
+    (action, response) => [
+      { type: actions.SET_LESSONS, payload: { lessons: response.data } },
+      { type: actions.ANIMATE_LESSONS },
+    ]
   );
+
+  yield takeLatest(actions.ANIMATE_LESSONS, startActions, (action) => [
+    { type: actions.ANIMATE_LESSONS_START },
+    { type: actions.ANIMATE_LESSONS_STOP },
+  ]);
 }
 
 export default function* rootSaga() {

@@ -51,6 +51,14 @@ const lessonReducer = (state = {}, action) => {
       return merge(state, {
         lessons: state.lessons.map((lesson) => merge(lesson, { priority_selected: false })),
       });
+    case actions.ANIMATE_LESSONS_START:
+      return merge(state, {
+        lessons: state.lessons.map((lesson) => merge(lesson, { animate: true })),
+      });
+    case actions.ANIMATE_LESSONS_STOP:
+      return merge(state, {
+        lessons: state.lessons.map((lesson) => merge(lesson, { animate: false })),
+      });
     default:
       return state;
   }

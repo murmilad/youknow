@@ -119,6 +119,12 @@ export function* oauth(handler, successActions, action) {
   yield put({ type: actions.SET_LOADING, payload: { loading: false } });
 }
 
+export function* startActions(successActions, action) {
+  for (const successAction of successActions(action)) {
+    yield put(successAction);
+  }
+}
+
 export function* submitGet(linkCallback, successActions, action) {
   try {
     console.log(`[HERE] Get`);
